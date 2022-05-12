@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "107017df_12ef5efa",
+        "filename": "include/rde_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T18:50:41Z",
+      "side": 1,
+      "message": "wouldn\u0027t this hit error with clang-tidy?\n\nNeed to use template function instead?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 6
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf42cab6_06613bac",
+        "filename": "include/rde_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T18:50:41Z",
+      "side": 1,
+      "message": "just need to define the first one. The others are implicit.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 38
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "476eb17e_6525330b",
+        "filename": "include/rde_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T18:50:41Z",
+      "side": 1,
+      "message": "does `\u003d` not work?",
+      "range": {
+        "startLine": 79,
+        "startChar": 32,
+        "endLine": 79,
+        "endChar": 33
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44311e85_1dbb5aa7",
+        "filename": "include/rde_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T18:50:41Z",
+      "side": 1,
+      "message": "new line at eof",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 218,
+        "endChar": 6
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3d9c4d4_90f2d0ab",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T18:50:41Z",
+      "side": 1,
+      "message": "add c version?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 20
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e367d6b_5efb6d5a",
+        "filename": "src/rde_common.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T18:50:41Z",
+      "side": 1,
+      "message": "static_cast. maybe not since this is C code.",
+      "range": {
+        "startLine": 8,
+        "startChar": 16,
+        "endLine": 8,
+        "endChar": 25
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
