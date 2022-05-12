@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94311aa0_b077411b",
+        "filename": "include/rde_common.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T20:14:06Z",
+      "side": 1,
+      "message": "what happen if it is 0? it doesn\u0027t return anything then?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 6
+      },
+      "revId": "41d75f0d538aa7c3d1a3dc9e0222c7905e2721f0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "631e4641_af386783",
+        "filename": "meson.build",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T20:14:06Z",
+      "side": 1,
+      "message": "c18 instead? I think that\u0027s the latest one",
+      "range": {
+        "startLine": 8,
+        "startChar": 4,
+        "endLine": 8,
+        "endChar": 16
+      },
+      "revId": "41d75f0d538aa7c3d1a3dc9e0222c7905e2721f0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
