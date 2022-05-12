@@ -145,6 +145,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "072d997f_972b71b6",
+        "filename": "include/rde_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T22:06:49Z",
+      "side": 1,
+      "message": "Sorry I missed this.. I feel like it depends on the context. Like, in BejError enum, we don\u0027t care about the numeric value except 0. But in BejPrincipalDataType we actually care about the numeric value. So depending on the context, I feel like we can explicitly mention the numeric value or not. In my opinion this increases the readability too. This way we know that BejReal has to be numeric value 9 etc. But we do not care whether BejErrorUnknown is numeric value 1 or 2 etc.\n\nBut if you disagree, I\u0027ll explicitly add numeric values to everything.",
+      "parentUuid": "815f28e3_13a579f4",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 38
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "476eb17e_6525330b",
         "filename": "include/rde_common.h",
         "patchSetId": 2

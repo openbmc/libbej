@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78968101_c0cf5bfe",
+        "filename": "include/rde_common.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T22:06:49Z",
+      "side": 1,
+      "message": "Unless we define a variable of this struct type, it will not have any storage allocated. So we can\u0027t initialize anything here.",
+      "parentUuid": "f3da61c2_db1ebc6d",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 29
+      },
+      "revId": "537d90ae4861d71454d431c6bd321c11ca51c89f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e58cc2c_2220112b",
@@ -47,6 +71,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "746e668e_a31e8b1f",
+        "filename": "meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T22:06:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e58cc2c_2220112b",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 5
+      },
+      "revId": "537d90ae4861d71454d431c6bd321c11ca51c89f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a54be0b_34b65233",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-05-12T21:29:24Z",
       "side": 1,
       "message": "do you need this? or can it just pass to rdeGetUnsignedInteger directly.",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 32
+      },
+      "revId": "537d90ae4861d71454d431c6bd321c11ca51c89f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaed8b0e_e194a4c4",
+        "filename": "src/rde_common.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T22:06:49Z",
+      "side": 1,
+      "message": "We need this. We could do rdeGetUnsignedInteger(nnint + sizeof(uint8_t), *nnint) but I felt like doing const uint8_t size \u003d *nnint might make things more clear.",
+      "parentUuid": "9a54be0b_34b65233",
       "range": {
         "startLine": 17,
         "startChar": 4,
