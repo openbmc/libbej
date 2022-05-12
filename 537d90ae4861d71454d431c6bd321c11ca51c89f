@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3da61c2_db1ebc6d",
+        "filename": "include/rde_common.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T21:29:24Z",
+      "side": 1,
+      "message": "for all of the member variables, do we need to initilize first. Probably safer that way.",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 29
+      },
+      "revId": "537d90ae4861d71454d431c6bd321c11ca51c89f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e58cc2c_2220112b",
+        "filename": "meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T21:29:24Z",
+      "side": 1,
+      "message": "new line here.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 5
+      },
+      "revId": "537d90ae4861d71454d431c6bd321c11ca51c89f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a54be0b_34b65233",
+        "filename": "src/rde_common.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T21:29:24Z",
+      "side": 1,
+      "message": "do you need this? or can it just pass to rdeGetUnsignedInteger directly.",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 32
+      },
+      "revId": "537d90ae4861d71454d431c6bd321c11ca51c89f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
