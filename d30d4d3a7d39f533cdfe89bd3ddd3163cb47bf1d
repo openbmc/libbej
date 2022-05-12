@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5803ce77_919c7f7a",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T23:20:33Z",
+      "side": 1,
+      "message": "do we need to check if this is 0?",
+      "range": {
+        "startLine": 16,
+        "startChar": 10,
+        "endLine": 16,
+        "endChar": 47
+      },
+      "revId": "d30d4d3a7d39f533cdfe89bd3ddd3163cb47bf1d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0af7be63_e06173d4",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T23:20:33Z",
+      "side": 1,
+      "message": "I would prefer to split them so they can have seperate error messsage.",
+      "range": {
+        "startLine": 27,
+        "startChar": 2,
+        "endLine": 35,
+        "endChar": 5
+      },
+      "revId": "d30d4d3a7d39f533cdfe89bd3ddd3163cb47bf1d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8657f743_36d0cf32",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T23:20:33Z",
+      "side": 1,
+      "message": "doesn\u0027t the return type not match here? I guess its fine here.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 1
+      },
+      "revId": "d30d4d3a7d39f533cdfe89bd3ddd3163cb47bf1d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01a9c6ba_3b76782e",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-12T23:20:33Z",
+      "side": 1,
+      "message": "nameLengh \u003d\u003d 0\n\ninstead?",
+      "range": {
+        "startLine": 85,
+        "startChar": 8,
+        "endLine": 85,
+        "endChar": 19
+      },
+      "revId": "d30d4d3a7d39f533cdfe89bd3ddd3163cb47bf1d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
