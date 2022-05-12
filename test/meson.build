@@ -17,6 +17,7 @@ endif
 
 gtests = [
   'rde_common',
+  'bej_dictionary',
 ]
 foreach t : gtests
   test(t, executable(t.underscorify(), t + '_test.cpp',
