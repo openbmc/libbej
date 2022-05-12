@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dedc8333_112b523f",
+        "filename": "include/rde_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T19:09:34Z",
+      "side": 1,
+      "message": "It does. This is for C code. So can\u0027t use template functions.",
+      "parentUuid": "107017df_12ef5efa",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 6
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf42cab6_06613bac",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-12T18:50:41Z",
       "side": 1,
       "message": "just need to define the first one. The others are implicit.",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 38
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f170c6c_dbae97db",
+        "filename": "include/rde_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T19:09:34Z",
+      "side": 1,
+      "message": "True. I prefer to keep it this way so that it is easier to relate to the values in the BEJ standard.",
+      "parentUuid": "bf42cab6_06613bac",
       "range": {
         "startLine": 57,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43b85250_806c897c",
+        "filename": "include/rde_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T19:09:34Z",
+      "side": 1,
+      "message": "These are for C bit fields.",
+      "parentUuid": "476eb17e_6525330b",
+      "range": {
+        "startLine": 79,
+        "startChar": 32,
+        "endLine": 79,
+        "endChar": 33
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44311e85_1dbb5aa7",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-05-12T18:50:41Z",
       "side": 1,
       "message": "new line at eof",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 218,
+        "endChar": 6
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a6e47d9_f87e1eb9",
+        "filename": "include/rde_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T19:09:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44311e85_1dbb5aa7",
       "range": {
         "startLine": 218,
         "startChar": 0,
@@ -116,6 +212,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bc54c1f_1660a0df",
+        "filename": "meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T19:09:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3d9c4d4_90f2d0ab",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 20
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e367d6b_5efb6d5a",
@@ -129,6 +249,30 @@
       "writtenOn": "2022-05-12T18:50:41Z",
       "side": 1,
       "message": "static_cast. maybe not since this is C code.",
+      "range": {
+        "startLine": 8,
+        "startChar": 16,
+        "endLine": 8,
+        "endChar": 25
+      },
+      "revId": "59703243884352b98a9a2ba7dfc3d60bceb8ac92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be53ce68_79764f65",
+        "filename": "src/rde_common.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T19:09:34Z",
+      "side": 1,
+      "message": "Yea, we can\u0027t use static_cast.",
+      "parentUuid": "4e367d6b_5efb6d5a",
       "range": {
         "startLine": 8,
         "startChar": 16,

@@ -16,6 +16,24 @@
       "message": "revert.",
       "revId": "8bc8ba8e9903904d4261c52c9ee7bd1288910cb1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68ddaef9_43bab0f2",
+        "filename": ".clang-tidy",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-12T19:09:34Z",
+      "side": 0,
+      "message": "I explained the reasoning for deleting this in the commit message.",
+      "parentUuid": "8a705cb1_4a4543f1",
+      "revId": "8bc8ba8e9903904d4261c52c9ee7bd1288910cb1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
