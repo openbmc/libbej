@@ -27,13 +27,13 @@ extern "C"
      */
     enum BejError
     {
-        BejErrorNoError = 0,
-        BejErrorUnknown,
-        BejErrorInvalidSize,
-        BejErrorNotSuppoted,
-        BejErrorUnknownProperty,
-        BejErrorInvalidSchemaType,
-        BejErrorInvalidPropertyOffset,
+        bejErrorNoError = 0,
+        bejErrorUnknown,
+        bejErrorInvalidSize,
+        bejErrorNotSuppoted,
+        bejErrorUnknownProperty,
+        bejErrorInvalidSchemaType,
+        bejErrorInvalidPropertyOffset,
     };
 
     /**
@@ -41,11 +41,11 @@ extern "C"
      */
     enum BejSchemaClass
     {
-        BejMajorSchemaClass = 0,
-        BejEventSchemaClass = 1,
-        BejAnnotationSchemaClass = 2,
-        BejCollectionMemberTypeSchemaClass = 3,
-        BejErrorSchemaClass = 4,
+        bejMajorSchemaClass = 0,
+        bejEventSchemaClass = 1,
+        bejAnnotationSchemaClass = 2,
+        bejCollectionMemberTypeSchemaClass = 3,
+        bejErrorSchemaClass = 4,
     };
 
     /**
@@ -53,22 +53,22 @@ extern "C"
      */
     enum BejPrincipalDataType
     {
-        BejSet = 0,
-        BejArray = 1,
-        BejNull = 2,
-        BejInteger = 3,
-        BejEnum = 4,
-        BejString = 5,
-        BejReal = 6,
-        BejBoolean = 7,
-        BejBytestring = 8,
-        BejChoice = 9,
-        BejPropertyAnnotation = 10,
-        Reserved1 = 11,
-        Reserved2 = 12,
-        Reserved3 = 13,
-        BejResourceLink = 14,
-        BejResourceLinkExpansion = 15,
+        bejSet = 0,
+        bejArray = 1,
+        bejNull = 2,
+        bejInteger = 3,
+        bejEnum = 4,
+        bejString = 5,
+        bejReal = 6,
+        bejBoolean = 7,
+        bejBytestring = 8,
+        bejChoice = 9,
+        bejPropertyAnnotation = 10,
+        bejPrincipalDataReserved1 = 11,
+        bejPrincipalDataReserved2 = 12,
+        bejPrincipalDataReserved3 = 13,
+        bejResourceLink = 14,
+        bejResourceLinkExpansion = 15,
     };
 
     /**
@@ -145,21 +145,21 @@ extern "C"
 
     enum RdeOperationInitType
     {
-        RdeOpInitOperationHead = 0,
-        RdeOpInitOperationRead = 1,
-        RdeOpInitOperationCreate = 2,
-        RdeOpInitOperationDelete = 3,
-        RdeOpInitOperationUpdate = 4,
-        RdeOpInitOperationReplace = 5,
-        RdeOpInitOperationAction = 6,
+        rdeOpInitOperationHead = 0,
+        rdeOpInitOperationRead = 1,
+        rdeOpInitOperationCreate = 2,
+        rdeOpInitOperationDelete = 3,
+        rdeOpInitOperationUpdate = 4,
+        rdeOpInitOperationReplace = 5,
+        rdeOpInitOperationAction = 6,
     };
 
     enum RdeMultiReceiveTransferFlag
     {
-        RdeMRecFlagStart = 0,
-        RdeMRecFlagMiddle = 1,
-        RdeMRecFlagEnd = 2,
-        RdeMRecFlagStartAndEnd = 3,
+        rdeMRecFlagStart = 0,
+        rdeMRecFlagMiddle = 1,
+        rdeMRecFlagEnd = 2,
+        rdeMRecFlagStartAndEnd = 3,
     };
 
     struct RdeOperationInitReqHeader
@@ -190,9 +190,11 @@ extern "C"
     /**
      * @brief Get the unsigned integer value from provided bytes.
      *
-     * @param bytes - valid pointer to a byte stream in little-endian format.
-     * @param numOfBytes - number of bytes belongs to the value. Maximum number
-     * of bytes supported is 8. If numOfBytes > 8, the result is undefined.
+     * @param[in] bytes - valid pointer to a byte stream in little-endian
+     * format.
+     * @param[in] numOfBytes - number of bytes belongs to the value. Maximum
+     * number of bytes supported is 8. If numOfBytes > 8, the result is
+     * undefined.
      * @return unsigend 64bit representation of the value.
      */
     uint64_t rdeGetUnsignedInteger(const uint8_t* bytes, uint8_t numOfBytes);
@@ -200,7 +202,7 @@ extern "C"
     /**
      * @brief Get the value from nnint type.
      *
-     * @param  nnint - nnint should be pointing to a valid nnint.
+     * @param[in] nnint - nnint should be pointing to a valid nnint.
      * @return unsigend 64bit representation of the value.
      */
     uint64_t rdeGetNnint(const uint8_t* nnint);
@@ -208,7 +210,7 @@ extern "C"
     /**
      * @brief Get the size of the complete nnint.
      *
-     * @param nnint - pointer to a valid nnint.
+     * @param[in] nnint - pointer to a valid nnint.
      * @return size of the complete nnint.
      */
     uint8_t rdeGetNnintSize(const uint8_t* nnint);
