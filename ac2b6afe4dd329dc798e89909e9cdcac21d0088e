@@ -96,6 +96,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60baa7bd_073b4065",
+        "filename": "include/bej_dictionary.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-13T16:38:50Z",
+      "side": 1,
+      "message": "Unfortunately we couldn\u0027t verify this with Ed today. Brandon and I thought that we can go ahead without the copyright header for now and add it later if necessary.",
+      "parentUuid": "3568af6d_d994cc01",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 12
+      },
+      "revId": "ac2b6afe4dd329dc798e89909e9cdcac21d0088e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5f2fb0d_c6c63879",
