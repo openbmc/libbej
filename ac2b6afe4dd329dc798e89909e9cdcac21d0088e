@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3568af6d_d994cc01",
+        "filename": "include/bej_dictionary.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-05-13T14:59:06Z",
+      "side": 1,
+      "message": "Hmmm since this is in openbmc/ repo instead of meta-google or google-misc, I\u0027m not sure how correct it is to check in the Google copyright - let\u0027s check up with Ed on that",
+      "parentUuid": "de5199ae_f2958da5",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 12
+      },
+      "revId": "ac2b6afe4dd329dc798e89909e9cdcac21d0088e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5f2fb0d_c6c63879",
         "filename": "src/bej_dictionary.c",
         "patchSetId": 1
