@@ -1,5 +1,6 @@
 libbej_lib = static_library(
   'libbej',
+  'bej_decoder_core.c',
   'rde_common.c',
   'bej_dictionary.c',
   include_directories : libbej_incs,
