@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "58be8bb2_3f8621b1",
+        "filename": "include/bej_dictionary.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-13T00:23:34Z",
+      "side": 1,
+      "message": "Do you have an example for this?",
+      "parentUuid": "ac6b71a2_82662bf8",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 12
+      },
+      "revId": "ac2b6afe4dd329dc798e89909e9cdcac21d0088e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5f2fb0d_c6c63879",
         "filename": "src/bej_dictionary.c",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-12T23:20:33Z",
       "side": 1,
       "message": "I believe the practice in C is to define all of the variable on top? not too sure.",
+      "range": {
+        "startLine": 66,
+        "startChar": 3,
+        "endLine": 66,
+        "endChar": 70
+      },
+      "revId": "ac2b6afe4dd329dc798e89909e9cdcac21d0088e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8fbf9c3_27257ba1",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-13T00:23:34Z",
+      "side": 1,
+      "message": "It doesn\u0027t have to be. We don\u0027t do that in EC code base.",
+      "parentUuid": "c5f2fb0d_c6c63879",
       "range": {
         "startLine": 66,
         "startChar": 3,
