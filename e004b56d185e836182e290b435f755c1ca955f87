@@ -3,6 +3,138 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "52140108_9273482e",
+        "filename": "include/bej_dictionary.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-05-13T23:35:32Z",
+      "side": 1,
+      "message": "These indentation seems possibly wrong?",
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d327b8f0_86f2cb52",
+        "filename": "include/bej_dictionary.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-05-13T23:35:32Z",
+      "side": 1,
+      "message": "I think enum members are supposed to be lowerCamelCase https://github.com/openbmc/docs/blob/master/cpp-style-and-conventions.md#constants",
+      "range": {
+        "startLine": 28,
+        "startChar": 11,
+        "endLine": 29,
+        "endChar": 17
+      },
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb77d874_025b66d8",
+        "filename": "include/bej_dictionary.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-05-13T23:35:32Z",
+      "side": 1,
+      "message": "same nit as below, would be good to have [in] / [out]",
+      "range": {
+        "startLine": 73,
+        "startChar": 6,
+        "endLine": 80,
+        "endChar": 31
+      },
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ab57d2f_2d6e1ba6",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-05-13T23:35:32Z",
+      "side": 1,
+      "message": "nit: here and below, would be good to indicate where it\u0027s [in] or [out] (or both)",
+      "range": {
+        "startLine": 10,
+        "startChar": 24,
+        "endLine": 10,
+        "endChar": 26
+      },
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8e449c3_d7c378e0",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-05-13T23:35:32Z",
+      "side": 1,
+      "message": "nit: I think for ease of understanding, having the RDE headers that we are using / expecting being included either in the .c / .h or in README would be good so that it\u0027s easier to read along",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 12
+      },
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c75c8ea_2f36356c",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-05-13T23:35:32Z",
+      "side": 1,
+      "message": "No need to check out of bounds or something with nameLength? I guess since these are just pointer, there\u0027s no way to do that..",
+      "range": {
+        "startLine": 93,
+        "startChar": 64,
+        "endLine": 93,
+        "endChar": 74
+      },
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82729d83_96e46be2",
         "filename": "test/meson.build",
         "patchSetId": 4
