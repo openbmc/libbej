@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7a77fde_9ac55983",
+        "filename": "include/bej_dictionary.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-15T23:08:10Z",
+      "side": 1,
+      "message": "This is produced by clang-format. I think this is because of the,\n\n#ifdef __cplusplus\nextern \"C\"\n{\n#endif\n\npart.",
+      "parentUuid": "52140108_9273482e",
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d327b8f0_86f2cb52",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-05-13T23:35:32Z",
       "side": 1,
       "message": "I think enum members are supposed to be lowerCamelCase https://github.com/openbmc/docs/blob/master/cpp-style-and-conventions.md#constants",
+      "range": {
+        "startLine": 28,
+        "startChar": 11,
+        "endLine": 29,
+        "endChar": 17
+      },
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b7e9233_fbbfcd3e",
+        "filename": "include/bej_dictionary.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-15T23:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d327b8f0_86f2cb52",
       "range": {
         "startLine": 28,
         "startChar": 11,
@@ -64,6 +106,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c16aac76_a6174493",
+        "filename": "include/bej_dictionary.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-15T23:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb77d874_025b66d8",
+      "range": {
+        "startLine": 73,
+        "startChar": 6,
+        "endLine": 80,
+        "endChar": 31
+      },
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ab57d2f_2d6e1ba6",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-05-13T23:35:32Z",
       "side": 1,
       "message": "nit: here and below, would be good to indicate where it\u0027s [in] or [out] (or both)",
+      "range": {
+        "startLine": 10,
+        "startChar": 24,
+        "endLine": 10,
+        "endChar": 26
+      },
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b82d380d_7b8ee392",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-15T23:08:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ab57d2f_2d6e1ba6",
       "range": {
         "startLine": 10,
         "startChar": 24,
@@ -110,6 +200,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ee0135f_abe68f37",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-15T23:08:10Z",
+      "side": 1,
+      "message": "Good point. But we are not using RDE headers for this. This is like one level below. For BEJ, I did not want to add too much information that we can get from the standard easily. If someone is trying to edit this code, I assumed that person would read the standard first to understand BEJ first.",
+      "parentUuid": "b8e449c3_d7c378e0",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 12
+      },
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c75c8ea_2f36356c",
@@ -123,6 +237,30 @@
       "writtenOn": "2022-05-13T23:35:32Z",
       "side": 1,
       "message": "No need to check out of bounds or something with nameLength? I guess since these are just pointer, there\u0027s no way to do that..",
+      "range": {
+        "startLine": 93,
+        "startChar": 64,
+        "endLine": 93,
+        "endChar": 74
+      },
+      "revId": "e004b56d185e836182e290b435f755c1ca955f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7566e31_9a3026cd",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-15T23:08:10Z",
+      "side": 1,
+      "message": "Yea. As long as we are using nameOffset and nameLength read from the dictionary, this is safe.",
+      "parentUuid": "2c75c8ea_2f36356c",
       "range": {
         "startLine": 93,
         "startChar": 64,
