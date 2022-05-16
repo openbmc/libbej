@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b08c09b3_ac318a0e",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-16T00:16:12Z",
+      "side": 1,
+      "message": "new line in between",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 27
+      },
+      "revId": "c0499232a811381da73e5b0cb882bfe89dff02bd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3fee48c_c386900b",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-16T00:16:12Z",
+      "side": 1,
+      "message": "should this be construct it together? like\n\n```\nstruct BejHandleTypeFuncParam params \u003d {\n  stackCallback,\n  decodedCallback,\n...\n}\n```\n\ninstead?",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 134,
+        "endChar": 45
+      },
+      "revId": "c0499232a811381da73e5b0cb882bfe89dff02bd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff887dc6_ab553134",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-16T00:16:12Z",
+      "side": 1,
+      "message": "nit: not needed.",
+      "range": {
+        "startLine": 222,
+        "startChar": 5,
+        "endLine": 222,
+        "endChar": 6
+      },
+      "revId": "c0499232a811381da73e5b0cb882bfe89dff02bd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
