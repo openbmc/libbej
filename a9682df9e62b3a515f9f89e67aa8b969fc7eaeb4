@@ -16,6 +16,29 @@
       "message": "any concern from other reviewers?",
       "revId": "a9682df9e62b3a515f9f89e67aa8b969fc7eaeb4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85e3100d_e424ca24",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-05-16T23:59:56Z",
+      "side": 1,
+      "message": "Is it common to have macros like this in C (I haven\u0027t coded production level C in a while... :P)",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 15
+      },
+      "revId": "a9682df9e62b3a515f9f89e67aa8b969fc7eaeb4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
