@@ -316,7 +316,7 @@ static bool bejIsArrayElement(const struct BejHandleTypeFuncParam* params)
 /**
  * @brief Decodes a BejSet type SFLV BEJ tuple.
  *
- * @param params - a valid BejHandleTypeFuncParam struct.
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
  * @return 0 if successful.
  */
 static int bejHandleBejSet(struct BejHandleTypeFuncParam* params)
@@ -382,7 +382,7 @@ static int bejHandleBejSet(struct BejHandleTypeFuncParam* params)
 /**
  * @brief Decodes a BejArray type SFLV BEJ tuple.
  *
- * @param params - a valid BejHandleTypeFuncParam struct.
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
  * @return 0 if successful.
  */
 static int bejHandleBejArray(struct BejHandleTypeFuncParam* params)
@@ -442,7 +442,7 @@ static int bejHandleBejArray(struct BejHandleTypeFuncParam* params)
 /**
  * @brief Decodes a BejNull type SFLV BEJ tuple.
  *
- * @param params - a valid BejHandleTypeFuncParam struct.
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
  * @return 0 if successful.
  */
 static int bejHandleBejNull(struct BejHandleTypeFuncParam* params)
@@ -457,7 +457,7 @@ static int bejHandleBejNull(struct BejHandleTypeFuncParam* params)
 /**
  * @brief Decodes a BejInteger type SFLV BEJ tuple.
  *
- * @param params - a valid BejHandleTypeFuncParam struct.
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
  * @return 0 if successful.
  */
 static int bejHandleBejInteger(struct BejHandleTypeFuncParam* params)
@@ -481,9 +481,61 @@ static int bejHandleBejInteger(struct BejHandleTypeFuncParam* params)
 }
 
 /**
+ * @brief Decodes a BejEnum type SFLV BEJ tuple.
+ *
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
+ * @return 0 if successful.
+ */
+static int bejHandleBejEnum(struct BejHandleTypeFuncParam* params)
+{
+    uint16_t sequenceNumber = params->sflv.tupleS.sequenceNumber;
+    if (bejIsArrayElement(params))
+    {
+        sequenceNumber = 0;
+    }
+    const uint8_t* dictionary;
+    const struct BejDictionaryProperty* prop;
+    RETURN_IF_IERROR(
+        bejGetDictionaryAndProperty(params, params->sflv.tupleS.schema,
+                                    sequenceNumber, &dictionary, &prop));
+
+    const char* propName = "";
+    if (params->state.addPropertyName)
+    {
+        propName = bejDictGetPropertyName(dictionary, prop->nameOffset,
+                                          prop->nameLength);
+    }
+
+    if (params->sflv.valueLength == 0)
+    {
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackNull,
+                                  propName, params->callbacksDataPtr);
+    }
+    else
+    {
+        // Get the string for enum value.
+        uint16_t enumValueSequenceN =
+            (uint16_t)(rdeGetNnint(params->sflv.value));
+        const struct BejDictionaryProperty* enumValueProp;
+        RETURN_IF_IERROR(
+            bejDictGetProperty(dictionary, prop->childPointerOffset,
+                               enumValueSequenceN, &enumValueProp));
+        const char* enumValueName = bejDictGetPropertyName(
+            dictionary, enumValueProp->nameOffset, enumValueProp->nameLength);
+
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackEnum,
+                                  propName, enumValueName,
+                                  params->callbacksDataPtr);
+    }
+    // Update the offset to point to the next possible SFLV tuple.
+    params->state.encodedStreamOffset = params->sflv.valueEndOffset;
+    return bejProcessEnding(params, /*canBeEmpty=*/false);
+}
+
+/**
  * @brief Decodes a BejString type SFLV BEJ tuple.
  *
- * @param params - a valid BejHandleTypeFuncParam struct.
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
  * @return 0 if successful.
  */
 static int bejHandleBejString(struct BejHandleTypeFuncParam* params)
@@ -507,9 +559,60 @@ static int bejHandleBejString(struct BejHandleTypeFuncParam* params)
 }
 
 /**
+ * @brief Decodes a BejReal type SFLV BEJ tuple.
+ *
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
+ * @return 0 if successful.
+ */
+static int bejHandleBejReal(struct BejHandleTypeFuncParam* params)
+{
+    const char* propName = bejGetPropName(params);
+
+    if (params->sflv.valueLength == 0)
+    {
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackNull,
+                                  propName, params->callbacksDataPtr);
+    }
+    else
+    {
+        // Real value has the following format.
+        // nnint      - Length of whole
+        // bejInteger - whole (includes sign for the overall real number)
+        // nnint      - Leading zero count for fract
+        // nnint      - fract
+        // nnint      - Length of exp
+        // bejInteger - exp (includes sign for the exponent)
+        uint8_t wholeByteLen = (uint8_t)rdeGetNnint(params->sflv.value);
+        const uint8_t* wholeBejInt =
+            params->sflv.value + rdeGetNnintSize(params->sflv.value);
+        const uint8_t* fractZeroCountNnint = wholeBejInt + wholeByteLen;
+        const uint8_t* fractNnint =
+            fractZeroCountNnint + rdeGetNnintSize(fractZeroCountNnint);
+        const uint8_t* lenExpNnint = fractNnint + rdeGetNnintSize(fractNnint);
+        const uint8_t* expBejInt = lenExpNnint + rdeGetNnintSize(lenExpNnint);
+
+        struct BejReal realValue;
+        realValue.whole = bejGetIntegerValue(wholeBejInt, wholeByteLen);
+        realValue.zeroCount = rdeGetNnint(fractZeroCountNnint);
+        realValue.fract = rdeGetNnint(fractNnint);
+        realValue.expLen = (uint8_t)rdeGetNnint(lenExpNnint);
+        if (realValue.expLen != 0)
+        {
+            realValue.exp = bejGetIntegerValue(
+                expBejInt, (uint8_t)rdeGetNnint(lenExpNnint));
+        }
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackReal,
+                                  propName, &realValue,
+                                  params->callbacksDataPtr);
+    }
+    params->state.encodedStreamOffset = params->sflv.valueEndOffset;
+    return bejProcessEnding(params, /*canBeEmpty=*/false);
+}
+
+/**
  * @brief Decodes a BejBoolean type SFLV BEJ tuple.
  *
- * @param params - a valid BejHandleTypeFuncParam struct.
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
  * @return 0 if successful.
  */
 static int bejHandleBejBoolean(struct BejHandleTypeFuncParam* params)
@@ -529,6 +632,49 @@ static int bejHandleBejBoolean(struct BejHandleTypeFuncParam* params)
     }
     params->state.encodedStreamOffset = params->sflv.valueEndOffset;
     return bejProcessEnding(params, /*canBeEmpty=*/false);
+}
+
+/**
+ * @brief Decodes a BejPropertyAnnotation type SFLV BEJ tuple.
+ *
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
+ * @return 0 if successful.
+ */
+static int bejHandleBejPropertyAnnotation(struct BejHandleTypeFuncParam* params)
+{
+    // TODO: Handle colon-delimited string values.
+
+    // Property annotation has the form OuterProperty@Annotation. First
+    // processing the outer property name.
+    const uint8_t* outerDictionary;
+    const struct BejDictionaryProperty* outerProp;
+    RETURN_IF_IERROR(bejGetDictionaryAndProperty(
+        params, params->sflv.tupleS.schema, params->sflv.tupleS.sequenceNumber,
+        &outerDictionary, &outerProp));
+
+    const char* propName = bejDictGetPropertyName(
+        outerDictionary, outerProp->nameOffset, outerProp->nameLength);
+    RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackAnnotation,
+                              propName, params->callbacksDataPtr);
+
+    // Mark the ending of the property annotation.
+    struct BejStackProperty newEnding = {
+        .sectionType = bejSectionNoType,
+        .addPropertyName = params->state.addPropertyName,
+        .mainDictPropOffset = params->state.mainDictPropOffset,
+        .annoDictPropOffset = params->state.annoDictPropOffset,
+        .streamEndOffset = params->sflv.valueEndOffset,
+    };
+    // Update the states for the next encoding segment.
+    RETURN_IF_IERROR(
+        params->stackCallback->stackPush(&newEnding, params->stackDataPtr));
+    params->state.addPropertyName = true;
+    // We might have to change this for nested annotations.
+    params->state.mainDictPropOffset = outerProp->childPointerOffset;
+    // Point to the start of the value for next decoding.
+    params->state.encodedStreamOffset =
+        params->sflv.valueEndOffset - params->sflv.valueLength;
+    return 0;
 }
 
 /**
@@ -608,17 +754,13 @@ static int bejDecode(const uint8_t* schemaDictionary,
                 RETURN_IF_IERROR(bejHandleBejInteger(&params));
                 break;
             case bejEnum:
-                // TODO: Add support for BejEnum decoding.
-                fprintf(stderr, "No BejEnum support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejEnum(&params));
                 break;
             case bejString:
                 RETURN_IF_IERROR(bejHandleBejString(&params));
                 break;
             case bejReal:
-                // TODO: Add support for BejReal decoding.
-                fprintf(stderr, "No BejReal support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejReal(&params));
                 break;
             case bejBoolean:
                 RETURN_IF_IERROR(bejHandleBejBoolean(&params));
@@ -634,9 +776,7 @@ static int bejDecode(const uint8_t* schemaDictionary,
                 params.state.encodedStreamOffset = params.sflv.valueEndOffset;
                 break;
             case bejPropertyAnnotation:
-                // TODO: Add support for BejPropertyAnnotation decoding.
-                fprintf(stderr, "No BejPropertyAnnotation support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejPropertyAnnotation(&params));
                 break;
             case bejResourceLink:
                 // TODO: Add support for BejResourceLink decoding.
@@ -665,7 +805,7 @@ static int bejDecode(const uint8_t* schemaDictionary,
 /**
  * @brief Check if a bej version is supported by this decoder
  *
- * @param bejVersion[in] - the bej version in the received encoded stream
+ * @param[in] bejVersion - the bej version in the received encoded stream
  * @return true if supported.
  */
 static bool bejIsSupported(uint32_t bejVersion)
