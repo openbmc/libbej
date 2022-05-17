@@ -34,6 +34,7 @@ extern "C"
         bejErrorUnknownProperty,
         bejErrorInvalidSchemaType,
         bejErrorInvalidPropertyOffset,
+        bejErrorNullParameter,
     };
 
     /**
