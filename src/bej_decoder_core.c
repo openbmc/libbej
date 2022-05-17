@@ -381,6 +381,94 @@ bejEndSet:
 }
 
 /**
+ * @brief Decodes a BejArray type SFLV BEJ tuple.
+ *
+ * @param params - a valid BejHandleTypeFuncParam struct.
+ * @return 0 if successful.
+ */
+static int bejHandleBejArray(struct BejHandleTypeFuncParam* params)
+{
+    const uint8_t* dictionary;
+    const struct BejDictionaryProperty* prop;
+    RETURN_IF_IERROR(bejGetDictionaryAndProperty(
+        params, params->sflv.tupleS.schema, params->sflv.tupleS.sequenceNumber,
+        &dictionary, &prop));
+
+    const char* propName;
+    if (params->state.addPropertyName)
+    {
+        propName = bejDictGetPropertyName(dictionary, prop->nameOffset,
+                                          prop->nameLength);
+    }
+    else
+    {
+        propName = "";
+    }
+
+    RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackArrayStart,
+                              propName, params->callbacksDataPtr);
+
+    uint64_t elements = rdeGetNnint(params->sflv.value);
+    // If its an empty array, we are done here.
+    if (elements == 0)
+    {
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackArrayEnd,
+                                  params->callbacksDataPtr);
+        goto bejEndArray;
+    }
+
+    // Update the state for next segment decoding.
+    struct BejStackProperty newEnding = {
+        .sectionType = bejSectionArray,
+        .addPropertyName = params->state.addPropertyName,
+        .mainDictPropOffset = params->state.mainDictPropOffset,
+        .annoDictPropOffset = params->state.annoDictPropOffset,
+        .streamEndOffset = params->sflv.valueEndOffset,
+    };
+    RETURN_IF_IERROR(
+        params->stackCallback->stackPush(&newEnding, params->stackDataPtr));
+    // We do not add property names for array elements.
+    params->state.addPropertyName = false;
+    if (params->sflv.tupleS.schema == bejAnnotation)
+    {
+        // Since this array is an annotated type, we need to advance the
+        // annotation dictionary for decoding the next segment.
+        params->state.annoDictPropOffset = prop->childPointerOffset;
+    }
+    else
+    {
+        params->state.mainDictPropOffset = prop->childPointerOffset;
+    }
+
+bejEndArray:
+    params->state.encodedStreamOffset = bejGetFirstTupleOffset(params);
+    return 0;
+}
+
+/**
+ * @brief Decodes a BejNull type SFLV BEJ tuple.
+ *
+ * @param params - a valid BejHandleTypeFuncParam struct.
+ * @return 0 if successful.
+ */
+static int bejHandleBejNull(struct BejHandleTypeFuncParam* params)
+{
+    const char* propName;
+    if (params->state.addPropertyName)
+    {
+        propName = bejFindPropName(params);
+    }
+    else
+    {
+        propName = "";
+    }
+    RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackNull, propName,
+                              params->callbacksDataPtr);
+    params->state.encodedStreamOffset = params->sflv.valueEndOffset;
+    return bejProcessEnding(params, /*canBeEmpty=*/false);
+}
+
+/**
  * @brief Decodes a BejInteger type SFLV BEJ tuple.
  *
  * @param params - a valid BejHandleTypeFuncParam struct.
@@ -409,6 +497,61 @@ static int bejHandleBejInteger(struct BejHandleTypeFuncParam* params)
             params->decodedCallback->callbackInteger, propName,
             bejGetIntegerValue(params->sflv.value, params->sflv.valueLength),
             params->callbacksDataPtr);
+    }
+    params->state.encodedStreamOffset = params->sflv.valueEndOffset;
+    return bejProcessEnding(params, /*canBeEmpty=*/false);
+}
+
+static int bejHandleBejString(struct BejHandleTypeFuncParam* params)
+{
+    // TODO: Handle deferred bindings.
+    const char* propName;
+    if (params->state.addPropertyName)
+    {
+        propName = bejFindPropName(params);
+    }
+    else
+    {
+        propName = "";
+    }
+
+    if (params->sflv.valueLength == 0)
+    {
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackNull,
+                                  propName, params->callbacksDataPtr);
+    }
+    else
+    {
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackString,
+                                  propName, (const char*)(params->sflv.value),
+                                  params->callbacksDataPtr);
+    }
+    params->state.encodedStreamOffset = params->sflv.valueEndOffset;
+    return bejProcessEnding(params, /*canBeEmpty=*/false);
+}
+
+static int bejHandleBejBoolean(struct BejHandleTypeFuncParam* params)
+{
+    const char* propName;
+    if (params->state.addPropertyName)
+    {
+        propName = bejFindPropName(params);
+    }
+    else
+    {
+        propName = "";
+    }
+
+    if (params->sflv.valueLength == 0)
+    {
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackNull,
+                                  propName, params->callbacksDataPtr);
+    }
+    else
+    {
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackBool,
+                                  propName, *(params->sflv.value) > 0,
+                                  params->callbacksDataPtr);
     }
     params->state.encodedStreamOffset = params->sflv.valueEndOffset;
     return bejProcessEnding(params, /*canBeEmpty=*/false);
@@ -482,14 +625,10 @@ static int bejDecode(const uint8_t* schemaDictionary,
                 RETURN_IF_IERROR(bejHandleBejSet(&params));
                 break;
             case bejArray:
-                // TODO: Add support for BejArray decoding.
-                fprintf(stderr, "No BejArray support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejArray(&params));
                 break;
             case bejNull:
-                // TODO: Add support for BejNull decoding.
-                fprintf(stderr, "No BejNull support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejNull(&params));
                 break;
             case bejInteger:
                 RETURN_IF_IERROR(bejHandleBejInteger(&params));
@@ -500,9 +639,7 @@ static int bejDecode(const uint8_t* schemaDictionary,
                 params.state.encodedStreamOffset = params.sflv.valueEndOffset;
                 break;
             case bejString:
-                // TODO: Add support for BejString decoding.
-                fprintf(stderr, "No BejString support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejString(&params));
                 break;
             case bejReal:
                 // TODO: Add support for BejReal decoding.
@@ -510,9 +647,7 @@ static int bejDecode(const uint8_t* schemaDictionary,
                 params.state.encodedStreamOffset = params.sflv.valueEndOffset;
                 break;
             case bejBoolean:
-                // TODO: Add support for BejBoolean decoding.
-                fprintf(stderr, "No BejBoolean support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejBoolean(&params));
                 break;
             case bejBytestring:
                 // TODO: Add support for BejBytestring decoding.
