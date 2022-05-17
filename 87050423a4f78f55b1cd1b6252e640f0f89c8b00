@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "522bf6f9_696574d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000593
+      },
+      "writtenOn": "2022-05-17T19:37:59Z",
+      "side": 1,
+      "message": "I don\u0027t really have any power here.\nYou do you",
+      "revId": "87050423a4f78f55b1cd1b6252e640f0f89c8b00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2a900e3_0ea89e2f",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000593
+      },
+      "writtenOn": "2022-05-17T19:37:59Z",
+      "side": 1,
+      "message": "this does not work if you try to get more the 64bits (8 bytes)\nI would recommend range checking numOfBytes, or updating the documentation or",
+      "range": {
+        "startLine": 39,
+        "startChar": 64,
+        "endLine": 39,
+        "endChar": 74
+      },
+      "revId": "87050423a4f78f55b1cd1b6252e640f0f89c8b00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f25c680f_c596bc04",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000593
+      },
+      "writtenOn": "2022-05-17T19:37:59Z",
+      "side": 1,
+      "message": "NIT:\nif you typedef BejHandleTypeFuncParam you don\u0027t have to write \"struct everytime you use it.",
+      "range": {
+        "startLine": 126,
+        "startChar": 33,
+        "endLine": 126,
+        "endChar": 39
+      },
+      "revId": "87050423a4f78f55b1cd1b6252e640f0f89c8b00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe309301_696fd470",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000593
+      },
+      "writtenOn": "2022-05-17T19:37:59Z",
+      "side": 1,
+      "message": "NIT:\noptional null check",
+      "range": {
+        "startLine": 131,
+        "startChar": 38,
+        "endLine": 131,
+        "endChar": 60
+      },
+      "revId": "87050423a4f78f55b1cd1b6252e640f0f89c8b00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48df5f04_905bd85d",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000593
+      },
+      "writtenOn": "2022-05-17T19:37:59Z",
+      "side": 1,
+      "message": "if stackCallback is null you will have an null dereferance.\nA common design is something like\n```\nif (params-\u003estackCallback \u003d\u003d nullprt || \n       params-\u003estackCallback-\u003estackEmpty(params-\u003estackDataPtr)\n```\nSo if stackCallback is null you never do the second half of the condition.",
+      "range": {
+        "startLine": 286,
+        "startChar": 4,
+        "endLine": 286,
+        "endChar": 8
+      },
+      "revId": "87050423a4f78f55b1cd1b6252e640f0f89c8b00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69a861f4_260bda82",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000593
+      },
+      "writtenOn": "2022-05-17T19:37:59Z",
+      "side": 1,
+      "message": "Why is their no comment explaining this?",
+      "range": {
+        "startLine": 297,
+        "startChar": 11,
+        "endLine": 297,
+        "endChar": 26
+      },
+      "revId": "87050423a4f78f55b1cd1b6252e640f0f89c8b00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e11e1f1_f5953a01",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000593
+      },
+      "writtenOn": "2022-05-17T19:37:59Z",
+      "side": 1,
+      "message": "Nit:\nI dis-prefer the goto, if you are only using it one place. But I do accept this a standard goto design pattern. It is a code smell issue, for others.",
+      "range": {
+        "startLine": 332,
+        "startChar": 13,
+        "endLine": 332,
+        "endChar": 22
+      },
+      "revId": "87050423a4f78f55b1cd1b6252e640f0f89c8b00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c2c1b21_90ceae2c",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000593
+      },
+      "writtenOn": "2022-05-17T19:37:59Z",
+      "side": 1,
+      "message": "Why is their no comment explaining this?",
+      "range": {
+        "startLine": 361,
+        "startChar": 11,
+        "endLine": 361,
+        "endChar": 30
+      },
+      "revId": "87050423a4f78f55b1cd1b6252e640f0f89c8b00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
