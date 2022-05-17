@@ -63,6 +63,30 @@
       },
       "revId": "a9682df9e62b3a515f9f89e67aa8b969fc7eaeb4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d60ea525_77d75745",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-17T00:29:50Z",
+      "side": 1,
+      "message": "Yea, we do use multiline macros.",
+      "parentUuid": "38c98516_c545ae03",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 15
+      },
+      "revId": "a9682df9e62b3a515f9f89e67aa8b969fc7eaeb4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
