@@ -103,7 +103,7 @@ extern "C"
         /**
          * @brief Calls when an Integer property is found.
          */
-        int (*callbackInteger)(const char* propertyName, uint64_t value,
+        int (*callbackInteger)(const char* propertyName, int64_t value,
                                void* dataPtr);
 
         /**
