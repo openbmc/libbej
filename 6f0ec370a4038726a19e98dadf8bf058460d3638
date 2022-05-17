@@ -45,6 +45,30 @@
       },
       "revId": "6f0ec370a4038726a19e98dadf8bf058460d3638",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "486471b6_63dd2bae",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-17T23:39:07Z",
+      "side": 1,
+      "message": "We do use goto this way to jump to the end of the function in linux kernel and EC as well.",
+      "parentUuid": "bad2aefa_d6455db3",
+      "range": {
+        "startLine": 417,
+        "startChar": 0,
+        "endLine": 417,
+        "endChar": 25
+      },
+      "revId": "6f0ec370a4038726a19e98dadf8bf058460d3638",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
