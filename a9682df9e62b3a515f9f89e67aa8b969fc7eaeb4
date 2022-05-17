@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a848103f_be8ef2af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001202
+      },
+      "writtenOn": "2022-05-17T17:01:15Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 16,
+        "startChar": 21,
+        "endLine": 16,
+        "endChar": 31
+      },
+      "revId": "a9682df9e62b3a515f9f89e67aa8b969fc7eaeb4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "cd95cb55_b372540e",
@@ -14,6 +37,52 @@
       "writtenOn": "2022-05-16T23:51:45Z",
       "side": 1,
       "message": "any concern from other reviewers?",
+      "revId": "a9682df9e62b3a515f9f89e67aa8b969fc7eaeb4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97ad683b_bb8de78c",
+        "filename": "include/bej_decoder_core.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001202
+      },
+      "writtenOn": "2022-05-17T17:01:15Z",
+      "side": 1,
+      "message": "I wouldn\u0027t normally expect everything inside of \"extern C\" to be indented.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 4
+      },
+      "revId": "a9682df9e62b3a515f9f89e67aa8b969fc7eaeb4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b334a4ef_6607b796",
+        "filename": "include/bej_decoder_core.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001202
+      },
+      "writtenOn": "2022-05-17T17:01:15Z",
+      "side": 1,
+      "message": "Should there be comments for all the parameters of the function pointers in this file?",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 29
+      },
       "revId": "a9682df9e62b3a515f9f89e67aa8b969fc7eaeb4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -84,6 +153,29 @@
         "startChar": 0,
         "endLine": 29,
         "endChar": 15
+      },
+      "revId": "a9682df9e62b3a515f9f89e67aa8b969fc7eaeb4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ac1ae28_ad759bbd",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1001202
+      },
+      "writtenOn": "2022-05-17T17:01:15Z",
+      "side": 1,
+      "message": "nit: This probably isn\u0027t important, but the name of this function sounds like it\u0027s supposed to return 1 if the version is supported.",
+      "range": {
+        "startLine": 243,
+        "startChar": 11,
+        "endLine": 243,
+        "endChar": 25
       },
       "revId": "a9682df9e62b3a515f9f89e67aa8b969fc7eaeb4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
