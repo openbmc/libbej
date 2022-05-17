@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bad2aefa_d6455db3",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-17T23:28:19Z",
+      "side": 1,
+      "message": "I had an impression that people don\u0027t like goto, but maybe that\u0027s just me.",
+      "range": {
+        "startLine": 417,
+        "startChar": 0,
+        "endLine": 417,
+        "endChar": 25
+      },
+      "revId": "6f0ec370a4038726a19e98dadf8bf058460d3638",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
