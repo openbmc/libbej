@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0a41815_6dee7dcc",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-05-18T05:32:34Z",
+      "side": 1,
+      "message": "just initialize propName to `\"\"` and remove the else?\n\nSame in bejHandleBejNull and the other functions",
+      "range": {
+        "startLine": 397,
+        "startChar": 4,
+        "endLine": 407,
+        "endChar": 0
+      },
+      "revId": "01ed1213ba15a014743231d172f389a3426fff19",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
