@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53040660_328e27da",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001202
+      },
+      "writtenOn": "2022-05-18T17:09:29Z",
+      "side": 1,
+      "message": "How much longer do you expect this file to get? Have you thought about breaking it up?",
+      "revId": "01ed1213ba15a014743231d172f389a3426fff19",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0a41815_6dee7dcc",
         "filename": "src/bej_decoder_core.c",
         "patchSetId": 4
@@ -19,6 +36,29 @@
         "startChar": 4,
         "endLine": 407,
         "endChar": 0
+      },
+      "revId": "01ed1213ba15a014743231d172f389a3426fff19",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f6b3e24_23c24af5",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1001202
+      },
+      "writtenOn": "2022-05-18T17:09:29Z",
+      "side": 1,
+      "message": "This block of code is replicated in many places. It might make sense to create an inline function for this, or just put the additional if logic inside of bejFindPropName.",
+      "range": {
+        "startLine": 457,
+        "startChar": 4,
+        "endLine": 463,
+        "endChar": 22
       },
       "revId": "01ed1213ba15a014743231d172f389a3426fff19",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
