@@ -206,6 +206,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86fef0da_c71bcba4",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000593
+      },
+      "writtenOn": "2022-05-18T20:51:51Z",
+      "side": 1,
+      "message": "I saw the NULL check added at the start.\nThat is okay with me, if you pass as const.",
+      "parentUuid": "62830843_d1c23ae5",
+      "range": {
+        "startLine": 286,
+        "startChar": 4,
+        "endLine": 286,
+        "endChar": 8
+      },
+      "revId": "87050423a4f78f55b1cd1b6252e640f0f89c8b00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69a861f4_260bda82",
@@ -290,6 +314,30 @@
       "side": 1,
       "message": "We do use goto to jump to an end of a function sometimes. It used this way in linux kernel code and EC.",
       "parentUuid": "9e11e1f1_f5953a01",
+      "range": {
+        "startLine": 332,
+        "startChar": 13,
+        "endLine": 332,
+        "endChar": 22
+      },
+      "revId": "87050423a4f78f55b1cd1b6252e640f0f89c8b00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcd88646_27798af4",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000593
+      },
+      "writtenOn": "2022-05-18T20:51:51Z",
+      "side": 1,
+      "message": "That is not a good reason. This is not the linux kernel or the EC team. But this is NIT.\n\nhttps://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Res-goto\n\nplease indent your label \"bejEndSet\" in accordance with our standard.\n\nhttps://github.com/openbmc/docs/blob/master/cpp-style-and-conventions.md#indentation",
+      "parentUuid": "e238ecca_bcef8068",
       "range": {
         "startLine": 332,
         "startChar": 13,
