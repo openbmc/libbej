@@ -16,6 +16,24 @@
       "message": "oh, I thought we want all C code?",
       "revId": "65f4dd57d717f199c68e665ce8e146777f812310",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7a6b9cc_6fbfede7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-23T20:02:43Z",
+      "side": 1,
+      "message": "Only the decoder core. Then we can build different clients (C or C++) on top of the core. Decoding the output to a JSON string is only useful for the bmc + ExternalStorer use case.",
+      "parentUuid": "fb5a4080_87d2e8b1",
+      "revId": "65f4dd57d717f199c68e665ce8e146777f812310",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
