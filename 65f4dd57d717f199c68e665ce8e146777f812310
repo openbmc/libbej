@@ -59,6 +59,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c72a1a92_87076092",
+        "filename": "include/bej_decoder_json.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-23T20:42:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efccdc09_7f34d388",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 21
+      },
+      "revId": "65f4dd57d717f199c68e665ce8e146777f812310",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b998be5_3e8dba92",
@@ -72,6 +96,30 @@
       "writtenOn": "2022-05-23T20:11:55Z",
       "side": 1,
       "message": "does it have to be poitners?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "65f4dd57d717f199c68e665ce8e146777f812310",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faa9d0ae_503aab68",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-23T20:42:54Z",
+      "side": 1,
+      "message": "Yes. This structure is used to pass pointers of client variables/objects to the decoder core. Then decoder core will pass them to the callback functions of the client so that client can use them inside those callback functions.",
+      "parentUuid": "6b998be5_3e8dba92",
       "range": {
         "startLine": 11,
         "startChar": 0,
@@ -99,6 +147,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34ea8043_a6b34246",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-23T20:42:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26b82d32_e3cdd9b1",
+      "revId": "65f4dd57d717f199c68e665ce8e146777f812310",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d88f596_55b9323c",
@@ -112,6 +178,30 @@
       "writtenOn": "2022-05-23T20:11:55Z",
       "side": 1,
       "message": "std::null_ptr for C++",
+      "range": {
+        "startLine": 276,
+        "startChar": 15,
+        "endLine": 276,
+        "endChar": 19
+      },
+      "revId": "65f4dd57d717f199c68e665ce8e146777f812310",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56977873_3e5bfbee",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-23T20:42:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d88f596_55b9323c",
       "range": {
         "startLine": 276,
         "startChar": 15,
