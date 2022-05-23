@@ -16,6 +16,7 @@ if not gtest.found() or not gmock.found()
 endif
 
 gtests = [
+  'bej_decoder',
   'rde_common',
   'bej_dictionary',
 ]
