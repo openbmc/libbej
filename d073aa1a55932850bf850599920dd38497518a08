@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b62cf8b_6db666af",
+        "filename": "include/bej_dictionary.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2022-05-28T01:04:20Z",
+      "side": 1,
+      "message": "Can we typedef all the structs ? \n\nstruct _BejDictionaryProperty_\n{\n} BejDictionaryProperty;\n\n\nThis will avoid repeated used of struct BejDictionaryProperty* and instead we can use BejDictionaryProperty*",
+      "revId": "d073aa1a55932850bf850599920dd38497518a08",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
