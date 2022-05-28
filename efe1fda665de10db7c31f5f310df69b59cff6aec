@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d950d026_9f04a3b3",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2022-05-28T01:45:22Z",
+      "side": 1,
+      "message": "Do we need a check to see if it greater than 8 bytes ?",
+      "revId": "efe1fda665de10db7c31f5f310df69b59cff6aec",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6461a324_6b6c446f",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2022-05-28T01:45:22Z",
+      "side": 1,
+      "message": "I think a uint8_t typecast is not needed here but you definitely need a (uint64_t) typecast for \u00271U\u0027. Otherwise your mask may be incorrect when (bitsInVal - 1) is between 32 to 63",
+      "revId": "efe1fda665de10db7c31f5f310df69b59cff6aec",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "475e626f_c92a2b99",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2022-05-28T01:45:22Z",
+      "side": 1,
+      "message": "Can the structs be defined and declared using the typedef ?",
+      "revId": "efe1fda665de10db7c31f5f310df69b59cff6aec",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
