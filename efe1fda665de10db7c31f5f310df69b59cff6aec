@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dffdf32_182aaacc",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-31T20:36:09Z",
+      "side": 1,
+      "message": "Since this function is local to this source file, and bejInteger type maximum is 64bits I did not check it. I have added this information in the function header.",
+      "parentUuid": "d950d026_9f04a3b3",
+      "revId": "efe1fda665de10db7c31f5f310df69b59cff6aec",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6461a324_6b6c446f",
@@ -35,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "492c0b9b_2a688f86",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-31T20:36:09Z",
+      "side": 1,
+      "message": "Good catch!\n\nI need uint8_t to stop the compiler warning.",
+      "parentUuid": "6461a324_6b6c446f",
+      "revId": "efe1fda665de10db7c31f5f310df69b59cff6aec",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "475e626f_c92a2b99",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-05-28T01:45:22Z",
       "side": 1,
       "message": "Can the structs be defined and declared using the typedef ?",
+      "revId": "efe1fda665de10db7c31f5f310df69b59cff6aec",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6770203d_8ca78d17",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-05-31T20:36:09Z",
+      "side": 1,
+      "message": "As I mentioned in the previous review, \"We could. I just preferred this style because it tells me that a particular variable is a struct\"",
+      "parentUuid": "475e626f_c92a2b99",
       "revId": "efe1fda665de10db7c31f5f310df69b59cff6aec",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
