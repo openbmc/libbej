@@ -16,6 +16,24 @@
       "message": "I am not sure, if I understand what this flag does. Can you explain it ?",
       "revId": "f5da8adf87e1787cd2d9b53dc87749b974443c33",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d7b72e6_2b58f79e",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-06-01T22:22:41Z",
+      "side": 1,
+      "message": "I added an explanation here as a comment. Let me know if it is not clear.",
+      "parentUuid": "455937fe_3fed6e40",
+      "revId": "f5da8adf87e1787cd2d9b53dc87749b974443c33",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
