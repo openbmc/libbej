@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1312eb03_90692c9c",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2022-06-01T20:41:26Z",
+      "side": 1,
+      "message": "You can drop the U now ?",
+      "revId": "6fe306751788e4410c998fa72dff7c2fd741d80c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc3207d8_766146a0",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 6
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2022-06-01T20:41:26Z",
+      "side": 1,
+      "message": "nit: We can just do \"return ret\" once here",
+      "revId": "6fe306751788e4410c998fa72dff7c2fd741d80c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
