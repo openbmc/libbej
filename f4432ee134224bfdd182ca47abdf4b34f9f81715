@@ -65,6 +65,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48eb4bbc_f2e27a3d",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-06-02T21:13:29Z",
+      "side": 1,
+      "message": "yea, its a type in BEJ.",
+      "parentUuid": "934e1e3f_5500669b",
+      "range": {
+        "startLine": 134,
+        "startChar": 59,
+        "endLine": 134,
+        "endChar": 64
+      },
+      "revId": "f4432ee134224bfdd182ca47abdf4b34f9f81715",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c3517cb_12e44793",
@@ -88,6 +112,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e240154_9d2f2452",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-06-02T21:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c3517cb_12e44793",
+      "range": {
+        "startLine": 133,
+        "startChar": 69,
+        "endLine": 136,
+        "endChar": 10
+      },
+      "revId": "f4432ee134224bfdd182ca47abdf4b34f9f81715",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84312b73_1e8decce",
@@ -101,6 +149,30 @@
       "writtenOn": "2022-06-02T18:27:32Z",
       "side": 1,
       "message": "nit: same as above, we should probably have brief be a one liner and leave the rest as inbody comment: https://www.doxygen.nl/manual/docblocks.html\n\n\u003e As the name suggest, a brief description is a short one-liner, whereas the detailed description provides longer, more detailed documentation. An \"in body\" description can also act as a detailed description or can describe a collection of implementation details. For the HTML output brief descriptions are also used to provide tooltips at places where an item is referenced.",
+      "range": {
+        "startLine": 224,
+        "startChar": 10,
+        "endLine": 227,
+        "endChar": 56
+      },
+      "revId": "f4432ee134224bfdd182ca47abdf4b34f9f81715",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cea7832c_dad4b67e",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-06-02T21:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84312b73_1e8decce",
       "range": {
         "startLine": 224,
         "startChar": 10,
