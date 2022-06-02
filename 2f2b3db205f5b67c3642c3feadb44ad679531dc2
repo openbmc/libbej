@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b846666b_d494c988",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-06-02T22:57:07Z",
+      "side": 1,
+      "message": "I feel like some of these functions are perfect for unit tests... but at the same time, maybe these are too simple",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 0
+      },
+      "revId": "2f2b3db205f5b67c3642c3feadb44ad679531dc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e6fe741_751de42b",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-06-02T22:57:07Z",
+      "side": 1,
+      "message": "Looks like here and below we started dropping static, is this intended?",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 3
+      },
+      "revId": "2f2b3db205f5b67c3642c3feadb44ad679531dc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34d317bc_d06d0878",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-06-02T22:57:07Z",
+      "side": 1,
+      "message": "I think it\u0027s better to avoid I here, maybe something like \"This is using\"",
+      "range": {
+        "startLine": 329,
+        "startChar": 70,
+        "endLine": 329,
+        "endChar": 80
+      },
+      "revId": "2f2b3db205f5b67c3642c3feadb44ad679531dc2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
