@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "934e1e3f_5500669b",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-06-02T18:28:58Z",
+      "side": 1,
+      "message": "Oh it looks like nnit is an actual thing: https://gerrit.openbmc.org/c/openbmc/libbej/+/53793/12",
+      "parentUuid": "cf6d301b_48e57699",
+      "range": {
+        "startLine": 134,
+        "startChar": 59,
+        "endLine": 134,
+        "endChar": 64
+      },
+      "revId": "f4432ee134224bfdd182ca47abdf4b34f9f81715",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c3517cb_12e44793",
