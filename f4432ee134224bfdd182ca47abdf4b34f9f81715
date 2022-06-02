@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13bb4374_819c1330",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-06-02T18:27:32Z",
+      "side": 1,
+      "message": "Looks good! Some nits on the comments.\n\nThank you Nikhil and John for the detailed and thorough reviews - definitely gotchas I would have missed in C land",
+      "revId": "f4432ee134224bfdd182ca47abdf4b34f9f81715",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6d301b_48e57699",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-06-02T18:27:32Z",
+      "side": 1,
+      "message": "is this a typo?",
+      "range": {
+        "startLine": 134,
+        "startChar": 59,
+        "endLine": 134,
+        "endChar": 64
+      },
+      "revId": "f4432ee134224bfdd182ca47abdf4b34f9f81715",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c3517cb_12e44793",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-06-02T18:27:32Z",
+      "side": 1,
+      "message": "Technically this is more than a brief, so should go under a new line.\n\nMaybe something like:\n\n```\n * @brief Get the offset to the first tuple of a bejArray or bejSet.\n *\n * The first part of the value of a bejArray or a bejSet contains an nnint providing the\n * number of elements/tuples. Offset is with respect to the start of the encoded\n * stream.\n```\n\n(you\u0027ll have to fix the 80 char limit)",
+      "range": {
+        "startLine": 133,
+        "startChar": 69,
+        "endLine": 136,
+        "endChar": 10
+      },
+      "revId": "f4432ee134224bfdd182ca47abdf4b34f9f81715",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84312b73_1e8decce",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 7
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-06-02T18:27:32Z",
+      "side": 1,
+      "message": "nit: same as above, we should probably have brief be a one liner and leave the rest as inbody comment: https://www.doxygen.nl/manual/docblocks.html\n\n\u003e As the name suggest, a brief description is a short one-liner, whereas the detailed description provides longer, more detailed documentation. An \"in body\" description can also act as a detailed description or can describe a collection of implementation details. For the HTML output brief descriptions are also used to provide tooltips at places where an item is referenced.",
+      "range": {
+        "startLine": 224,
+        "startChar": 10,
+        "endLine": 227,
+        "endChar": 56
+      },
+      "revId": "f4432ee134224bfdd182ca47abdf4b34f9f81715",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
