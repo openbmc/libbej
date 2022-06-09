@@ -62,7 +62,7 @@ static int64_t bejGetIntegerValue(const uint8_t* bytes, uint8_t numOfBytes)
     uint8_t bitsInVal = numOfBytes * 8;
     // Since numOfBytes > 0, bitsInVal is non negative.
     uint64_t mask = (uint64_t)1 << (uint8_t)(bitsInVal - 1);
-    return (value ^ mask) - mask;
+    return (int64_t)((value ^ mask) - mask);
 }
 
 /**
