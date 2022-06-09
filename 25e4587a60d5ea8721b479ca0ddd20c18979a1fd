@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bcceff3_9a17b44a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-06-09T17:04:25Z",
+      "side": 1,
+      "message": "nit: These tests are not guaranteed to work as a subproject.",
+      "range": {
+        "startLine": 9,
+        "startChar": 67,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "25e4587a60d5ea8721b479ca0ddd20c18979a1fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
