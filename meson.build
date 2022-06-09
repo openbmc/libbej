@@ -9,6 +9,7 @@ project(
     'cpp_std=c++20',
     'werror=true',
     'warning_level=3',
+    'tests=' + (meson.is_subproject() ? 'disabled' : 'auto'),
   ])
 
 libbej_incs = include_directories('include')
