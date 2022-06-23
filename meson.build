@@ -14,6 +14,8 @@ project(
 
 libbej_incs = include_directories('include')
 subdir('src')
+subdir('include')
 if not get_option('tests').disabled()
   subdir('test')
 endif
+
