@@ -16,9 +16,7 @@ if not gtest.found() or not gmock.found()
 endif
 
 gtests = [
-  'bej_decoder',
-  'rde_common',
-  'bej_dictionary',
+  'bej_encoder',
 ]
 foreach t : gtests
   test(t, executable(t.underscorify(), t + '_test.cpp',

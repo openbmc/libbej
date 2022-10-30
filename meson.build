@@ -12,9 +12,9 @@ project(
     'tests=' + (meson.is_subproject() ? 'disabled' : 'auto'),
   ])
 
-libbej_incs = include_directories('include')
+libbej_incs = include_directories('include/libbej')
 subdir('src')
-subdir('include')
+subdir('include/libbej')
 if not get_option('tests').disabled()
   subdir('test')
 endif
