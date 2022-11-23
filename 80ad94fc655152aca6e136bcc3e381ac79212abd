@@ -22,6 +22,30 @@
       },
       "revId": "80ad94fc655152aca6e136bcc3e381ac79212abd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cecc25d_64e61413",
+        "filename": "include/libbej/bej_common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-11-23T22:54:46Z",
+      "side": 0,
+      "message": "Not yet. This is only used by bios-bmc-smm-error-logger. I am planning to update that once this change is merged.",
+      "parentUuid": "90ec9858_1b0b0ab9",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 29
+      },
+      "revId": "80ad94fc655152aca6e136bcc3e381ac79212abd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
