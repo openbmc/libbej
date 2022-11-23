@@ -17,7 +17,7 @@ endif
 
 gtests = [
   'bej_decoder',
-  'rde_common',
+  'bej_common',
   'bej_dictionary',
 ]
 foreach t : gtests

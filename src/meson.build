@@ -1,7 +1,7 @@
 libbej_lib = library(
   'libbej',
   'bej_decoder_core.c',
-  'rde_common.c',
+  'bej_common.c',
   'bej_dictionary.c',
   'bej_decoder_json.cpp',
   include_directories : libbej_incs,

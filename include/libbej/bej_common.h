@@ -144,50 +144,6 @@ extern "C"
         uint8_t schemaClass;
     } __attribute__((__packed__));
 
-    enum RdeOperationInitType
-    {
-        rdeOpInitOperationHead = 0,
-        rdeOpInitOperationRead = 1,
-        rdeOpInitOperationCreate = 2,
-        rdeOpInitOperationDelete = 3,
-        rdeOpInitOperationUpdate = 4,
-        rdeOpInitOperationReplace = 5,
-        rdeOpInitOperationAction = 6,
-    };
-
-    enum RdeMultiReceiveTransferFlag
-    {
-        rdeMRecFlagStart = 0,
-        rdeMRecFlagMiddle = 1,
-        rdeMRecFlagEnd = 2,
-        rdeMRecFlagStartAndEnd = 3,
-    };
-
-    struct RdeOperationInitReqHeader
-    {
-        uint32_t resourceID;
-        uint16_t operationID;
-        uint8_t operationType;
-
-        // OperationFlags bits
-        uint8_t locatorValid : 1;
-        uint8_t containsRequestPayload : 1;
-        uint8_t containsCustomRequestParameters : 1;
-
-        uint8_t reserved : 5;
-        uint32_t sendDataTransferHandle;
-        uint8_t operationLocatorLength;
-        uint32_t requestPayloadLength;
-    } __attribute__((__packed__));
-
-    struct MultipartReceiveResHeader
-    {
-        uint8_t completionCode;
-        uint8_t transferFlag;
-        uint32_t nextDataTransferHandle;
-        uint32_t dataLengthBytes;
-    } __attribute__((__packed__));
-
     /**
      * @brief Get the unsigned integer value from provided bytes.
      *
@@ -198,7 +154,7 @@ extern "C"
      * undefined.
      * @return unsigend 64bit representation of the value.
      */
-    uint64_t rdeGetUnsignedInteger(const uint8_t* bytes, uint8_t numOfBytes);
+    uint64_t bejGetUnsignedInteger(const uint8_t* bytes, uint8_t numOfBytes);
 
     /**
      * @brief Get the value from nnint type.
@@ -206,7 +162,7 @@ extern "C"
      * @param[in] nnint - nnint should be pointing to a valid nnint.
      * @return unsigend 64bit representation of the value.
      */
-    uint64_t rdeGetNnint(const uint8_t* nnint);
+    uint64_t bejGetNnint(const uint8_t* nnint);
 
     /**
      * @brief Get the size of the complete nnint.
@@ -214,7 +170,7 @@ extern "C"
      * @param[in] nnint - pointer to a valid nnint.
      * @return size of the complete nnint.
      */
-    uint8_t rdeGetNnintSize(const uint8_t* nnint);
+    uint8_t bejGetNnintSize(const uint8_t* nnint);
 
 #ifdef __cplusplus
 }
