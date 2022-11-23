@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rde_common.h"
+#include "bej_common.h"
 
 #include <stdbool.h>
 #include <stddef.h>

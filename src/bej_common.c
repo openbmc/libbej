@@ -1,4 +1,4 @@
-#include "rde_common.h"
+#include "bej_common.h"
 
 uint64_t rdeGetUnsignedInteger(const uint8_t* bytes, uint8_t numOfBytes)
 {
