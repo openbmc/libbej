@@ -1,7 +1,7 @@
 #pragma once
 
+#include "bej_common.h"
 #include "bej_decoder_core.h"
-#include "rde_common.h"
 
 #include <span>
 #include <string>

@@ -58,7 +58,7 @@ static int64_t bejGetIntegerValue(const uint8_t* bytes, uint8_t numOfBytes)
     {
         return 0;
     }
-    uint64_t value = rdeGetUnsignedInteger(bytes, numOfBytes);
+    uint64_t value = bejGetUnsignedInteger(bytes, numOfBytes);
     uint8_t bitsInVal = numOfBytes * 8;
     // Since numOfBytes > 0, bitsInVal is non negative.
     uint64_t mask = (uint64_t)1 << (uint8_t)(bitsInVal - 1);
@@ -112,11 +112,11 @@ static void bejInitSFLVStruct(struct BejHandleTypeFuncParam* params)
     // segment.
     bejGetLocalBejSFLVOffsets(params->state.encodedSubStream, &localOffset);
     struct BejSFLV* sflv = &params->sflv;
-    const uint32_t valueLength = (uint32_t)(rdeGetNnint(
+    const uint32_t valueLength = (uint32_t)(bejGetNnint(
         params->state.encodedSubStream + localOffset.valueLenNnintOffset));
     // Sequence number itself should be 16bits. Using 32bits for
     // [sequence_number + schema_type].
-    uint32_t tupleS = (uint32_t)(rdeGetNnint(params->state.encodedSubStream));
+    uint32_t tupleS = (uint32_t)(bejGetNnint(params->state.encodedSubStream));
     sflv->tupleS.schema = (uint8_t)(tupleS & DICTIONARY_TYPE_MASK);
     sflv->tupleS.sequenceNumber =
         (uint16_t)((tupleS & (~DICTIONARY_TYPE_MASK)) >>
@@ -147,7 +147,7 @@ static uint32_t
     // being decoded.
     bejGetLocalBejSFLVOffsets(params->state.encodedSubStream, &localOffset);
     return params->state.encodedStreamOffset + localOffset.valueOffset +
-           rdeGetNnintSize(params->sflv.value);
+           bejGetNnintSize(params->sflv.value);
 }
 
 /**
@@ -344,7 +344,7 @@ static int bejHandleBejSet(struct BejHandleTypeFuncParam* params)
     RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackSetStart,
                               propName, params->callbacksDataPtr);
 
-    uint64_t elements = rdeGetNnint(params->sflv.value);
+    uint64_t elements = bejGetNnint(params->sflv.value);
     // If its an empty set, we are done here.
     if (elements == 0)
     {
@@ -403,7 +403,7 @@ static int bejHandleBejArray(struct BejHandleTypeFuncParam* params)
     RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackArrayStart,
                               propName, params->callbacksDataPtr);
 
-    uint64_t elements = rdeGetNnint(params->sflv.value);
+    uint64_t elements = bejGetNnint(params->sflv.value);
     // If its an empty array, we are done here.
     if (elements == 0)
     {
@@ -515,7 +515,7 @@ static int bejHandleBejEnum(struct BejHandleTypeFuncParam* params)
     {
         // Get the string for enum value.
         uint16_t enumValueSequenceN =
-            (uint16_t)(rdeGetNnint(params->sflv.value));
+            (uint16_t)(bejGetNnint(params->sflv.value));
         const struct BejDictionaryProperty* enumValueProp;
         RETURN_IF_IERROR(
             bejDictGetProperty(dictionary, prop->childPointerOffset,
@@ -582,24 +582,24 @@ static int bejHandleBejReal(struct BejHandleTypeFuncParam* params)
         // nnint      - fract
         // nnint      - Length of exp
         // bejInteger - exp (includes sign for the exponent)
-        uint8_t wholeByteLen = (uint8_t)rdeGetNnint(params->sflv.value);
+        uint8_t wholeByteLen = (uint8_t)bejGetNnint(params->sflv.value);
         const uint8_t* wholeBejInt =
-            params->sflv.value + rdeGetNnintSize(params->sflv.value);
+            params->sflv.value + bejGetNnintSize(params->sflv.value);
         const uint8_t* fractZeroCountNnint = wholeBejInt + wholeByteLen;
         const uint8_t* fractNnint =
-            fractZeroCountNnint + rdeGetNnintSize(fractZeroCountNnint);
-        const uint8_t* lenExpNnint = fractNnint + rdeGetNnintSize(fractNnint);
-        const uint8_t* expBejInt = lenExpNnint + rdeGetNnintSize(lenExpNnint);
+            fractZeroCountNnint + bejGetNnintSize(fractZeroCountNnint);
+        const uint8_t* lenExpNnint = fractNnint + bejGetNnintSize(fractNnint);
+        const uint8_t* expBejInt = lenExpNnint + bejGetNnintSize(lenExpNnint);
 
         struct BejReal realValue;
         realValue.whole = bejGetIntegerValue(wholeBejInt, wholeByteLen);
-        realValue.zeroCount = rdeGetNnint(fractZeroCountNnint);
-        realValue.fract = rdeGetNnint(fractNnint);
-        realValue.expLen = (uint8_t)rdeGetNnint(lenExpNnint);
+        realValue.zeroCount = bejGetNnint(fractZeroCountNnint);
+        realValue.fract = bejGetNnint(fractNnint);
+        realValue.expLen = (uint8_t)bejGetNnint(lenExpNnint);
         if (realValue.expLen != 0)
         {
             realValue.exp = bejGetIntegerValue(
-                expBejInt, (uint8_t)rdeGetNnint(lenExpNnint));
+                expBejInt, (uint8_t)bejGetNnint(lenExpNnint));
         }
         RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackReal,
                                   propName, &realValue,
