@@ -344,38 +344,44 @@ static int bejHandleBejSet(struct BejHandleTypeFuncParam* params)
     RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackSetStart,
                               propName, params->callbacksDataPtr);
 
+    // Move the offset to the next SFLV tuple (or end). Make sure that this is
+    // called before calling bejProcessEnding.
+    params->state.encodedStreamOffset = bejGetFirstTupleOffset(params);
+
     uint64_t elements = bejGetNnint(params->sflv.value);
     // If its an empty set, we are done here.
     if (elements == 0)
     {
         RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackSetEnd,
                                   params->callbacksDataPtr);
+        // Since this is an ending of a property (empty array), we should call
+        // bejProcessEnding. Unless the whole JSON object is an empty set (which
+        // shouldn't be the case), stack cannot be empty.
+        bejProcessEnding(params, /*canBeEmpty=*/false);
+        return 0;
+    }
+
+    // Update the states for the next encoding segment.
+    struct BejStackProperty newEnding = {
+        .sectionType = bejSectionSet,
+        .addPropertyName = params->state.addPropertyName,
+        .mainDictPropOffset = params->state.mainDictPropOffset,
+        .annoDictPropOffset = params->state.annoDictPropOffset,
+        .streamEndOffset = params->sflv.valueEndOffset,
+    };
+    RETURN_IF_IERROR(
+        params->stackCallback->stackPush(&newEnding, params->stackDataPtr));
+    params->state.addPropertyName = true;
+    if (params->sflv.tupleS.schema == bejAnnotation)
+    {
+        // Since this set is an annotated type, we need to advance the
+        // annotation dictionary for decoding the next segment.
+        params->state.annoDictPropOffset = prop->childPointerOffset;
     }
     else
     {
-        // Update the states for the next encoding segment.
-        struct BejStackProperty newEnding = {
-            .sectionType = bejSectionSet,
-            .addPropertyName = params->state.addPropertyName,
-            .mainDictPropOffset = params->state.mainDictPropOffset,
-            .annoDictPropOffset = params->state.annoDictPropOffset,
-            .streamEndOffset = params->sflv.valueEndOffset,
-        };
-        RETURN_IF_IERROR(
-            params->stackCallback->stackPush(&newEnding, params->stackDataPtr));
-        params->state.addPropertyName = true;
-        if (params->sflv.tupleS.schema == bejAnnotation)
-        {
-            // Since this set is an annotated type, we need to advance the
-            // annotation dictionary for decoding the next segment.
-            params->state.annoDictPropOffset = prop->childPointerOffset;
-        }
-        else
-        {
-            params->state.mainDictPropOffset = prop->childPointerOffset;
-        }
+        params->state.mainDictPropOffset = prop->childPointerOffset;
     }
-    params->state.encodedStreamOffset = bejGetFirstTupleOffset(params);
     return 0;
 }
 
@@ -403,39 +409,45 @@ static int bejHandleBejArray(struct BejHandleTypeFuncParam* params)
     RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackArrayStart,
                               propName, params->callbacksDataPtr);
 
+    // Move the offset to the next SFLV tuple (or end). Make sure that this is
+    // called before calling bejProcessEnding.
+    params->state.encodedStreamOffset = bejGetFirstTupleOffset(params);
+
     uint64_t elements = bejGetNnint(params->sflv.value);
     // If its an empty array, we are done here.
     if (elements == 0)
     {
         RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackArrayEnd,
                                   params->callbacksDataPtr);
+        // Since this is an ending of a property (empty array), we should call
+        // bejProcessEnding. Stack cannot be empty since there should be at
+        // least 1 parent in the stack.
+        bejProcessEnding(params, /*canBeEmpty=*/false);
+        return 0;
+    }
+
+    // Update the state for next segment decoding.
+    struct BejStackProperty newEnding = {
+        .sectionType = bejSectionArray,
+        .addPropertyName = params->state.addPropertyName,
+        .mainDictPropOffset = params->state.mainDictPropOffset,
+        .annoDictPropOffset = params->state.annoDictPropOffset,
+        .streamEndOffset = params->sflv.valueEndOffset,
+    };
+    RETURN_IF_IERROR(
+        params->stackCallback->stackPush(&newEnding, params->stackDataPtr));
+    // We do not add property names for array elements.
+    params->state.addPropertyName = false;
+    if (params->sflv.tupleS.schema == bejAnnotation)
+    {
+        // Since this array is an annotated type, we need to advance the
+        // annotation dictionary for decoding the next segment.
+        params->state.annoDictPropOffset = prop->childPointerOffset;
     }
     else
     {
-        // Update the state for next segment decoding.
-        struct BejStackProperty newEnding = {
-            .sectionType = bejSectionArray,
-            .addPropertyName = params->state.addPropertyName,
-            .mainDictPropOffset = params->state.mainDictPropOffset,
-            .annoDictPropOffset = params->state.annoDictPropOffset,
-            .streamEndOffset = params->sflv.valueEndOffset,
-        };
-        RETURN_IF_IERROR(
-            params->stackCallback->stackPush(&newEnding, params->stackDataPtr));
-        // We do not add property names for array elements.
-        params->state.addPropertyName = false;
-        if (params->sflv.tupleS.schema == bejAnnotation)
-        {
-            // Since this array is an annotated type, we need to advance the
-            // annotation dictionary for decoding the next segment.
-            params->state.annoDictPropOffset = prop->childPointerOffset;
-        }
-        else
-        {
-            params->state.mainDictPropOffset = prop->childPointerOffset;
-        }
+        params->state.mainDictPropOffset = prop->childPointerOffset;
     }
-    params->state.encodedStreamOffset = bejGetFirstTupleOffset(params);
     return 0;
 }
 
