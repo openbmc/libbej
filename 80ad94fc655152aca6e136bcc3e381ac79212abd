@@ -46,6 +46,30 @@
       },
       "revId": "80ad94fc655152aca6e136bcc3e381ac79212abd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd45a3f6_70313f40",
+        "filename": "include/libbej/bej_common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2022-11-24T05:12:08Z",
+      "side": 0,
+      "message": "I think that might be an issue for the presubmit in bios-bmc-smm-error-logger if we submit this without the fix.",
+      "parentUuid": "7cecc25d_64e61413",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 29
+      },
+      "revId": "80ad94fc655152aca6e136bcc3e381ac79212abd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
