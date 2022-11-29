@@ -94,6 +94,30 @@
       },
       "revId": "80ad94fc655152aca6e136bcc3e381ac79212abd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "501040a5_8101c084",
+        "filename": "include/libbej/bej_common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2022-11-29T16:35:46Z",
+      "side": 0,
+      "message": "Do we need to couple the srcrev bump dependencies with topic or something?",
+      "parentUuid": "8aeaa91b_567fc025",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 29
+      },
+      "revId": "80ad94fc655152aca6e136bcc3e381ac79212abd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
