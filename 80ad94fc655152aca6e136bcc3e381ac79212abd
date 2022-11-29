@@ -70,6 +70,30 @@
       },
       "revId": "80ad94fc655152aca6e136bcc3e381ac79212abd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aeaa91b_567fc025",
+        "filename": "include/libbej/bej_common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-11-29T05:30:07Z",
+      "side": 0,
+      "message": "I added this to the bios-bmc-smm-error-logger: https://gerrit.openbmc.org/c/openbmc/bios-bmc-smm-error-logger/+/58998\n\nI also renamed the functions inside the bej_common and the test file for it which I should have done before.",
+      "parentUuid": "dd45a3f6_70313f40",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 29
+      },
+      "revId": "80ad94fc655152aca6e136bcc3e381ac79212abd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
