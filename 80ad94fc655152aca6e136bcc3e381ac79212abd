@@ -118,6 +118,30 @@
       },
       "revId": "80ad94fc655152aca6e136bcc3e381ac79212abd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4190b6c_9a1710d4",
+        "filename": "include/libbej/bej_common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2022-11-29T19:11:08Z",
+      "side": 0,
+      "message": "I pushed the https://gerrit.openbmc.org/c/openbmc/bios-bmc-smm-error-logger/+/58998 change. Since I pushed it first, would the srcrev will bump it first? As long as srcrev bump that change with or before this change, things shouldn\u0027t break.",
+      "parentUuid": "501040a5_8101c084",
+      "range": {
+        "startLine": 147,
+        "startChar": 4,
+        "endLine": 147,
+        "endChar": 29
+      },
+      "revId": "80ad94fc655152aca6e136bcc3e381ac79212abd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
