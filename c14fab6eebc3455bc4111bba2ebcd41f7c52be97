@@ -1,0 +1,7 @@
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+2: Willy Tu <wltu@google.com>
+Submitted-by: Kasun Athukorala <kasunath@google.com>
+Submitted-at: Thu, 01 Dec 2022 19:26:24 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/libbej/+/58938
+Project: openbmc/libbej
+Branch: refs/heads/main
