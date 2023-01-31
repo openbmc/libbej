@@ -121,6 +121,35 @@ extern "C"
     };
 
     /**
+     * @brief bejString type property node.
+     */
+    struct RedfishPropertyLeafString
+    {
+        struct RedfishPropertyLeaf leaf;
+        const char* value;
+    };
+
+    /**
+     * @brief bejReal type property node.
+     */
+    struct RedfishPropertyLeafReal
+    {
+        struct RedfishPropertyLeaf leaf;
+        double value;
+        // bejReal representation of the value. Populated during bej encoding.
+        struct BejReal bejReal;
+    };
+
+    /**
+     * @brief bejBoolean type property node.
+     */
+    struct RedfishPropertyLeafBool
+    {
+        struct RedfishPropertyLeaf leaf;
+        bool value;
+    };
+
+    /**
      * @brief Initialize a bejSet type node.
      *
      * @param[in] node - pointer to a RedfishPropertyParent struct.
@@ -179,6 +208,50 @@ extern "C"
                         const char* value);
 
     /**
+     * @brief Add a bejString type node to a parent node.
+     *
+     * @param[in] parent - a pointer to an initialized parent struct.
+     * @param[in] child - a pointer to an uninitialized bejString type node.
+     * @param[in] name - name of the bejString type property.
+     * @param[in] value - value of the bejString type property.
+     */
+    void bejTreeAddString(struct RedfishPropertyParent* parent,
+                          struct RedfishPropertyLeafString* child,
+                          const char* name, const char* value);
+
+    /**
+     * @brief Add a bejReal type node to a parent node.
+     *
+     * @param[in] parent - a pointer to an initialized parent struct.
+     * @param[in] child - a pointer to an uninitialized bejReal type node.
+     * @param[in] name - name of the bejReal type property.
+     * @param[in] value - value of the bejReal type property.
+     */
+    void bejTreeAddReal(struct RedfishPropertyParent* parent,
+                        struct RedfishPropertyLeafReal* child, const char* name,
+                        double value);
+
+    /**
+     * @brief Set a new value in bejReal type node.
+     *
+     * @param[in] node - initialized bejReal type node.
+     * @param[in] newValue - new double value.
+     */
+    void bejTreeSetReal(struct RedfishPropertyLeafReal* node, double newValue);
+
+    /**
+     * @brief Add a bejBoolean type node to a parent node.
+     *
+     * @param[in] parent - a pointer to an initialized parent struct.
+     * @param[in] child - a pointer to an uninitialized bejBoolean type node.
+     * @param[in] name - name of the bejBoolean type property.
+     * @param[in] value - value of the bejBoolean type property.
+     */
+    void bejTreeAddBool(struct RedfishPropertyParent* parent,
+                        struct RedfishPropertyLeafBool* child, const char* name,
+                        bool value);
+
+    /**
      * @brief Link a node to its parent.
      *
      * @param[in] parent  - a pointer to an initialized parent struct.
@@ -186,6 +259,26 @@ extern "C"
      */
     void bejTreeLinkChildToParent(struct RedfishPropertyParent* parent,
                                   void* child);
+
+    /**
+     * @brief Set Bej format flags of a node.
+     *
+     * @param node - an initialized node.
+     * @param deferredBinding - set deferred binding flag.
+     * @param readOnlyProperty - set read only property flag.
+     * @param nullableProperty - set nullable property flag.
+     */
+    void bejTreeUpdateNodeFlags(struct RedfishPropertyNode* node,
+                                bool deferredBinding, bool readOnlyProperty,
+                                bool nullableProperty);
+
+    /**
+     * @brief Check if a node is a parent type node.
+     *
+     * @param node - node to be checked.
+     * @return true if the node is a parent type node.
+     */
+    bool bejTreeIsParentType(struct RedfishPropertyNode* node);
 
 #ifdef __cplusplus
 }
