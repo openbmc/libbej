@@ -134,4 +134,90 @@ TEST(BejTreeTest, AddEnum)
     EXPECT_THAT(child.value, enumValue);
 }
 
+TEST(BejTreeTest, AddString)
+{
+    const char* name = "SomeProperty";
+    const char* stringValue = "StringValue";
+    struct RedfishPropertyParent parent;
+    struct RedfishPropertyLeafString child;
+
+    bejTreeInitSet(&parent, nullptr);
+    bejTreeAddString(&parent, &child, name, stringValue);
+
+    EXPECT_THAT(child.leaf.nodeAttr.name, name);
+    EXPECT_THAT(child.leaf.nodeAttr.format.principalDataType, bejString);
+    EXPECT_THAT(child.leaf.nodeAttr.format.deferredBinding, 0);
+    EXPECT_THAT(child.leaf.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(child.leaf.nodeAttr.format.nullableProperty, 0);
+    EXPECT_THAT(child.leaf.nodeAttr.sibling, nullptr);
+    EXPECT_THAT(child.value, stringValue);
+}
+
+TEST(BejTreeTest, AddReal)
+{
+    const char* name = "SomeProperty";
+    double value = 10.50;
+    struct RedfishPropertyParent parent;
+    struct RedfishPropertyLeafReal child;
+
+    bejTreeInitSet(&parent, nullptr);
+    bejTreeAddReal(&parent, &child, name, value);
+
+    EXPECT_THAT(child.leaf.nodeAttr.name, name);
+    EXPECT_THAT(child.leaf.nodeAttr.format.principalDataType, bejReal);
+    EXPECT_THAT(child.leaf.nodeAttr.format.deferredBinding, 0);
+    EXPECT_THAT(child.leaf.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(child.leaf.nodeAttr.format.nullableProperty, 0);
+    EXPECT_THAT(child.leaf.nodeAttr.sibling, nullptr);
+    EXPECT_THAT(child.value, value);
+}
+
+TEST(BejTreeTest, AddBool)
+{
+    const char* name = "SomeProperty";
+    bool value = true;
+    struct RedfishPropertyParent parent;
+    struct RedfishPropertyLeafBool child;
+
+    bejTreeInitSet(&parent, nullptr);
+    bejTreeAddBool(&parent, &child, name, value);
+
+    EXPECT_THAT(child.leaf.nodeAttr.name, name);
+    EXPECT_THAT(child.leaf.nodeAttr.format.principalDataType, bejBoolean);
+    EXPECT_THAT(child.leaf.nodeAttr.format.deferredBinding, 0);
+    EXPECT_THAT(child.leaf.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(child.leaf.nodeAttr.format.nullableProperty, 0);
+    EXPECT_THAT(child.leaf.nodeAttr.sibling, nullptr);
+    EXPECT_THAT(child.value, value);
+}
+
+TEST(BejTreeTest, NodeFlags)
+{
+    struct RedfishPropertyParent parent;
+    bejTreeInitSet(&parent, nullptr);
+    EXPECT_THAT(parent.nodeAttr.format.deferredBinding, 0);
+    EXPECT_THAT(parent.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(parent.nodeAttr.format.nullableProperty, 0);
+
+    bejTreeUpdateNodeFlags(&parent.nodeAttr, true, true, true);
+    EXPECT_THAT(parent.nodeAttr.format.deferredBinding, 1);
+    EXPECT_THAT(parent.nodeAttr.format.readOnlyProperty, 1);
+    EXPECT_THAT(parent.nodeAttr.format.nullableProperty, 1);
+}
+
+TEST(BejTreeTest, NodeType)
+{
+    struct RedfishPropertyParent parent;
+    struct RedfishPropertyLeafBool child1;
+    struct RedfishPropertyLeafReal child2;
+
+    bejTreeInitSet(&parent, nullptr);
+    bejTreeAddBool(&parent, &child1, nullptr, true);
+    bejTreeAddReal(&parent, &child2, nullptr, 10.5);
+
+    EXPECT_THAT(bejTreeIsParentType(&parent.nodeAttr), true);
+    EXPECT_THAT(bejTreeIsParentType(&child1.leaf.nodeAttr), false);
+    EXPECT_THAT(bejTreeIsParentType(&child2.leaf.nodeAttr), false);
+}
+
 } // namespace libbej
