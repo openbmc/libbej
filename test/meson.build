@@ -19,6 +19,7 @@ gtests = [
   'bej_decoder',
   'bej_common',
   'bej_dictionary',
+  'bej_tree',
 ]
 foreach t : gtests
   test(t, executable(t.underscorify(), t + '_test.cpp',
