@@ -8,18 +8,18 @@
     "Model": "Consorto MM0500FBFVQ",
     "Revision": "C1.1",
     "Status": {
-       "State": "Enabled",
-       "Health": "Warning"
+        "State": "Enabled",
+        "Health": "Warning"
     },
     "Actions": {
-       "#Drive.SecureErase": {
-          "target": "/redfish/v1/drives/1/Actions/Drive.SecureErase",
-          "title": "Secure Erase a Drive"
-       },
-      "#Drive.Reset": {
-          "target": "/redfish/v1/drives/1/Actions/Drive.Reset",
-          "title": "Reset a Drive",
-          "ResetType@Redfish.AllowableValues": [
+        "#Drive.SecureErase": {
+            "target": "/redfish/v1/drives/1/Actions/Drive.SecureErase",
+            "title": "Secure Erase a Drive"
+        },
+        "#Drive.Reset": {
+            "target": "/redfish/v1/drives/1/Actions/Drive.Reset",
+            "title": "Reset a Drive",
+            "ResetType@Redfish.AllowableValues": [
                 "On",
                 "ForceOff",
                 "ForceRestart",
@@ -27,7 +27,7 @@
                 "ForceOn",
                 "PushPowerButton"
             ]
-      }
+        }
     },
     "Status@Message.ExtendedInfo": [
         {
@@ -55,60 +55,49 @@
     "Manufacturer": "CONSORTO",
     "SerialNumber": "9XF11DLF00009238W7LN",
     "PhysicalLocation": {
-       "PartLocation": {
-           "LocationOrdinalValue": 1,
-           "LocationType": "Bay",
-           "ServiceLabel": "Port=A:Bay=1"
-       }
+        "PartLocation": {
+            "LocationOrdinalValue": 1,
+            "LocationType": "Bay",
+            "ServiceLabel": "Port=A:Bay=1"
+        }
     },
     "RotationSpeedRPM": 15000.0,
     "CapableSpeedGbs": 5.0e-4,
     "NegotiatedSpeedGbs": 12.0,
     "Operations": [
-       {
-           "OperationName": "Erasing",
-           "PercentageComplete": 20,
-           "AssociatedTask": {
-              "@odata.id": "/redfish/v1/Tasks/1"
-           }
-       },
-       {
-           "OperationName": "Rebuilding",
-           "PercentageComplete": 70,
-           "AssociatedTask": {
-              "@odata.id": "/redfish/v1/Tasks/2"
-           }
-       }
+        {
+            "OperationName": "Erasing",
+            "PercentageComplete": 20,
+            "AssociatedTask": {
+                "@odata.id": "/redfish/v1/Tasks/1"
+            }
+        },
+        {
+            "OperationName": "Rebuilding",
+            "PercentageComplete": 70,
+            "AssociatedTask": {
+                "@odata.id": "/redfish/v1/Tasks/2"
+            }
+        }
     ],
-   "Links": {
-      "Volumes": [
-         {
-            "@odata.id": "/redfish/v1/Systems/1/Storage/1/Volumes/1"
-         },
-         {
-            "@odata.id": "/redfish/v1/Systems/1/Storage/1/Volumes/2"
-         },
-         {
-            "@odata.id": "/redfish/v1/Systems/1/Storage/1/Volumes/3"
-         }
-      ]
-   },
-   "Oem": {
-       "OEM1": {
-           "@odata.type": "#OEMDriveExt.v1_0_0.OEM1DriveExt",
-           "ArrayOfStrings": [
-               "str1",
-               "str2",
-               "str3",
-               "str4"
-           ],
-           "ArrayOfInts": [
-               10,
-               20,
-               30,
-               40,
-               50
-           ]
-       }
-   }
+    "Links": {
+        "Volumes": [
+            {
+                "@odata.id": "/redfish/v1/Systems/1/Storage/1/Volumes/1"
+            },
+            {
+                "@odata.id": "/redfish/v1/Systems/1/Storage/1/Volumes/2"
+            },
+            {
+                "@odata.id": "/redfish/v1/Systems/1/Storage/1/Volumes/3"
+            }
+        ]
+    },
+    "Oem": {
+        "OEM1": {
+            "@odata.type": "#OEMDriveExt.v1_0_0.OEM1DriveExt",
+            "ArrayOfStrings": ["str1", "str2", "str3", "str4"],
+            "ArrayOfInts": [10, 20, 30, 40, 50]
+        }
+    }
 }
