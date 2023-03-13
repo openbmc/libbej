@@ -20,10 +20,14 @@ gtests = [
   'bej_common',
   'bej_dictionary',
   'bej_tree',
+  'bej_encoder'
 ]
+
+libbej_test_incs = include_directories('include')
 foreach t : gtests
   test(t, executable(t.underscorify(), t + '_test.cpp',
                      build_by_default: false,
                      implicit_include_directories: false,
+                     include_directories: libbej_test_incs,
                      dependencies: [libbej, gtest, gmock]))
 endforeach
