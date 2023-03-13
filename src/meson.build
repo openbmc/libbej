@@ -7,6 +7,7 @@ libbej_lib = library(
   'bej_encoder_core.c',
   'bej_encoder_metadata.c',
   'bej_decoder_json.cpp',
+  'bej_encoder_json.cpp',
   include_directories : libbej_incs,
   implicit_include_directories: false,
   version: meson.project_version(),
