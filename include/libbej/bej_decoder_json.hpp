@@ -15,7 +15,6 @@ namespace libbej
  */
 class BejDecoderJson
 {
-
   public:
     /**
      * @brief Decode the encoded PLDM block.
