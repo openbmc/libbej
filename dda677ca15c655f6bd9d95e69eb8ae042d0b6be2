@@ -16,6 +16,24 @@
       "message": "Since this is adding the API before a user, I am speculating here.  I anticipate that RDE responders will need to run the BEJ encoder as the encoded lengths are dynamic with the actual value.  \n\nWhile representing an enum as a string is convenient when translating from a JSON string, in a constrained system I would hope to supply an enum value as an integer and avoid having the encoder doing a string comparison each time let alone searching for the matching string in a table.\n\nAs an alternative (to avoid requiring the value provider to have to match the  values from the dictionary) we could have the enum node store an integer and a pointer to a table of struct (string, dictionary enumeration) with a count of elements and a count of pre-matched values.  The encoder would cache the enumerated values.  A resource constrained caller would supply a table with all supported enum values, and a general translator could set a table with one entry.\n\nAnother alternative would be supply two APIs, one enum value based that is the known dictionary (since its defined to be stable across versions) and the keep current proposed string enum value.",
       "revId": "dda677ca15c655f6bd9d95e69eb8ae042d0b6be2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1007605_bf80b138",
+        "filename": "include/libbej/bej_tree.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-07-07T19:46:56Z",
+      "side": 1,
+      "message": "Thanks for reviewing this change and for your feedback.\n\nI agree that this is not the most performance efficient implementation for resource constrained systems. I did it this way because it is simpler for the API users provided that the system is good enough to handle it (acceptable latency).\n\nTo avoid string matching, the user needs to provide the corresponding sequence number from the dictionary. Or as you suggested (if I understood it correctly), a table where the encoder will cache [enum integer value -\u003e seq number mapping] relationship in the first run and use it for the corresponding runs. \n\nMy only concern is the extra memory usage per resource. Especially if you need to avoid dynamic memory allocations (something I did in my application). We need pre allocated memory for every resource we handle apart from the dictionary memory.\n\nBut if this is a better trade-off for someones use case, as you have suggested we can add another specialized node or more info to this node to inform the encoder.",
+      "parentUuid": "d3877099_0e36d356",
+      "revId": "dda677ca15c655f6bd9d95e69eb8ae042d0b6be2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
