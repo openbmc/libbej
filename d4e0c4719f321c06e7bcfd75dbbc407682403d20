@@ -63,6 +63,30 @@
       },
       "revId": "d4e0c4719f321c06e7bcfd75dbbc407682403d20",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ce43be0_afb90293",
+        "filename": "src/bej_tree.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-07-19T04:46:22Z",
+      "side": 1,
+      "message": "My apologies. I lost track of these changes and couldn\u0027t reply to the original question.\n\nSo this API represents a JSON in C using linked lists. Specifically a redfish resource. Eg:\n\n{\n  \"@odata.id\": \"/redfish/v1/drives/1\",\n  \"ArrayProperty\": [\"string1\", \"string2\"],\n  \"Status@Message.ExtendedInfo\": []\n}\n  \nIn this the outer most {} captures a JSON set object. It has 3 child nodes. So a bejSet type is a parent type node. \"ArrayProperty\" contains a set of strings as its value. So it also has child nodes (string nodes in this case) which makes a bejArray nodes, a parent node.\n\n\"Status@Message.ExtendedInfo\" is a special kind of property. The \"Status\" property has been annotated by another property called \"Message.ExtendedInfo\". Because of that, when BEJ encoding \"Status\" property needs include some details about the \"Message.ExtendedInfo\". So we can consider that \"Message.ExtendedInfo\" is a child property of \"Status\" property. So a  bejPropertyAnnotation type node is also a parent type node because it always points to a one child node.\n\n\nThanks for the suggestion Milton. I moved it to the line you suggested.",
+      "parentUuid": "80a95f8c_9fe7d014",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 67
+      },
+      "revId": "d4e0c4719f321c06e7bcfd75dbbc407682403d20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
