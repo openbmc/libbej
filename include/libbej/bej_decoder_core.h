@@ -40,13 +40,6 @@ extern "C"
         uint32_t streamEndOffset;
     };
 
-    struct BejDictionaries
-    {
-        const uint8_t* schemaDictionary;
-        const uint8_t* annotationDictionary;
-        const uint8_t* errorDictionary;
-    };
-
     /**
      * @brief Holds the information related to the current bejTuple being
      * decoded.

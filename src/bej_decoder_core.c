@@ -30,21 +30,6 @@ const uint32_t supportedBejVersions[] = {0xF1F0F000};
     } while (0)
 
 /**
- * @brief Check a given varable is NULL. If it is NULL, this will return with
- * bejErrorNullParameter. If the variable is not NULL, this will will not
- * return.
- */
-#define NULL_CHECK(param, structStr)                                           \
-    do                                                                         \
-    {                                                                          \
-        if ((param) == NULL)                                                   \
-        {                                                                      \
-            fprintf(stderr, "nullCheck: %s cannot be null\n", structStr);      \
-            return bejErrorNullParameter;                                      \
-        }                                                                      \
-    } while (0)
-
-/**
  * @brief Get the integer value from BEJ byte stream.
  *
  * @param[in] bytes - valid pointer to a byte stream in little-endian format.
