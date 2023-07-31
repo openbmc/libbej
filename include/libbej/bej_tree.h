@@ -278,6 +278,16 @@ extern "C"
                                 bool deferredBinding, bool readOnlyProperty,
                                 bool nullableProperty);
 
+    /**
+     * @brief Move the parent node to the next child node to be processed.
+     *
+     * @param parent - parent node.
+     * @param currentChild - current child node being processed.
+     * @return pointer to the next child node to be processed.
+     */
+    void* bejParentGoToNextChild(struct RedfishPropertyParent* parent,
+                                 struct RedfishPropertyNode* currentChild);
+
 #ifdef __cplusplus
 }
 #endif

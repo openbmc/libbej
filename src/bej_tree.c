@@ -128,3 +128,11 @@ void bejTreeUpdateNodeFlags(struct RedfishPropertyNode* node,
     node->format.readOnlyProperty = readOnlyProperty;
     node->format.nullableProperty = nullableProperty;
 }
+
+void* bejParentGoToNextChild(struct RedfishPropertyParent* parent,
+                             struct RedfishPropertyNode* currentChild)
+{
+    parent->metaData.nextChildIndex += 1;
+    parent->metaData.nextChild = currentChild->sibling;
+    return currentChild->sibling;
+}
