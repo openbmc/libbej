@@ -278,6 +278,20 @@ extern "C"
                                 bool deferredBinding, bool readOnlyProperty,
                                 bool nullableProperty);
 
+    /**
+     * @brief Get the next child node to be processed.
+     *
+     * This function returns the next child node of the parent node. This also
+     * updates the parent node's next child properties.
+     *
+     * @param parent - parent node.
+     * @param currentChild - current child node being processed.
+     * @return pointer to the next child node to be processed. NULL if there is
+     * no next child or one of the params are NULL.
+     */
+    void* bejParentGoToNextChild(struct RedfishPropertyParent* parent,
+                                 struct RedfishPropertyNode* currentChild);
+
 #ifdef __cplusplus
 }
 #endif
