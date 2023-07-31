@@ -1,11 +1,18 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+
+/**
+ * @brief Use this value to indicate that the dictonary needs to be traversed
+ * starting at the first property of the dictionary.
+ */
+#define BEJ_DICTIONARY_START_AT_HEAD 0
 
 /**
  * @brief If expr is non zero, return with that value.
@@ -21,6 +28,20 @@ extern "C"
         }                                                                      \
     } while (0)
 #endif
+
+/**
+ * @brief Check a given varable is NULL. If it is NULL, this will return with
+ * bejErrorNullParameter. If the variable is not NULL, this will not return.
+ */
+#define NULL_CHECK(param, structStr)                                           \
+    do                                                                         \
+    {                                                                          \
+        if ((param) == NULL)                                                   \
+        {                                                                      \
+            fprintf(stderr, "nullCheck: %s cannot be null\n", structStr);      \
+            return bejErrorNullParameter;                                      \
+        }                                                                      \
+    } while (0)
 
     /**
      * @brief RDE BEJ decoding errors.
@@ -145,6 +166,58 @@ extern "C"
     } __attribute__((__packed__));
 
     /**
+     * @brief Points to dictionaries used for encoding and decoding.
+     */
+    struct BejDictionaries
+    {
+        const uint8_t* schemaDictionary;
+        const uint8_t* annotationDictionary;
+        const uint8_t* errorDictionary;
+    };
+
+    /**
+     * @brief Callbacks to a stack that can store pointers.
+     */
+    struct BejPointerStackCallback
+    {
+        /**
+         * @brief A context for the stack.
+         */
+        void* stackContext;
+
+        /**
+         * @brief Return true if the stack is empty.
+         */
+        bool (*stackEmpty)(void* stackContext);
+
+        /**
+         * @brief View the pointer at the top of the stack. If the stack is
+         * empty, this will return NULL.
+         */
+        void* (*stackPeek)(void* stackContext);
+
+        /**
+         * @brief Returns and removes the top most pointer from the stack. The
+         * Client of the libbej is responsible for destroying the memory used
+         * for storing the removed pointer (not the memory pointed by the
+         * pointer).
+         */
+        void* (*stackPop)(void* stackContext);
+
+        /**
+         * @brief Push a pointer into the stack. Returns 0 if the operation is
+         * successful. Client of this API is responsible for allocating memory
+         * for storing the new pointer.
+         */
+        int (*stackPush)(void* p, void* stackContext);
+
+        /**
+         * @brief Delete the stack.
+         */
+        void (*deleteStack)(void* stackContext);
+    };
+
+    /**
      * @brief Get the unsigned integer value from provided bytes.
      *
      * @param[in] bytes - valid pointer to a byte stream in little-endian
@@ -171,6 +244,23 @@ extern "C"
      * @return size of the complete nnint.
      */
     uint8_t bejGetNnintSize(const uint8_t* nnint);
+
+    /**
+     * @brief Get the total bytes needed to encode an unsigned value using nnint
+     * format.
+     *
+     * @param[in] val - unsigned value needed to encode.
+     * @return size of the nnint value.
+     */
+    uint8_t bejNnintEncodingSizeOfUInt(uint64_t val);
+
+    /**
+     * @brief Get the length field value of the unsigned value nnint encoding.
+     *
+     * @param val - unsigned value needed to encode.
+     * @return value of the length field in the encoded nnint.
+     */
+    uint8_t bejNnintLengthFieldOfUInt(uint64_t val);
 
 #ifdef __cplusplus
 }
