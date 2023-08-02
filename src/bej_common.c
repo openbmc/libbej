@@ -24,6 +24,45 @@ uint8_t bejGetNnintSize(const uint8_t* nnint)
     return *nnint + sizeof(uint8_t);
 }
 
+uint8_t bejIntLengthOfValue(int64_t val)
+{
+    // Only need to encode 0x00 or 0xFF
+    if (val == 0 || val == -1)
+    {
+        return 1;
+    }
+
+    // Starts at the MSB. LSB index is 0.
+    uint8_t byteIndex = sizeof(uint64_t) - 1;
+    const uint8_t bitsPerByte = 8;
+    // The current byte being looked at. Starts at MSB.
+    uint8_t currentByte = (val >> (bitsPerByte * byteIndex)) & 0xFF;
+    uint8_t byteLength = sizeof(int64_t);
+
+    while ((val > 0 && currentByte == 0) || (val < 0 && currentByte == 0xFF))
+    {
+        byteLength -= 1;
+        byteIndex -= 1;
+        currentByte = (val >> (bitsPerByte * byteIndex)) & 0xFF;
+    }
+
+    // If the value is positive and encoded MSBbit is 1 we need to add 0x00 to
+    // the encoded value as padding.
+    if (val > 0 && (currentByte & 0x80))
+    {
+        byteLength += 1;
+    }
+
+    // If the value is negative and encoded MSBbit is 0 we need to add 0xFF to
+    // the encoded value as padding.
+    if (val < 0 && !(currentByte & 0x80))
+    {
+        byteLength += 1;
+    }
+
+    return byteLength;
+}
+
 uint8_t bejNnintEncodingSizeOfUInt(uint64_t val)
 {
     uint8_t bytes = 0;
