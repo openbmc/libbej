@@ -221,6 +221,59 @@ static int bejUpdateStringMetaData(const struct BejDictionaries* dictionaries,
     return 0;
 }
 
+static int bejUpdateEnumMetaData(const struct BejDictionaries* dictionaries,
+                                 const uint8_t* parentDictionary,
+                                 struct RedfishPropertyLeafEnum* node,
+                                 uint16_t nodeIndex,
+                                 uint16_t dictStartingOffset)
+{
+    const uint8_t* nodeDictionary;
+    uint16_t childEntryOffset;
+    uint32_t sequenceNumber;
+    // If the enum property doesn't have a name, this will simply return the
+    // nodeIndex encoded as the sequence number. If not, this will return the
+    // sequence number in the dictionary and the starting dictionary index for
+    // the enum values.
+    RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
+        dictionaries, parentDictionary, &(node->leaf.nodeAttr), nodeIndex,
+        dictStartingOffset, &sequenceNumber, &nodeDictionary,
+        &childEntryOffset));
+    // Update the sequence number of the property.
+    node->leaf.metaData.sequenceNumber = sequenceNumber;
+
+    // Get the sequence number for the Enum value.
+    if (node->leaf.nodeAttr.name != NULL && node->leaf.nodeAttr.name[0] != '\0')
+    {
+        dictStartingOffset = childEntryOffset;
+    }
+    const struct BejDictionaryProperty* enumValueProperty;
+    int ret = bejDictGetPropertyByName(nodeDictionary, dictStartingOffset,
+                                       node->value, &enumValueProperty, NULL);
+    if (ret != 0)
+    {
+        fprintf(
+            stderr,
+            "Failed to find dictionary entry for enum value %s. Search started "
+            "at offset: %u. ret: %d\n",
+            node->value, dictStartingOffset, ret);
+        return ret;
+    }
+    node->enumValueSeq = enumValueProperty->sequenceNumber;
+
+    // Calculate the size for encoding this in a SFLV tuple.
+    // S: Size needed for encoding sequence number.
+    node->leaf.metaData.sflSize = bejNnintEncodingSizeOfUInt(sequenceNumber);
+    // F: Size of the format byte is 1.
+    node->leaf.metaData.sflSize += 1;
+    // V: Bytes used for the value.
+    node->leaf.metaData.vSize =
+        bejNnintEncodingSizeOfUInt(enumValueProperty->sequenceNumber);
+    // L: Length needed for the value nnint.
+    node->leaf.metaData.sflSize +=
+        bejNnintEncodingSizeOfUInt(node->leaf.metaData.vSize);
+    return 0;
+}
+
 static int bejUpdateBoolMetaData(const struct BejDictionaries* dictionaries,
                                  const uint8_t* parentDictionary,
                                  struct RedfishPropertyLeafEnum* node,
@@ -275,6 +328,11 @@ static int bejUpdateLeafNodeMetaData(const struct BejDictionaries* dictionaries,
             RETURN_IF_IERROR(bejUpdateStringMetaData(
                 dictionaries, parentDictionary, childPtr, childIndex,
                 dictStartingOffset));
+            break;
+        case bejEnum:
+            RETURN_IF_IERROR(
+                bejUpdateEnumMetaData(dictionaries, parentDictionary, childPtr,
+                                      childIndex, dictStartingOffset));
             break;
         case bejBoolean:
             RETURN_IF_IERROR(
