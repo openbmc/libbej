@@ -246,6 +246,17 @@ extern "C"
     uint8_t bejGetNnintSize(const uint8_t* nnint);
 
     /**
+     * @brief Get the bytes needed represent the value as a bejInteger.
+     *
+     * This will return the number of bytes needed to encode the signed value
+     * into a bejInteger type.
+     *
+     * @param val - signed value needed to encode.
+     * @return size of the bejInteger.
+     */
+    uint8_t bejIntLengthOfValue(int64_t val);
+
+    /**
      * @brief Get the total bytes needed to encode an unsigned value using nnint
      * format.
      *
