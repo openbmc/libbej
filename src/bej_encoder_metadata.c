@@ -8,6 +8,22 @@
 #include <string.h>
 
 /**
+ * @brief bejTupleL size of an integer.
+ *
+ * Maximum bytes possible for an integer is 8. Therefore to encode the length of
+ * an integer using a nnint, we only need two bytes. [byte1: nnint length,
+ * byte2: integer length [0-8]]
+ */
+#define BEJ_TUPLE_L_SIZE_FOR_BEJ_INTEGER 2
+
+/**
+ * @brief bejTupleL size of a bool.
+ *
+ * 1byte for the nnint length and 1 byte for the value.
+ */
+#define BEJ_TUPLE_L_SIZE_FOR_BEJ_BOOL 2
+
+/**
  * @brief Check the name is an annotation type name.
  *
  * @param[in] name - property name.
@@ -156,6 +172,79 @@ static int bejFindSeqNumAndChildDictOffset(
     return 0;
 }
 
+static int bejUpdateIntMetaData(const struct BejDictionaries* dictionaries,
+                                const uint8_t* parentDictionary,
+                                struct RedfishPropertyLeafInt* node,
+                                uint16_t nodeIndex, uint16_t dictStartingOffset)
+{
+    uint32_t sequenceNumber;
+    RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
+        dictionaries, parentDictionary, &node->leaf.nodeAttr, nodeIndex,
+        dictStartingOffset, &sequenceNumber, NULL, NULL));
+    node->leaf.metaData.sequenceNumber = sequenceNumber;
+
+    // Calculate the size for encoding this in a SFLV tuple.
+    // S: Size needed for encoding sequence number.
+    node->leaf.metaData.sflSize = bejNnintEncodingSizeOfUInt(sequenceNumber);
+    // F: Size of the format byte is 1.
+    node->leaf.metaData.sflSize += 1;
+    // L: Length needed for the value.
+    node->leaf.metaData.sflSize += BEJ_TUPLE_L_SIZE_FOR_BEJ_INTEGER;
+    // V: Bytes used for the value.
+    node->leaf.metaData.vSize = bejIntLengthOfValue(node->value);
+    return 0;
+}
+
+static int bejUpdateStringMetaData(const struct BejDictionaries* dictionaries,
+                                   const uint8_t* parentDictionary,
+                                   struct RedfishPropertyLeafString* node,
+                                   uint16_t nodeIndex,
+                                   uint16_t dictStartingOffset)
+{
+    uint32_t sequenceNumber;
+    RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
+        dictionaries, parentDictionary, &(node->leaf.nodeAttr), nodeIndex,
+        dictStartingOffset, &sequenceNumber, NULL, NULL));
+    node->leaf.metaData.sequenceNumber = sequenceNumber;
+
+    // Calculate the size for encoding this in a SFLV tuple.
+    // S: Size needed for encoding sequence number.
+    node->leaf.metaData.sflSize = bejNnintEncodingSizeOfUInt(sequenceNumber);
+    // F: Size of the format byte is 1.
+    node->leaf.metaData.sflSize += 1;
+    // L: Length needed for the string including the NULL character. Length is
+    // in nnint format.
+    size_t strLenWithNull = strlen(node->value) + 1;
+    node->leaf.metaData.sflSize += bejNnintEncodingSizeOfUInt(strLenWithNull);
+    // V: Bytes used for the value.
+    node->leaf.metaData.vSize = strLenWithNull;
+    return 0;
+}
+
+static int bejUpdateBoolMetaData(const struct BejDictionaries* dictionaries,
+                                 const uint8_t* parentDictionary,
+                                 struct RedfishPropertyLeafBool* node,
+                                 uint16_t nodeIndex,
+                                 uint16_t dictStartingOffset)
+{
+    uint32_t sequenceNumber;
+    RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
+        dictionaries, parentDictionary, &node->leaf.nodeAttr, nodeIndex,
+        dictStartingOffset, &sequenceNumber, NULL, NULL));
+    node->leaf.metaData.sequenceNumber = sequenceNumber;
+
+    // Calculate the size for encoding this in a SFLV tuple.
+    // S: Size needed for encoding sequence number.
+    node->leaf.metaData.sflSize = bejNnintEncodingSizeOfUInt(sequenceNumber);
+    // F: Size of the format byte is 1.
+    node->leaf.metaData.sflSize += 1;
+    // L: Length needed for the value.
+    node->leaf.metaData.sflSize += BEJ_TUPLE_L_SIZE_FOR_BEJ_BOOL;
+    // V: Bytes used for the value; 0x00 or 0xFF.
+    node->leaf.metaData.vSize = 1;
+    return 0;
+}
+
 /**
  * @brief Update metadata of leaf nodes.
  *
@@ -173,15 +262,25 @@ static int bejUpdateLeafNodeMetaData(const struct BejDictionaries* dictionaries,
                                      void* childPtr, uint16_t childIndex,
                                      uint16_t dictStartingOffset)
 {
-    // TODO: Implement this
-    (void)dictionaries;
-    (void)parentDictionary;
-    (void)childIndex;
-    (void)dictStartingOffset;
-
     struct RedfishPropertyLeaf* chNode = childPtr;
+
     switch (chNode->nodeAttr.format.principalDataType)
     {
+        case bejInteger:
+            RETURN_IF_IERROR(
+                bejUpdateIntMetaData(dictionaries, parentDictionary, childPtr,
+                                     childIndex, dictStartingOffset));
+            break;
+        case bejString:
+            RETURN_IF_IERROR(bejUpdateStringMetaData(
+                dictionaries, parentDictionary, childPtr, childIndex,
+                dictStartingOffset));
+            break;
+        case bejBoolean:
+            RETURN_IF_IERROR(
+                bejUpdateBoolMetaData(dictionaries, parentDictionary, childPtr,
+                                      childIndex, dictStartingOffset));
+            break;
         default:
             fprintf(stderr, "Child type %u not supported\n",
                     chNode->nodeAttr.format.principalDataType);
