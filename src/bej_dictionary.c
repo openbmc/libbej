@@ -2,6 +2,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 /**
  * @brief Get the index for a property offset. First property will be at index
@@ -19,10 +20,12 @@ static uint16_t bejGetPropertyEntryIndex(uint16_t propertyOffset)
 /**
  * @brief  Validate a property offset.
  *
+ * @param[in] dictionary - pointer to the dictionary.
  * @param[in] propertyOffset - offset needed to be validated.
  * @return true if propertyOffset is a valid offset.
  */
-static bool bejValidatePropertyOffset(uint16_t propertyOffset)
+static bool bejValidatePropertyOffset(const uint8_t* dictionary,
+                                      uint16_t propertyOffset)
 {
     // propertyOffset should be greater than or equal to first property offset.
     if (propertyOffset < bejDictGetPropertyHeadOffset())
@@ -40,6 +43,18 @@ static bool bejValidatePropertyOffset(uint16_t propertyOffset)
     {
         fprintf(stderr, "Invalid property offset. Does not point to beginning "
                         "of property\n");
+        return false;
+    }
+
+    const struct BejDictionaryHeader* header =
+        (const struct BejDictionaryHeader*)dictionary;
+    uint16_t propertyIndex = bejGetPropertyEntryIndex(propertyOffset);
+    if (propertyIndex >= header->entryCount)
+    {
+        fprintf(stderr,
+                "Invalid property offset %u. It falls outside of dictionary "
+                "properties\n",
+                propertyOffset);
         return false;
     }
 
@@ -69,7 +84,7 @@ int bejDictGetProperty(const uint8_t* dictionary,
     const struct BejDictionaryHeader* header =
         (const struct BejDictionaryHeader*)dictionary;
 
-    if (!bejValidatePropertyOffset(propertyOffset))
+    if (!bejValidatePropertyOffset(dictionary, propertyOffset))
     {
         return bejErrorInvalidPropertyOffset;
     }
@@ -97,4 +112,44 @@ const char* bejDictGetPropertyName(const uint8_t* dictionary,
         return "";
     }
     return (const char*)(dictionary + nameOffset);
+}
+
+int bejDictGetPropertyByName(const uint8_t* dictionary,
+                             uint16_t startingPropertyOffset,
+                             const char* propertyName,
+                             const struct BejDictionaryProperty** property,
+                             uint16_t* propertyOffset)
+{
+    NULL_CHECK(property, "property in bejDictGetPropertyByName");
+
+    uint16_t curPropertyOffset = startingPropertyOffset;
+    const struct BejDictionaryHeader* header =
+        (const struct BejDictionaryHeader*)dictionary;
+
+    if (!bejValidatePropertyOffset(dictionary, curPropertyOffset))
+    {
+        return bejErrorInvalidPropertyOffset;
+    }
+    uint16_t propertyIndex = bejGetPropertyEntryIndex(curPropertyOffset);
+
+    for (uint16_t index = propertyIndex; index < header->entryCount; ++index)
+    {
+        const struct BejDictionaryProperty* p =
+            (const struct BejDictionaryProperty*)(dictionary +
+                                                  curPropertyOffset);
+        if (strcmp(propertyName,
+                   bejDictGetPropertyName(dictionary, p->nameOffset,
+                                          p->nameLength)) == 0)
+        {
+            *property = p;
+            // propertyOffset is an optional output.
+            if (propertyOffset != NULL)
+            {
+                *propertyOffset = curPropertyOffset;
+            }
+            return 0;
+        }
+        curPropertyOffset += sizeof(struct BejDictionaryProperty);
+    }
+    return bejErrorUnknownProperty;
 }
