@@ -96,6 +96,26 @@ extern "C"
     const char* bejDictGetPropertyName(const uint8_t* dictionary,
                                        uint16_t nameOffset, uint8_t nameLength);
 
+    /**
+     * @brief Get the property related to the given property name.
+     *
+     * @param[in] dictionary - dictionary containing the property.
+     * @param[in] startingPropertyOffset - offset of the starting property for
+     * the search.
+     * @param[in] propertyName - name of the searched property.
+     * @param[out] property - if the search is successful, this will point to a
+     * valid property.
+     * @param[out] propertyOffset - if the search is successful, this will point
+     * to the offset of the property within the dictionary. Can provide a NULL
+     * pointer if this is not needed.
+     * @return 0 if successful.
+     */
+    int bejDictGetPropertyByName(const uint8_t* dictionary,
+                                 uint16_t startingPropertyOffset,
+                                 const char* propertyName,
+                                 const struct BejDictionaryProperty** property,
+                                 uint16_t* propertyOffset);
+
 #ifdef __cplusplus
 }
 #endif

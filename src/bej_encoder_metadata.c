@@ -8,6 +8,155 @@
 #include <string.h>
 
 /**
+ * @brief Check the name is an annotation type name.
+ *
+ * @param[in] name - property name.
+ * @return true for annotation name, false otherwise.
+ */
+static bool bejIsAnnotation(const char* name)
+{
+    if (name == NULL)
+    {
+        return false;
+    }
+    return name[0] == '@';
+}
+
+/**
+ * @brief Get the dictionary for the provided node.
+ *
+ * @param[in] dictionaries - available dictionaries for encoding.
+ * @param[in] parentDictionary - dictionary used for the parent of this node.
+ * @param[in] nodeName - name of the interested node. Can be NULL if the node
+ * doesn't have a name.
+ * @return a pointer to the dictionary to be used.
+ */
+static const uint8_t*
+    bejGetRelatedDictionary(const struct BejDictionaries* dictionaries,
+                            const uint8_t* parentDictionary,
+                            const char* nodeName)
+{
+    // If the node name is NULL, we have to use parent dictionary.
+    if (nodeName == NULL)
+    {
+        return parentDictionary;
+    }
+
+    // If the parent is using annotation dictionary, that means the parent is an
+    // annotation. Therefore the child (this node) should be an annotation too
+    // (Could this be false?). Therefore we should use the annotation dictionary
+    // for this node as well.
+    if (parentDictionary == dictionaries->annotationDictionary)
+    {
+        return dictionaries->annotationDictionary;
+    }
+    return bejIsAnnotation(nodeName) ? dictionaries->annotationDictionary
+                                     : dictionaries->schemaDictionary;
+}
+
+/**
+ * @brief Get dictionary data for the given node.
+ *
+ * @param[in] dictionaries - available dictionaries.
+ * @param[in] parentDictionary - the dictionary used by the provided node's
+ * parent.
+ * @param[in] node - node that caller is interested in.
+ * @param[in] nodeIndex - index of this node within its parent.
+ * @param[in] dictStartingOffset - starting dictionary child offset value of
+ * this node's parent.
+ * @param[out] sequenceNumber - sequence number of the node. bit0 specifies the
+ * dictionary schema type: [major|annotation].
+ * @param[out] nodeDictionary - if not NULL, return a pointer to the dictionary
+ * used for the node.
+ * @param[out] childEntryOffset - if not NULL, return the dictionary starting
+ * offset used for this nodes children. If this node is not supposed to have
+ * children, caller should ignore this value.
+ * @return 0 if successful.
+ */
+static int bejFindSeqNumAndChildDictOffset(
+    const struct BejDictionaries* dictionaries, const uint8_t* parentDictionary,
+    struct RedfishPropertyNode* node, uint16_t nodeIndex,
+    uint16_t dictStartingOffset, uint32_t* sequenceNumber,
+    const uint8_t** nodeDictionary, uint16_t* childEntryOffset)
+{
+    // If the node doesn't have a name, we can't use a dictionary. So we can use
+    // its parent's info.
+    if (node->name == NULL || node->name[0] == '\0')
+    {
+        if (nodeDictionary != NULL)
+        {
+            *nodeDictionary = parentDictionary;
+        }
+
+        if (childEntryOffset != NULL)
+        {
+            *childEntryOffset = dictStartingOffset;
+        }
+
+        // If the property doesn't have a name, it has to be an element of an
+        // array. In that case, sequence number is the array index.
+        *sequenceNumber = (uint32_t)nodeIndex << 1;
+        if (dictionaries->annotationDictionary == parentDictionary)
+        {
+            *sequenceNumber |= 1;
+        }
+        return 0;
+    }
+
+    // If we are here, the property has a name.
+    const uint8_t* dictionary =
+        bejGetRelatedDictionary(dictionaries, parentDictionary, node->name);
+    bool isAnnotation = dictionary == dictionaries->annotationDictionary;
+    // If this node's dictionary and its parent's dictionary is different,
+    // this node should start searching from the beginning of its
+    // dictionary. This should only happen for property annotations of form
+    // property@annotation_class.annotation_name.
+    if (dictionary != parentDictionary)
+    {
+        // Redundancy check.
+        if (!isAnnotation)
+        {
+            fprintf(stderr,
+                    "Dictionary for property %s should be the annotation "
+                    "dictionary. Might be a encoding failure. Maybe the "
+                    "JSON tree is not created correctly.",
+                    node->name);
+            return -1;
+        }
+        dictStartingOffset = bejDictGetFirstAnnotatedPropertyOffset();
+    }
+
+    const struct BejDictionaryProperty* property;
+    int ret = bejDictGetPropertyByName(dictionary, dictStartingOffset,
+                                       node->name, &property, NULL);
+    if (ret != 0)
+    {
+        fprintf(stderr,
+                "Failed to find dictionary entry for name %s. Search started "
+                "at offset: %u. ret: %d\n",
+                node->name, dictStartingOffset, ret);
+        return ret;
+    }
+
+    if (nodeDictionary != NULL)
+    {
+        *nodeDictionary = dictionary;
+    }
+
+    if (childEntryOffset != NULL)
+    {
+        *childEntryOffset = property->childPointerOffset;
+    }
+
+    *sequenceNumber = (uint32_t)(property->sequenceNumber) << 1;
+    if (isAnnotation)
+    {
+        *sequenceNumber |= 1;
+    }
+    return 0;
+}
+
+/**
  * @brief Update metadata of leaf nodes.
  *
  * @param dictionaries - dictionaries needed for encoding.
@@ -58,14 +207,36 @@ static int bejUpdateParentMetaData(const struct BejDictionaries* dictionaries,
                                    struct RedfishPropertyParent* node,
                                    uint16_t nodeIndex)
 {
-    // TODO: Implement this
-    (void)dictionaries;
-    (void)parentDictionary;
-    (void)dictStartingOffset;
-    (void)node;
-    (void)nodeIndex;
+    const uint8_t* nodeDictionary;
+    uint16_t childEntryOffset;
+    uint32_t sequenceNumber;
 
-    return -1;
+    // Get the dictionary related data from the node.
+    RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
+        dictionaries, parentDictionary, &node->nodeAttr, nodeIndex,
+        dictStartingOffset, &sequenceNumber, &nodeDictionary,
+        &childEntryOffset));
+
+    node->metaData.sequenceNumber = sequenceNumber;
+    node->metaData.childrenDictPropOffset = childEntryOffset;
+    node->metaData.nextChild = node->firstChild;
+    node->metaData.nextChildIndex = 0;
+    node->metaData.dictionary = nodeDictionary;
+    node->metaData.vSize = 0;
+
+    // S: Size needed for encoding sequence number.
+    node->metaData.sflSize =
+        bejNnintEncodingSizeOfUInt(node->metaData.sequenceNumber);
+    // F: Size of the format byte is 1.
+    node->metaData.sflSize += 1;
+    // V: Only for bejArray and bejSet types, value size should include the
+    // children count. We need to add the size needs to encode all the children
+    // later.
+    if (node->nodeAttr.format.principalDataType != bejPropertyAnnotation)
+    {
+        node->metaData.vSize = bejNnintEncodingSizeOfUInt(node->nChildren);
+    }
+    return 0;
 }
 
 /**
