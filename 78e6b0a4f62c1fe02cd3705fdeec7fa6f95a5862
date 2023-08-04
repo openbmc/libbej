@@ -26,6 +26,138 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e16f06ce_5b2d3a83",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-08-04T23:16:37Z",
+      "side": 1,
+      "message": "tot?",
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe9499c1_4e704d95",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-08-04T23:16:37Z",
+      "side": 1,
+      "message": "I think we should avoid subtracting 1 everytime to get nnintLength Byte ? \nIt is better to have separate APIs 1) that returns bejNnintByteLength and 2) that returns bejNnintSizeOfValue (bejNnintByteLength + 1) ?",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 46
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78fd95c6_3dc876a7",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-08-04T23:16:37Z",
+      "side": 1,
+      "message": "const ?",
+      "range": {
+        "startLine": 27,
+        "startChar": 27,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ae86715_c3f06a0b",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-08-04T23:16:37Z",
+      "side": 1,
+      "message": "Can you add description for static functions ? Same for other files too",
+      "range": {
+        "startLine": 34,
+        "startChar": 6,
+        "endLine": 34,
+        "endChar": 34
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2643e02_dbb00ae6",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-08-04T23:16:37Z",
+      "side": 1,
+      "message": "childP seems an odd name ? maybe just `child` ?",
+      "range": {
+        "startLine": 77,
+        "startChar": 10,
+        "endLine": 77,
+        "endChar": 16
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28d8a788_cfd54e67",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-08-04T23:16:37Z",
+      "side": 1,
+      "message": "Maybe need to explicitly mention that the function returns without encoding the other child nodes ?",
+      "range": {
+        "startLine": 120,
+        "startChar": 39,
+        "endLine": 120,
+        "endChar": 60
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f995fca0_2d3f12c8",
         "filename": "src/bej_encoder_core.c",
         "patchSetId": 2
