@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "220540d9_4507b171",
+        "filename": "include/libbej/bej_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-08-05T03:54:06Z",
+      "side": 1,
+      "message": "Good catch!",
+      "parentUuid": "772ab955_eeaa5bb3",
+      "range": {
+        "startLine": 34,
+        "startChar": 60,
+        "endLine": 34,
+        "endChar": 70
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e16f06ce_5b2d3a83",
@@ -41,6 +65,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aee5473_a3542c20",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-08-05T03:54:06Z",
+      "side": 1,
+      "message": "Not applicable anymore.",
+      "parentUuid": "e16f06ce_5b2d3a83",
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe9499c1_4e704d95",
@@ -54,6 +96,30 @@
       "writtenOn": "2023-08-04T23:16:37Z",
       "side": 1,
       "message": "I think we should avoid subtracting 1 everytime to get nnintLength Byte ? \nIt is better to have separate APIs 1) that returns bejNnintByteLength and 2) that returns bejNnintSizeOfValue (bejNnintByteLength + 1) ?",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 46
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c17190_81b277c2",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-08-05T03:54:06Z",
+      "side": 1,
+      "message": "Good point. I think the names I have used look confusing too. I changed the names and added what you suggested.",
+      "parentUuid": "fe9499c1_4e704d95",
       "range": {
         "startLine": 17,
         "startChar": 4,
@@ -87,6 +153,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc42d549_dbe43455",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-08-05T03:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78fd95c6_3dc876a7",
+      "range": {
+        "startLine": 27,
+        "startChar": 27,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ae86715_c3f06a0b",
@@ -100,6 +190,30 @@
       "writtenOn": "2023-08-04T23:16:37Z",
       "side": 1,
       "message": "Can you add description for static functions ? Same for other files too",
+      "range": {
+        "startLine": 34,
+        "startChar": 6,
+        "endLine": 34,
+        "endChar": 34
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7845732_92980ad2",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-08-05T03:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ae86715_c3f06a0b",
       "range": {
         "startLine": 34,
         "startChar": 6,
@@ -133,6 +247,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d51a0cc_1b098073",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-08-05T03:54:06Z",
+      "side": 1,
+      "message": "Changed to childPtr \u003d\u003e child pointer",
+      "parentUuid": "b2643e02_dbb00ae6",
+      "range": {
+        "startLine": 77,
+        "startChar": 10,
+        "endLine": 77,
+        "endChar": 16
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28d8a788_cfd54e67",
@@ -156,6 +294,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6348f7b_a8d871ef",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-08-05T03:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28d8a788_cfd54e67",
+      "range": {
+        "startLine": 120,
+        "startChar": 39,
+        "endLine": 120,
+        "endChar": 60
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f995fca0_2d3f12c8",
@@ -169,6 +331,30 @@
       "writtenOn": "2023-08-03T09:08:14Z",
       "side": 1,
       "message": "is the BEJ version only used in here? should be set as a common variable?",
+      "range": {
+        "startLine": 176,
+        "startChar": 4,
+        "endLine": 177,
+        "endChar": 34
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e101434_730bb58a",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-08-05T03:54:06Z",
+      "side": 1,
+      "message": "Only used here. Sorry I did not get your second question.",
+      "parentUuid": "f995fca0_2d3f12c8",
       "range": {
         "startLine": 176,
         "startChar": 4,
