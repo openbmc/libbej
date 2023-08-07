@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73059fb0_e6759e56",
+        "filename": "include/libbej/bej_common.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-08-07T23:01:51Z",
+      "side": 1,
+      "message": "I think there is a typo here ? Do you mean Encoded ?",
+      "range": {
+        "startLine": 255,
+        "startChar": 20,
+        "endLine": 255,
+        "endChar": 30
+      },
+      "revId": "17a2d136a7902bbc0a7b4a95b3b1af4b17880abe",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
