@@ -387,6 +387,30 @@
       },
       "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33d973c2_94f82d29",
+        "filename": "src/bej_encoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2023-08-08T20:40:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "390aabff_0a996144",
+      "range": {
+        "startLine": 176,
+        "startChar": 4,
+        "endLine": 177,
+        "endChar": 34
+      },
+      "revId": "78e6b0a4f62c1fe02cd3705fdeec7fa6f95a5862",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
