@@ -49,6 +49,13 @@ static void bejTreeInitChildNode(struct RedfishPropertyLeaf* node,
     node->nodeAttr.sibling = NULL;
 }
 
+void bejTreeAddNull(struct RedfishPropertyParent* parent,
+                    struct RedfishPropertyLeafNull* child, const char* name)
+{
+    bejTreeInitChildNode((struct RedfishPropertyLeaf*)child, name, bejNull);
+    bejTreeLinkChildToParent(parent, child);
+}
+
 void bejTreeAddInteger(struct RedfishPropertyParent* parent,
                        struct RedfishPropertyLeafInt* child, const char* name,
                        int64_t value)

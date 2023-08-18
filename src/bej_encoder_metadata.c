@@ -385,6 +385,30 @@ static int bejUpdateBoolMetaData(const struct BejDictionaries* dictionaries,
     return 0;
 }
 
+static int bejUpdateNullMetaData(const struct BejDictionaries* dictionaries,
+                                 const uint8_t* parentDictionary,
+                                 struct RedfishPropertyLeafNull* node,
+                                 uint16_t nodeIndex,
+                                 uint16_t dictStartingOffset)
+{
+    uint32_t sequenceNumber;
+    RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
+        dictionaries, parentDictionary, &node->leaf.nodeAttr, nodeIndex,
+        dictStartingOffset, &sequenceNumber, NULL, NULL));
+    node->leaf.metaData.sequenceNumber = sequenceNumber;
+
+    // Calculate the size for encoding this in a SFLV tuple.
+    // S: Size needed for encoding sequence number.
+    node->leaf.metaData.sflSize = bejNnintEncodingSizeOfUInt(sequenceNumber);
+    // F: Size of the format byte is 1.
+    node->leaf.metaData.sflSize += 1;
+    // L: Length needed for the value. Value length for NULL type is 0. So we
+    // need to encode [0x01 0x00]
+    node->leaf.metaData.sflSize += BEJ_TUPLE_L_SIZE_FOR_BEJ_INTEGER;
+    node->leaf.metaData.vSize = 0;
+    return 0;
+}
+
 /**
  * @brief Update metadata of leaf nodes.
  *
@@ -429,6 +453,11 @@ static int bejUpdateLeafNodeMetaData(const struct BejDictionaries* dictionaries,
         case bejBoolean:
             RETURN_IF_IERROR(
                 bejUpdateBoolMetaData(dictionaries, parentDictionary, childPtr,
+                                      childIndex, dictStartingOffset));
+            break;
+        case bejNull:
+            RETURN_IF_IERROR(
+                bejUpdateNullMetaData(dictionaries, parentDictionary, childPtr,
                                       childIndex, dictStartingOffset));
             break;
         default:
