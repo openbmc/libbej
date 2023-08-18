@@ -3,9 +3,15 @@
 #include "bej_common.h"
 #include "bej_dictionary.h"
 
+#include <math.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+
+/**
+ * @brief Maximum digits supported in the fractional part of a real number.
+ */
+#define BEJ_REAL_PRECISION 16
 
 /**
  * @brief bejTupleL size of an integer.
@@ -221,6 +227,87 @@ static int bejUpdateStringMetaData(const struct BejDictionaries* dictionaries,
     return 0;
 }
 
+static int bejUpdateRealMetaData(const struct BejDictionaries* dictionaries,
+                                 const uint8_t* parentDictionary,
+                                 struct RedfishPropertyLeafReal* node,
+                                 uint16_t nodeIndex,
+                                 uint16_t dictStartingOffset)
+{
+    uint32_t sequenceNumber;
+    RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
+        dictionaries, parentDictionary, &(node->leaf.nodeAttr), nodeIndex,
+        dictStartingOffset, &sequenceNumber, NULL, NULL));
+    node->leaf.metaData.sequenceNumber = sequenceNumber;
+
+    if (node->value > (double)INT64_MAX)
+    {
+        // TODO: We should use the exponent.
+        fprintf(
+            stderr,
+            "Need to add support to encode double value larger than INT64_MAX\n");
+        return -1;
+    }
+
+    // Calculate the size for encoding this in a SFLV tuple.
+    // S: Size needed for encoding sequence number.
+    node->leaf.metaData.sflSize = bejNnintEncodingSizeOfUInt(sequenceNumber);
+    // F: Size of the format byte is 1.
+    node->leaf.metaData.sflSize += 1;
+    // We need to breakdown the real number to bejReal type to determine the
+    // length. We are not gonna add an exponent. It will only be the whole part
+    // and the fraction part. Get the whole part
+    double originalWhole;
+    double originalFract = modf(node->value, &originalWhole);
+
+    // Convert the fraction to a whole value for encoding.
+    // Create a new value by multiplying the original fraction by 10. Do this
+    // until the fraction of the new value is 0 or we reach the precision. Eg
+    // 0.00105: This fraction value has two leading zeros. We will keep
+    // multiplying this by 10 until the fraction of the result of that
+    // multiplication is 0.
+    double originalFactConvertedToWhole = fabs(originalFract);
+    double fract = originalFract;
+    double intPart;
+    uint32_t leadingZeros = 0;
+    uint32_t precision = 0;
+    while (fract != 0 && precision < BEJ_REAL_PRECISION)
+    {
+        originalFactConvertedToWhole = originalFactConvertedToWhole * 10;
+        fract = modf(originalFactConvertedToWhole, &intPart);
+        // If the integer portion is 0, that means we still have leading zeros.
+        if (intPart == 0)
+        {
+            ++leadingZeros;
+        }
+        ++precision;
+    }
+    node->bejReal.whole = (int64_t)originalWhole;
+    node->bejReal.zeroCount = leadingZeros;
+    node->bejReal.fract = (int64_t)originalFactConvertedToWhole;
+    // We are omitting exp. So the exp length should be 0.
+    node->bejReal.expLen = 0;
+    node->bejReal.exp = 0;
+
+    // Calculate the sizes needed for storing bejReal fields.
+    // nnint for the length of the "whole" value.
+    node->leaf.metaData.vSize = BEJ_TUPLE_L_SIZE_FOR_BEJ_INTEGER;
+    // Length needed for the "whole" value.
+    node->leaf.metaData.vSize += bejIntLengthOfValue((int64_t)originalWhole);
+    // nnint for leading zero count.
+    node->leaf.metaData.vSize += bejNnintEncodingSizeOfUInt(leadingZeros);
+    // nnint for the factional part.
+    node->leaf.metaData.vSize +=
+        bejNnintEncodingSizeOfUInt((int64_t)originalFactConvertedToWhole);
+    // nnint for the exp length. We are omitting exp. So the exp length should
+    // be 0.
+    node->leaf.metaData.vSize += bejNnintEncodingSizeOfUInt(0);
+
+    // L: nnint for the size needed for encoding the bejReal value.
+    node->leaf.metaData.sflSize +=
+        bejNnintEncodingSizeOfUInt(node->leaf.metaData.vSize);
+    return 0;
+}
+
 static int bejUpdateEnumMetaData(const struct BejDictionaries* dictionaries,
                                  const uint8_t* parentDictionary,
                                  struct RedfishPropertyLeafEnum* node,
@@ -328,6 +415,11 @@ static int bejUpdateLeafNodeMetaData(const struct BejDictionaries* dictionaries,
             RETURN_IF_IERROR(bejUpdateStringMetaData(
                 dictionaries, parentDictionary, childPtr, childIndex,
                 dictStartingOffset));
+            break;
+        case bejReal:
+            RETURN_IF_IERROR(
+                bejUpdateRealMetaData(dictionaries, parentDictionary, childPtr,
+                                      childIndex, dictStartingOffset));
             break;
         case bejEnum:
             RETURN_IF_IERROR(
