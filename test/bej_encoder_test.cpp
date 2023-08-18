@@ -369,4 +369,77 @@ INSTANTIATE_TEST_SUITE_P(
     return info.param.testName;
     });
 
+/**
+ * @brief Creates a Drive resource action payload
+ *
+ * {
+ *   "ResetType": "On"
+ * }
+ */
+struct RedfishPropertyParent* createDriveAction()
+{
+    static struct RedfishPropertyParent root;
+    static struct RedfishPropertyLeafEnum resetType;
+
+    bejTreeInitSet(&root, "#Drive.Reset");
+    bejTreeAddEnum(&root, &resetType, "ResetType", "On");
+    return &root;
+}
+
+constexpr std::array<uint8_t, 8> bejLocatorDriveReset{
+    {0x1, 0x6, 0x1, 0x0, 0x1, 0x0, 0x1, 0x4}};
+
+const std::string driveActionJson = R"(
+    {
+        "ResetType": "On"
+    }
+)";
+
+TEST(BejEncoderDecoderTest, EncodeDecodeDriveAction)
+{
+    auto inputsOrErr = BejFileReader::loadInputs(driveOemTestFiles);
+    EXPECT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .errorDictionary = inputsOrErr->errorDictionary,
+    };
+
+    std::vector<uint8_t> outputBuffer;
+    struct BejEncoderOutputHandler output = {
+        .handlerContext = &outputBuffer,
+        .recvOutput = &recvOutput,
+    };
+
+    std::vector<void*> pointerStack;
+    struct BejPointerStackCallback stackCallbacks = {
+        .stackContext = &pointerStack,
+        .stackEmpty = stackEmpty,
+        .stackPeek = stackPeek,
+        .stackPop = stackPop,
+        .stackPush = stackPush,
+        .deleteStack = NULL,
+    };
+
+    uint16_t property_offset;
+    EXPECT_THAT(bejDictEntryByBejLocator(
+                    dictionaries.schemaDictionary, bejLocatorDriveReset.data(),
+                    bejLocatorDriveReset.size(), nullptr, &property_offset),
+                0);
+
+    bejEncode(&dictionaries, property_offset, bejMajorSchemaClass,
+              createDriveAction(), &output, &stackCallbacks);
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(
+        decoder.decode(dictionaries, std::span(outputBuffer), property_offset),
+        0);
+    std::string decoded = decoder.getOutput();
+    nlohmann::json jsonDecoded = nlohmann::json::parse(decoded);
+
+    nlohmann::json expectedJson = nlohmann::json::parse(driveActionJson);
+    EXPECT_TRUE(jsonDecoded.dump() == expectedJson.dump());
+}
+
 } // namespace libbej

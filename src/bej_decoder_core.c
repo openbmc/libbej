@@ -588,7 +588,7 @@ static int bejHandleBejReal(struct BejHandleTypeFuncParam* params)
         const uint8_t* lenExpNnint = fractNnint + bejGetNnintSize(fractNnint);
         const uint8_t* expBejInt = lenExpNnint + bejGetNnintSize(lenExpNnint);
 
-        struct BejReal realValue;
+        struct BejReal realValue = {0};
         realValue.whole = bejGetIntegerValue(wholeBejInt, wholeByteLen);
         realValue.zeroCount = bejGetNnint(fractZeroCountNnint);
         realValue.fract = bejGetNnint(fractNnint);
@@ -679,6 +679,8 @@ static int bejHandleBejPropertyAnnotation(struct BejHandleTypeFuncParam* params)
  *
  * @param[in] schemaDictionary - main schema dictionary to use.
  * @param[in] annotationDictionary - annotation dictionary
+ * @param[in] majorSchemaStartingOffset - dictionary starting offset of the
+ * major schema.
  * @param[in] enStream - encoded stream without the PLDM header.
  * @param[in] streamLen - length of the enStream.
  * @param[in] stackCallback - callbacks for stack handlers.
@@ -692,6 +694,7 @@ static int bejHandleBejPropertyAnnotation(struct BejHandleTypeFuncParam* params)
  */
 static int bejDecode(const uint8_t* schemaDictionary,
                      const uint8_t* annotationDictionary,
+                     uint16_t majorSchemaStartingOffset,
                      const uint8_t* enStream, uint32_t streamLen,
                      const struct BejStackCallback* stackCallback,
                      const struct BejDecodedCallback* decodedCallback,
@@ -719,6 +722,12 @@ static int bejDecode(const uint8_t* schemaDictionary,
         .callbacksDataPtr = callbacksDataPtr,
         .stackDataPtr = stackDataPtr,
     };
+
+    // Decide the starting property offset of the main dictionary.
+    if (majorSchemaStartingOffset != BEJ_DICTIONARY_START_AT_HEAD)
+    {
+        params.state.mainDictPropOffset = majorSchemaStartingOffset;
+    }
 
     while (params.state.encodedStreamOffset < streamLen)
     {
@@ -819,6 +828,7 @@ static bool bejIsSupported(uint32_t bejVersion)
 }
 
 int bejDecodePldmBlock(const struct BejDictionaries* dictionaries,
+                       uint16_t majorSchemaStartingOffset,
                        const uint8_t* encodedPldmBlock, uint32_t blockLength,
                        const struct BejStackCallback* stackCallback,
                        const struct BejDecodedCallback* decodedCallback,
@@ -878,8 +888,8 @@ int bejDecodePldmBlock(const struct BejDictionaries* dictionaries,
     // Skip the PLDM header.
     const uint8_t* enStream = encodedPldmBlock + pldmHeaderSize;
     uint32_t streamLen = blockLength - pldmHeaderSize;
-    return bejDecode(dictionaries->schemaDictionary,
-                     dictionaries->annotationDictionary, enStream, streamLen,
-                     stackCallback, decodedCallback, callbacksDataPtr,
-                     stackDataPtr);
+    return bejDecode(
+        dictionaries->schemaDictionary, dictionaries->annotationDictionary,
+        majorSchemaStartingOffset, enStream, streamLen, stackCallback,
+        decodedCallback, callbacksDataPtr, stackDataPtr);
 }

@@ -190,6 +190,9 @@ extern "C"
      * supports is 32bits.
      *
      * @param[in] dictionaries - dictionaries needed for decoding.
+     * @param[in] majorSchemaStartingOffset - dictionary starting offset of the
+     * major schema. Usually this will be set to BEJ_DICTIONARY_START_AT_HEAD
+     * unless we are decoding a payload associated with a bejLocator type.
      * @param[in] encodedPldmBlock - encoded PLDM block.
      * @param[in] blockLength - length of the PLDM block.
      * @param[in] stackCallback - callbacks for stack handlers. callbacks in
@@ -205,6 +208,7 @@ extern "C"
      * @return 0 if successful.
      */
     int bejDecodePldmBlock(const struct BejDictionaries* dictionaries,
+                           uint16_t majorSchemaStartingOffset,
                            const uint8_t* encodedPldmBlock,
                            uint32_t blockLength,
                            const struct BejStackCallback* stackCallback,

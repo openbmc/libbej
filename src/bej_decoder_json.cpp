@@ -325,7 +325,8 @@ static int stackPush(const struct BejStackProperty* const property,
 }
 
 int BejDecoderJson::decode(const BejDictionaries& dictionaries,
-                           const std::span<const uint8_t> encodedPldmBlock)
+                           const std::span<const uint8_t> encodedPldmBlock,
+                           uint16_t majorSchemaStartingOffset)
 {
     // Clear the previous output if any.
     output.clear();
@@ -367,10 +368,10 @@ int BejDecoderJson::decode(const BejDictionaries& dictionaries,
         .output = &output,
     };
 
-    return bejDecodePldmBlock(&dictionaries, encodedPldmBlock.data(),
-                              encodedPldmBlock.size_bytes(), &stackCallback,
-                              &decodedCallback, (void*)(&callbackData),
-                              (void*)(&stack));
+    return bejDecodePldmBlock(
+        &dictionaries, majorSchemaStartingOffset, encodedPldmBlock.data(),
+        encodedPldmBlock.size_bytes(), &stackCallback, &decodedCallback,
+        (void*)(&callbackData), (void*)(&stack));
 }
 
 std::string BejDecoderJson::getOutput()
