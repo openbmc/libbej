@@ -15,15 +15,21 @@ if not gtest.found() or not gmock.found()
   endif
 endif
 
+test_dep = declare_dependency(
+  include_directories: include_directories('include'),
+  dependencies: [libbej, gtest, gmock]
+)
+
 gtests = [
   'bej_decoder',
   'bej_common',
   'bej_dictionary',
   'bej_tree',
+  'bej_encoder',
 ]
 foreach t : gtests
   test(t, executable(t.underscorify(), t + '_test.cpp',
                      build_by_default: false,
                      implicit_include_directories: false,
-                     dependencies: [libbej, gtest, gmock]))
+                     dependencies: test_dep))
 endforeach

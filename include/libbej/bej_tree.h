@@ -156,6 +156,38 @@ extern "C"
     };
 
     /**
+     * @brief Storage for an array of links with an annotated odata.count.
+     *
+     * This doesn't contain storage for the link itself.
+     *
+     * Eg:
+     * {
+     *   "Contains": [],
+     *   "Contains@odata.count": 0,
+     * }
+     */
+    struct RedfishArrayOfLinksJson
+    {
+        struct RedfishPropertyParent array;
+        struct RedfishPropertyParent annotatedProperty;
+        struct RedfishPropertyLeafInt count;
+    };
+
+    /**
+     * @brief Storage for a single odata.id link inside a JSON "Set" object.
+     *
+     * Eg:
+     * FieldName: {
+     *   "@odata.id": "/redfish/v1/Chassis/Something"
+     * }
+     */
+    struct RedfishLinkJson
+    {
+        struct RedfishPropertyParent set;
+        struct RedfishPropertyLeafString odataId;
+    };
+
+    /**
      * @brief Initialize a bejSet type node.
      *
      * @param[in] node - pointer to a RedfishPropertyParent struct.
@@ -310,6 +342,82 @@ extern "C"
      */
     void* bejParentGoToNextChild(struct RedfishPropertyParent* parent,
                                  struct RedfishPropertyNode* currentChild);
+
+    /**
+     * @brief A helper function to add a redfish link to a JSON tree.
+     *
+     * Eg:
+     * parent {
+     *   linkSetName: {
+     *     "@odata.id": "value"
+     *   }
+     * }
+     * @param parent - An initialized parent object.
+     * @param linkJson - Storage for the RedfishLinkJson.
+     * @param linkSetName - Name of the bejSet.
+     * @param value - The link.
+     * @return 0 if successful.
+     */
+    int bejAddLinkToJson(struct RedfishPropertyParent* parent,
+                         struct RedfishLinkJson* linkJson,
+                         const char* linkSetName, const char* value);
+
+    /**
+     * @brief A helper function to add an annotated count to a JSON tree.
+     *
+     * Eg:
+     * parent {
+     *   "annotatedPropertyName@odata.count": value,
+     * }
+     *
+     * @param parent - An initialized parent object.
+     * @param annotatedProperty - Storage for the property being annotated.
+     * @param annotatedPropertyName - Name of the property being annotated.
+     * @param countProperty - Storage for representing the count in JSON.
+     * @param value - The count.
+     * @return 0 if successful.
+     */
+    int bejAddAnnotatedCountToJson(
+        struct RedfishPropertyParent* parent,
+        struct RedfishPropertyParent* annotatedProperty,
+        const char* annotatedPropertyName,
+        struct RedfishPropertyLeafInt* countProperty, int64_t value);
+
+    /**
+     * @brief A helper function to creates a JSON object with an array of links
+     * and adds it to a parent.
+     *
+     * The array should have an annotated property count. This function will add
+     * the following structure to a JSON object.
+     *
+     * Eg:
+     * parent {
+     *   "arrayName": [
+     *     {
+     *       "@odata.id": "{links[0]}"
+     *     },
+     *     {
+     *       "@odata.id": "{links[1]}"
+     *     },
+     *     ...
+     *   ],
+     *   "array_name@odata.count": linkCount,
+     * }
+     *
+     * @param parent - Parent node to add to.
+     * @param arrayName - Name of the array.
+     * @param linkCount - Number of links.
+     * @param links - An array of odata.id links equal to linkCount.
+     * @param linksInfo - A valid RedfishArrayOfLinksJson struct.
+     * @param linkJsonArray - An array of RedfishLinkJson structs. Size should
+     * be equal to linkCount.
+     * @return 0 if successful.
+     */
+    int bejCreateArrayOfLinksJson(struct RedfishPropertyParent* parent,
+                                  const char* arrayName, uint16_t linkCount,
+                                  const char* const links[],
+                                  struct RedfishArrayOfLinksJson* linksInfo,
+                                  struct RedfishLinkJson* linkJsonArray);
 
 #ifdef __cplusplus
 }

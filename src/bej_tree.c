@@ -148,3 +148,73 @@ void* bejParentGoToNextChild(struct RedfishPropertyParent* parent,
     parent->metaData.nextChild = currentChild->sibling;
     return currentChild->sibling;
 }
+
+int bejAddLinkToJson(struct RedfishPropertyParent* parent,
+                     struct RedfishLinkJson* linkJson, const char* linkSetName,
+                     const char* value)
+{
+    // Nothing to be added.
+    if (value == NULL)
+    {
+        return 0;
+    }
+
+    NULL_CHECK(parent, "Parent can't be NULL");
+    NULL_CHECK(linkJson, "Link JSON storage can't be NULL");
+
+    bejTreeInitSet(&linkJson->set, linkSetName);
+    bejTreeAddString(&linkJson->set, &linkJson->odataId, "@odata.id", value);
+    bejTreeLinkChildToParent(parent, &linkJson->set);
+    return 0;
+}
+
+int bejAddAnnotatedCountToJson(struct RedfishPropertyParent* parent,
+                               struct RedfishPropertyParent* annotatedProperty,
+                               const char* annotatedPropertyName,
+                               struct RedfishPropertyLeafInt* countProperty,
+                               int64_t value)
+{
+    NULL_CHECK(parent, "Parent can't be NULL");
+    NULL_CHECK(annotatedProperty,
+               "Storage for property being annotated can't be NULL");
+    NULL_CHECK(countProperty, "Storage for count property can't be NULL");
+
+    bejTreeInitPropertyAnnotated(annotatedProperty, annotatedPropertyName);
+    bejTreeAddInteger(annotatedProperty, countProperty, "@odata.count", value);
+    bejTreeLinkChildToParent(parent, annotatedProperty);
+    return 0;
+}
+
+int bejCreateArrayOfLinksJson(struct RedfishPropertyParent* parent,
+                              const char* arrayName, uint16_t linkCount,
+                              const char* const links[],
+                              struct RedfishArrayOfLinksJson* linksInfo,
+                              struct RedfishLinkJson* linkJsonArray)
+{
+    NULL_CHECK(parent, "Invalid parent pointer for creating an array of links");
+    NULL_CHECK(linksInfo, "NULL pointer for links array metadata JSON storage");
+
+    // Link the array to the parent node.
+    bejTreeInitArray(&linksInfo->array, arrayName);
+    bejTreeLinkChildToParent(parent, &linksInfo->array);
+
+    RETURN_IF_IERROR(
+        bejAddAnnotatedCountToJson(parent, &linksInfo->annotatedProperty,
+                                   arrayName, &linksInfo->count, linkCount));
+
+    // No links to be addded.
+    if (linkCount == 0)
+    {
+        return 0;
+    }
+
+    NULL_CHECK(links, "Links array of strings can't be NULL");
+    NULL_CHECK(linkJsonArray, "NULL pointer for links JSON storage");
+
+    for (uint16_t i = 0; i < linkCount; ++i)
+    {
+        RETURN_IF_IERROR(bejAddLinkToJson(&linksInfo->array, &linkJsonArray[i],
+                                          NULL, links[i]));
+    }
+    return 0;
+}
