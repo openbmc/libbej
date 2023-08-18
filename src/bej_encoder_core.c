@@ -90,6 +90,79 @@ int bejEncodeBejEnum(struct RedfishPropertyLeafEnum* node,
     return bejEncodeNnint(node->enumValueSeq, output);
 }
 
+int bejEncodeBejString(struct RedfishPropertyLeafString* node,
+                       struct BejEncoderOutputHandler* output)
+{
+    // S: Encode Sequence number.
+    RETURN_IF_IERROR(
+        bejEncodeNnint(node->leaf.metaData.sequenceNumber, output));
+    // F: Add the format.
+    RETURN_IF_IERROR(bejEncodeFormat(&node->leaf.nodeAttr.format, output));
+    // L: Encode the value length.
+    RETURN_IF_IERROR(bejEncodeNnint(node->leaf.metaData.vSize, output));
+    // V: Encode the value.
+    return output->recvOutput((void*)node->value, node->leaf.metaData.vSize,
+                              output->handlerContext);
+}
+
+int bejEncodeBejReal(struct RedfishPropertyLeafReal* node,
+                     struct BejEncoderOutputHandler* output)
+{
+    // S: Encode Sequence number.
+    RETURN_IF_IERROR(
+        bejEncodeNnint(node->leaf.metaData.sequenceNumber, output));
+    // F: Add the format.
+    RETURN_IF_IERROR(bejEncodeFormat(&node->leaf.nodeAttr.format, output));
+    // L: Encode the value length.
+    RETURN_IF_IERROR(bejEncodeNnint(node->leaf.metaData.vSize, output));
+    // V: Encode the value.
+    // Length of the "whole" value as nnint.
+    RETURN_IF_IERROR(
+        bejEncodeNnint(bejIntLengthOfValue(node->bejReal.whole), output));
+    // Add the "whole" value.
+    RETURN_IF_IERROR(bejEncodeInteger(node->bejReal.whole, output));
+    // Leading zero count as a nnint.
+    RETURN_IF_IERROR(bejEncodeNnint(node->bejReal.zeroCount, output));
+    // Fraction as a nnint.
+    RETURN_IF_IERROR(bejEncodeNnint(node->bejReal.fract, output));
+    // Exp length as a nnint.
+    RETURN_IF_IERROR(bejEncodeNnint(node->bejReal.expLen, output));
+    if (node->bejReal.expLen > 0)
+    {
+        // Exp length as a nnint.
+        RETURN_IF_IERROR(bejEncodeNnint(node->bejReal.expLen, output));
+        RETURN_IF_IERROR(bejEncodeInteger(node->bejReal.exp, output));
+    }
+    return 0;
+}
+
+int bejEncodeBejBool(struct RedfishPropertyLeafBool* node,
+                     struct BejEncoderOutputHandler* output)
+{
+    // S: Encode Sequence number.
+    RETURN_IF_IERROR(
+        bejEncodeNnint(node->leaf.metaData.sequenceNumber, output));
+    // F: Add the format.
+    RETURN_IF_IERROR(bejEncodeFormat(&node->leaf.nodeAttr.format, output));
+    // L: Encode the value length.
+    RETURN_IF_IERROR(bejEncodeNnint(node->leaf.metaData.vSize, output));
+    // V: Encode the value.
+    uint8_t value = node->value ? 0xFF : 0x00;
+    return output->recvOutput(&value, /*data_size=*/sizeof(uint8_t),
+                              output->handlerContext);
+}
+
+int bejEncodeBejProAnno(struct RedfishPropertyParent* node,
+                        struct BejEncoderOutputHandler* output)
+{
+    // Encode Sequence number.
+    RETURN_IF_IERROR(bejEncodeNnint(node->metaData.sequenceNumber, output));
+    // Add the format.
+    RETURN_IF_IERROR(bejEncodeFormat(&node->nodeAttr.format, output));
+    // Encode the value length.
+    return bejEncodeNnint(node->metaData.vSize, output);
+}
+
 /**
  * @brief Encode a BejNull type.
  */
@@ -127,6 +200,18 @@ static int bejEncodeNode(void* node, struct BejEncoderOutputHandler* output)
             break;
         case bejEnum:
             RETURN_IF_IERROR(bejEncodeBejEnum(node, output));
+            break;
+        case bejString:
+            RETURN_IF_IERROR(bejEncodeBejString(node, output));
+            break;
+        case bejReal:
+            RETURN_IF_IERROR(bejEncodeBejReal(node, output));
+            break;
+        case bejBoolean:
+            RETURN_IF_IERROR(bejEncodeBejBool(node, output));
+            break;
+        case bejPropertyAnnotation:
+            RETURN_IF_IERROR(bejEncodeBejProAnno(node, output));
             break;
         default:
             fprintf(stderr, "Unsupported node type: %d\n",
