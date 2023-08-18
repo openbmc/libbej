@@ -1,0 +1,34 @@
+{
+    "@odata.id": "/redfish/v1/Chassis/SomeChassis",
+    "Links": {
+        "ComputerSystems": [
+            {
+                "@odata.id": "/redfish/v1/Systems/system"
+            }
+        ],
+        "ContainedBy": {
+            "@odata.id": "/redfish/v1/Chassis/SomeOtherChassis"
+        },
+        "Contains": [
+            {
+                "@odata.id": "/redfish/v1/Chassis/Disk_0"
+            },
+            {
+                "@odata.id": "/redfish/v1/Chassis/Disk_1"
+            }
+        ],
+        "Contains@odata.count": 2,
+        "Storage": [
+            {
+                "@odata.id": "/redfish/v1/Systems/system/Storage/SATA"
+            }
+        ],
+        "Storage@odata.count": 1,
+        "Drives": [
+            {
+                "@odata.id": "/redfish/v1/Chassis/SomeChassis/Drives/SATA_0"
+            }
+        ],
+        "Drives@odata.count": 1
+    }
+}
