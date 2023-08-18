@@ -47,6 +47,65 @@ static int bejEncodeBejSetOrArray(struct RedfishPropertyParent* node,
 }
 
 /**
+ * @brief Encode an integer to bejInteger type.
+ */
+static uint8_t bejEncodeInteger(int64_t val,
+                                struct BejEncoderOutputHandler* output)
+{
+    uint8_t copyLength = bejIntLengthOfValue(val);
+    return output->recvOutput(&val, copyLength, output->handlerContext);
+}
+
+/**
+ * @brief Encode a BejInteger type.
+ */
+int bejEncodeBejInteger(struct RedfishPropertyLeafInt* node,
+                        struct BejEncoderOutputHandler* output)
+{
+    // Encode Sequence number.
+    RETURN_IF_IERROR(
+        bejEncodeNnint(node->leaf.metaData.sequenceNumber, output));
+    // Add the format.
+    RETURN_IF_IERROR(bejEncodeFormat(&node->leaf.nodeAttr.format, output));
+    // Encode the value length.
+    RETURN_IF_IERROR(bejEncodeNnint(node->leaf.metaData.vSize, output));
+    // Encode the value.
+    return bejEncodeInteger(node->value, output);
+}
+
+/**
+ * @brief Encode a BejEnum type.
+ */
+int bejEncodeBejEnum(struct RedfishPropertyLeafEnum* node,
+                     struct BejEncoderOutputHandler* output)
+{
+    // S: Encode Sequence number.
+    RETURN_IF_IERROR(
+        bejEncodeNnint(node->leaf.metaData.sequenceNumber, output));
+    // F: Add the format.
+    RETURN_IF_IERROR(bejEncodeFormat(&node->leaf.nodeAttr.format, output));
+    // L: Encode the value length.
+    RETURN_IF_IERROR(bejEncodeNnint(node->leaf.metaData.vSize, output));
+    // V: Encode the value.
+    return bejEncodeNnint(node->enumValueSeq, output);
+}
+
+/**
+ * @brief Encode a BejNull type.
+ */
+int bejEncodeBejNull(struct RedfishPropertyLeafNull* node,
+                     struct BejEncoderOutputHandler* output)
+{
+    // S: Encode Sequence number.
+    RETURN_IF_IERROR(
+        bejEncodeNnint(node->leaf.metaData.sequenceNumber, output));
+    // F: Add the format.
+    RETURN_IF_IERROR(bejEncodeFormat(&node->leaf.nodeAttr.format, output));
+    // L: Encode the value length.
+    return bejEncodeNnint(node->leaf.metaData.vSize, output);
+}
+
+/**
  * @brief Encode the provided node.
  */
 static int bejEncodeNode(void* node, struct BejEncoderOutputHandler* output)
@@ -56,6 +115,18 @@ static int bejEncodeNode(void* node, struct BejEncoderOutputHandler* output)
     {
         case bejSet:
             RETURN_IF_IERROR(bejEncodeBejSetOrArray(node, output));
+            break;
+        case bejArray:
+            RETURN_IF_IERROR(bejEncodeBejSetOrArray(node, output));
+            break;
+        case bejNull:
+            RETURN_IF_IERROR(bejEncodeBejNull(node, output));
+            break;
+        case bejInteger:
+            RETURN_IF_IERROR(bejEncodeBejInteger(node, output));
+            break;
+        case bejEnum:
+            RETURN_IF_IERROR(bejEncodeBejEnum(node, output));
             break;
         default:
             fprintf(stderr, "Unsupported node type: %d\n",
