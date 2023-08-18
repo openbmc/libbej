@@ -98,6 +98,14 @@ extern "C"
     };
 
     /**
+     * @brief bejNull type property node.
+     */
+    struct RedfishPropertyLeafNull
+    {
+        struct RedfishPropertyLeaf leaf;
+    };
+
+    /**
      * @brief bejInteger type property node.
      */
     struct RedfishPropertyLeafInt
@@ -179,6 +187,17 @@ extern "C"
      * @return true if the node is a parent type node.
      */
     bool bejTreeIsParentType(struct RedfishPropertyNode* node);
+
+    /**
+     * @brief Initialize a bejNull type node.
+     *
+     * @param parent - a pointer to an initialized parent struct.
+     * @param child - a pointer to an uninitialized bejNull type node.
+     * @param name - name of the bejNull type property.
+     */
+    void bejTreeAddNull(struct RedfishPropertyParent* parent,
+                        struct RedfishPropertyLeafNull* child,
+                        const char* name);
 
     /**
      * @brief Add a bejInteger type node to a parent node.
