@@ -176,7 +176,7 @@ static int
     }
 
     int ret = bejDictGetProperty(*dictionary, dictPropOffset, sequenceNumber,
-                                 prop);
+                                 prop, NULL);
     if (ret != 0)
     {
         fprintf(stderr, "Failed to get dictionary property for offset: %u\n",
@@ -516,7 +516,7 @@ static int bejHandleBejEnum(struct BejHandleTypeFuncParam* params)
         const struct BejDictionaryProperty* enumValueProp;
         RETURN_IF_IERROR(
             bejDictGetProperty(dictionary, prop->childPointerOffset,
-                               enumValueSequenceN, &enumValueProp));
+                               enumValueSequenceN, &enumValueProp, NULL));
         const char* enumValueName = bejDictGetPropertyName(
             dictionary, enumValueProp->nameOffset, enumValueProp->nameLength);
 

@@ -77,12 +77,16 @@ extern "C"
      * @param[in] sequenceNumber - sequence number of the property.
      * @param[out] property - if the search is successful, this will point to a
      * valid property.
+     * @param[out] propertyOffset - if the search is successful, this will point
+     * to the offset of the property within the dictionary. Can provide a NULL
+     * pointer if this is not needed.
      * @return 0 if successful.
      */
     int bejDictGetProperty(const uint8_t* dictionary,
                            uint16_t startingPropertyOffset,
                            uint16_t sequenceNumber,
-                           const struct BejDictionaryProperty** property);
+                           const struct BejDictionaryProperty** property,
+                           uint16_t* propertyOffset);
 
     /**
      * @brief Get the name of a property.
@@ -113,6 +117,24 @@ extern "C"
     int bejDictGetPropertyByName(const uint8_t* dictionary,
                                  uint16_t startingPropertyOffset,
                                  const char* propertyName,
+                                 const struct BejDictionaryProperty** property,
+                                 uint16_t* propertyOffset);
+
+    /**
+     * @brief Get dictionary entry pointed by the bejLocator.
+     *
+     * @param dictionary - dictionary containing the property.
+     * @param bejLocator - bejLocator data.
+     * @param locatorLength - length of the locatorLength.
+     * @param property - if successful, this will point to a valid property if
+     * property is not NULL.
+     * @param property_offset - if successful, this provides the dictionary
+     * offset of the found property.
+     * @return 0 if successful.
+     */
+    int bejDictEntryByBejLocator(const uint8_t* dictionary,
+                                 const uint8_t* bejLocator,
+                                 uint8_t locatorLength,
                                  const struct BejDictionaryProperty** property,
                                  uint16_t* propertyOffset);
 
