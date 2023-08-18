@@ -21,10 +21,15 @@ class BejDecoderJson
      *
      * @param[in] dictionaries - dictionaries needed for decoding.
      * @param[in] encodedPldmBlock - encoded PLDM block.
+     * @param[in] majorSchemaStartingOffset - dictionary starting offset of the
+     * major schema. Usually this will be set to BEJ_DICTIONARY_START_AT_HEAD
+     * unless we are decoding a payload associated with a bejLocator type.
      * @return 0 if successful.
      */
-    int decode(const BejDictionaries& dictionaries,
-               const std::span<const uint8_t> encodedPldmBlock);
+    int decode(
+        const BejDictionaries& dictionaries,
+        const std::span<const uint8_t> encodedPldmBlock,
+        uint16_t majorSchemaStartingOffset = BEJ_DICTIONARY_START_AT_HEAD);
 
     /**
      * @brief Get the JSON output related to the latest call to decode.
