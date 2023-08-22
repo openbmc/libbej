@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85e83be1_97e29ae5",
+        "filename": "src/bej_encoder_metadata.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2023-08-22T07:02:02Z",
+      "side": 1,
+      "message": "sflSize++",
+      "range": {
+        "startLine": 404,
+        "startChar": 24,
+        "endLine": 404,
+        "endChar": 37
+      },
+      "revId": "744e13162307090fc303ca1d936deb49a363c3c1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
