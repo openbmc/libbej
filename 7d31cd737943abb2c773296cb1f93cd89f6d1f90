@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcbdb28e_958877d3",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2023-09-02T00:04:21Z",
+      "side": 1,
+      "message": "minor nit: number",
+      "range": {
+        "startLine": 202,
+        "startChar": 31,
+        "endLine": 202,
+        "endChar": 38
+      },
+      "revId": "7d31cd737943abb2c773296cb1f93cd89f6d1f90",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "870d42e2_ec53a1d6",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2023-09-02T00:04:21Z",
+      "side": 1,
+      "message": "minor nit: take out /",
+      "range": {
+        "startLine": 220,
+        "startChar": 33,
+        "endLine": 220,
+        "endChar": 34
+      },
+      "revId": "7d31cd737943abb2c773296cb1f93cd89f6d1f90",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3534357a_8a412ecb",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2023-09-02T00:04:21Z",
+      "side": 1,
+      "message": "minor nit: whether",
+      "range": {
+        "startLine": 223,
+        "startChar": 17,
+        "endLine": 223,
+        "endChar": 23
+      },
+      "revId": "7d31cd737943abb2c773296cb1f93cd89f6d1f90",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
