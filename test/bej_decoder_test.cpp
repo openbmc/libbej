@@ -190,6 +190,6 @@ INSTANTIATE_TEST_SUITE_P(
     }),
     [](const testing::TestParamInfo<BejDecoderTest::ParamType>& info) {
     return info.param.testName;
-    });
+});
 
 } // namespace libbej
