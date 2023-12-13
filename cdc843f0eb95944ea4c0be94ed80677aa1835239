@@ -16,6 +16,144 @@
       "message": "apologies, haven\u0027t been able to take a look at this review - I\u0027ll try to get to it by tomorrow (unless others are able to review earlier)",
       "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af74ba76_aeb88b14",
+        "filename": "include/libbej/bej_encoder_json.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2023-12-13T18:23:27Z",
+      "side": 1,
+      "message": "not used here.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7375f6a_8add2a0a",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2023-12-13T18:23:27Z",
+      "side": 1,
+      "message": "nit: can just combine?",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4606c49e_169e5fea",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2023-12-13T18:23:27Z",
+      "side": 1,
+      "message": "lowerCanmalCase",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 26
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea06ba89_432f7e13",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2023-12-13T18:23:27Z",
+      "side": 1,
+      "message": "std::span instead?",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 20
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a38bac0_c34f1334",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2023-12-13T18:23:27Z",
+      "side": 1,
+      "message": "wouldn\u0027t this cause some issue when we need to access `encodedPayload` again?",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 37
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "499617ae_a1ed4117",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000885
+      },
+      "writtenOn": "2023-12-13T18:23:27Z",
+      "side": 1,
+      "message": "`nullptr`",
+      "range": {
+        "startLine": 108,
+        "startChar": 23,
+        "endLine": 108,
+        "endChar": 27
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
