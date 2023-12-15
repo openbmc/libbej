@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d103b08c_12dea0ca",
+        "filename": "include/libbej/bej_encoder_json.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-12-15T23:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af74ba76_aeb88b14",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7375f6a_8add2a0a",
@@ -64,6 +88,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3640a17_dfa010a8",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-12-15T23:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7375f6a_8add2a0a",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4606c49e_169e5fea",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-12-13T18:23:27Z",
       "side": 1,
       "message": "lowerCanmalCase",
+      "range": {
+        "startLine": 79,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 26
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02198a88_12b5a855",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-12-15T23:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4606c49e_169e5fea",
       "range": {
         "startLine": 79,
         "startChar": 4,
@@ -112,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba7b2ac7_f7423606",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-12-15T23:54:28Z",
+      "side": 1,
+      "message": "No because we want to transfer the encoded vector ownership to the Caller API (to avoid the vector copy)",
+      "parentUuid": "ea06ba89_432f7e13",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 20
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a38bac0_c34f1334",
         "filename": "src/bej_encoder_json.cpp",
         "patchSetId": 3
@@ -123,6 +219,30 @@
       "writtenOn": "2023-12-13T18:23:27Z",
       "side": 1,
       "message": "wouldn\u0027t this cause some issue when we need to access `encodedPayload` again?",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 37
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7152a746_56bf3f61",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-12-15T23:54:28Z",
+      "side": 1,
+      "message": "I did leave a comment in the Class declaration of this API, that the vector ownership will be transferred to the requester API\n\nhttps://gerrit.openbmc.org/c/openbmc/libbej/+/68200/3/include/libbej/bej_encoder_json.hpp\n\n\nThe reason to do std:move \n1) Is to avoid copying of the encoded binary vector as it could be huge. \n2) I think in a given caller context there would only be one encoder class object will do `encoder.encode()` and `encoder.getOutput()` only once. In that context, it is unlikely that it would be used more than once.\n\n\n\nBut I guess, it is better to reinitialize encodedPayload object again, for the next set of encoding.\n\nDone",
+      "parentUuid": "1a38bac0_c34f1334",
       "range": {
         "startLine": 90,
         "startChar": 4,
@@ -146,6 +266,30 @@
       "writtenOn": "2023-12-13T18:23:27Z",
       "side": 1,
       "message": "`nullptr`",
+      "range": {
+        "startLine": 108,
+        "startChar": 23,
+        "endLine": 108,
+        "endChar": 27
+      },
+      "revId": "cdc843f0eb95944ea4c0be94ed80677aa1835239",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa5dfc92_cea22f22",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2023-12-15T23:54:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "499617ae_a1ed4117",
       "range": {
         "startLine": 108,
         "startChar": 23,
