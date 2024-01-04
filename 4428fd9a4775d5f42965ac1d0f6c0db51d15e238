@@ -119,6 +119,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d6bdcc3_0c047cfc",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2024-01-04T17:34:40Z",
+      "side": 1,
+      "message": "Right, and yeah since we are constraint on what we\u0027re returning / having to use the member variable stack, we do need this wrapper anyhow - so we\u0027re making our own stack with vector. Ok this makes sense.",
+      "parentUuid": "280287bf_fb01a2d9",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 1
+      },
+      "revId": "4428fd9a4775d5f42965ac1d0f6c0db51d15e238",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "adb334a2_9703180e",
