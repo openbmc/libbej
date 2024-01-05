@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0c0778d_0935ff72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2024-01-05T18:55:43Z",
+      "side": 1,
+      "message": "Hmm - btw it does seem like it conflicts with Kasun\u0027s implementaiotn: https://gerrit.openbmc.org/c/openbmc/libbej/+/66142",
+      "revId": "da6e55739306fb4361cbbda8c7e4400cad3037d1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
