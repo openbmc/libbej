@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84c99016_e7bbe33a",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2024-01-05T18:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "140e7b78_04d5dc75",
+      "range": {
+        "startLine": 65,
+        "startChar": 11,
+        "endLine": 65,
+        "endChar": 20
+      },
+      "revId": "4428fd9a4775d5f42965ac1d0f6c0db51d15e238",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8890591b_26ad2ae2",
@@ -166,6 +190,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c54fe4a2_d464b6cd",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2024-01-05T18:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adb334a2_9703180e",
+      "range": {
+        "startLine": 73,
+        "startChar": 14,
+        "endLine": 73,
+        "endChar": 23
+      },
+      "revId": "4428fd9a4775d5f42965ac1d0f6c0db51d15e238",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d54cba0_879d35aa",
@@ -189,6 +237,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef2f64dd_22a8720e",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2024-01-05T18:02:22Z",
+      "side": 1,
+      "message": "Actually, we should expose this in header along with other stack APIs, so test or other files that want to use encoder wrapper can leverage the APIs",
+      "parentUuid": "6d54cba0_879d35aa",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 1
+      },
+      "revId": "4428fd9a4775d5f42965ac1d0f6c0db51d15e238",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b35110a7_ca93cd17",
@@ -202,6 +274,30 @@
       "writtenOn": "2024-01-04T00:05:22Z",
       "side": 1,
       "message": "Hmmm this is duplicate so it\u0027d be good to avoid it if possible (since our implementation - although stack* APIs probably won\u0027t change) and what we\u0027re testing is different",
+      "range": {
+        "startLine": 52,
+        "startChar": 22,
+        "endLine": 94,
+        "endChar": 0
+      },
+      "revId": "4428fd9a4775d5f42965ac1d0f6c0db51d15e238",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7f974cb_485964cc",
+        "filename": "test/bej_encoder_test.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001369
+      },
+      "writtenOn": "2024-01-05T18:02:22Z",
+      "side": 1,
+      "message": "Good catch... I missed removing these. The test shall now use the same APIs that encoder wrapper uses",
+      "parentUuid": "b35110a7_ca93cd17",
       "range": {
         "startLine": 52,
         "startChar": 22,
