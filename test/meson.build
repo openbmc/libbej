@@ -23,11 +23,13 @@ gtests = [
   'bej_encoder'
 ]
 
+nlohmann_json_dep = dependency('nlohmann_json', include_type: 'system')
+
 libbej_test_incs = include_directories('include')
 foreach t : gtests
   test(t, executable(t.underscorify(), t + '_test.cpp',
                      build_by_default: false,
                      implicit_include_directories: false,
                      include_directories: libbej_test_incs,
-                     dependencies: [libbej, gtest, gmock]))
+                     dependencies: [libbej, gtest, gmock, nlohmann_json_dep]))
 endforeach
