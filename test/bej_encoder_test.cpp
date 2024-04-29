@@ -436,7 +436,7 @@ INSTANTIATE_TEST_SUITE_P(
         {"Chassis", chassisTestFiles, "", &createChassisResource},
     }),
     [](const testing::TestParamInfo<BejEncoderTest::ParamType>& info) {
-    return info.param.testName;
-});
+        return info.param.testName;
+    });
 
 } // namespace libbej
