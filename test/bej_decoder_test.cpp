@@ -91,7 +91,7 @@ INSTANTIATE_TEST_SUITE_P(
         {"DummySimple", dummySimpleTestFiles},
     }),
     [](const testing::TestParamInfo<BejDecoderTest::ParamType>& info) {
-    return info.param.testName;
-});
+        return info.param.testName;
+    });
 
 } // namespace libbej

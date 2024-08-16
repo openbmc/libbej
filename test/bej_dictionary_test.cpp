@@ -85,10 +85,10 @@ TEST(BejDictionaryTest, ValidPropertyTest)
                                        std::get<1>(propertyNameSeq[index]),
                                        &property),
                     0);
-        EXPECT_THAT(bejDictGetPropertyName(dummySimpleDict.data(),
-                                           property->nameOffset,
-                                           property->nameLength),
-                    std::get<0>(propertyNameSeq[index]));
+        EXPECT_THAT(
+            bejDictGetPropertyName(dummySimpleDict.data(), property->nameOffset,
+                                   property->nameLength),
+            std::get<0>(propertyNameSeq[index]));
     }
 }
 

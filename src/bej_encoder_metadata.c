@@ -58,10 +58,9 @@ static bool bejIsAnnotation(const char* name)
  * doesn't have a name.
  * @return a pointer to the dictionary to be used.
  */
-static const uint8_t*
-    bejGetRelatedDictionary(const struct BejDictionaries* dictionaries,
-                            const uint8_t* parentDictionary,
-                            const char* nodeName)
+static const uint8_t* bejGetRelatedDictionary(
+    const struct BejDictionaries* dictionaries, const uint8_t* parentDictionary,
+    const char* nodeName)
 {
     // If the node name is NULL, we have to use parent dictionary.
     if (nodeName == NULL)
@@ -206,11 +205,10 @@ static int bejUpdateIntMetaData(const struct BejDictionaries* dictionaries,
     return 0;
 }
 
-static int bejUpdateStringMetaData(const struct BejDictionaries* dictionaries,
-                                   const uint8_t* parentDictionary,
-                                   struct RedfishPropertyLeafString* node,
-                                   uint16_t nodeIndex,
-                                   uint16_t dictStartingOffset)
+static int bejUpdateStringMetaData(
+    const struct BejDictionaries* dictionaries, const uint8_t* parentDictionary,
+    struct RedfishPropertyLeafString* node, uint16_t nodeIndex,
+    uint16_t dictStartingOffset)
 {
     uint32_t sequenceNumber;
     RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
@@ -232,11 +230,10 @@ static int bejUpdateStringMetaData(const struct BejDictionaries* dictionaries,
     return 0;
 }
 
-static int bejUpdateRealMetaData(const struct BejDictionaries* dictionaries,
-                                 const uint8_t* parentDictionary,
-                                 struct RedfishPropertyLeafReal* node,
-                                 uint16_t nodeIndex,
-                                 uint16_t dictStartingOffset)
+static int bejUpdateRealMetaData(
+    const struct BejDictionaries* dictionaries, const uint8_t* parentDictionary,
+    struct RedfishPropertyLeafReal* node, uint16_t nodeIndex,
+    uint16_t dictStartingOffset)
 {
     uint32_t sequenceNumber;
     RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
@@ -313,11 +310,10 @@ static int bejUpdateRealMetaData(const struct BejDictionaries* dictionaries,
     return 0;
 }
 
-static int bejUpdateEnumMetaData(const struct BejDictionaries* dictionaries,
-                                 const uint8_t* parentDictionary,
-                                 struct RedfishPropertyLeafEnum* node,
-                                 uint16_t nodeIndex,
-                                 uint16_t dictStartingOffset)
+static int bejUpdateEnumMetaData(
+    const struct BejDictionaries* dictionaries, const uint8_t* parentDictionary,
+    struct RedfishPropertyLeafEnum* node, uint16_t nodeIndex,
+    uint16_t dictStartingOffset)
 {
     const uint8_t* nodeDictionary;
     uint16_t childEntryOffset;
@@ -366,11 +362,10 @@ static int bejUpdateEnumMetaData(const struct BejDictionaries* dictionaries,
     return 0;
 }
 
-static int bejUpdateBoolMetaData(const struct BejDictionaries* dictionaries,
-                                 const uint8_t* parentDictionary,
-                                 struct RedfishPropertyLeafBool* node,
-                                 uint16_t nodeIndex,
-                                 uint16_t dictStartingOffset)
+static int bejUpdateBoolMetaData(
+    const struct BejDictionaries* dictionaries, const uint8_t* parentDictionary,
+    struct RedfishPropertyLeafBool* node, uint16_t nodeIndex,
+    uint16_t dictStartingOffset)
 {
     uint32_t sequenceNumber;
     RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
@@ -390,11 +385,10 @@ static int bejUpdateBoolMetaData(const struct BejDictionaries* dictionaries,
     return 0;
 }
 
-static int bejUpdateNullMetaData(const struct BejDictionaries* dictionaries,
-                                 const uint8_t* parentDictionary,
-                                 struct RedfishPropertyLeafNull* node,
-                                 uint16_t nodeIndex,
-                                 uint16_t dictStartingOffset)
+static int bejUpdateNullMetaData(
+    const struct BejDictionaries* dictionaries, const uint8_t* parentDictionary,
+    struct RedfishPropertyLeafNull* node, uint16_t nodeIndex,
+    uint16_t dictStartingOffset)
 {
     uint32_t sequenceNumber;
     RETURN_IF_IERROR(bejFindSeqNumAndChildDictOffset(
@@ -426,10 +420,9 @@ static int bejUpdateNullMetaData(const struct BejDictionaries* dictionaries,
  * node's parent.
  * @return 0 if successful.
  */
-static int bejUpdateLeafNodeMetaData(const struct BejDictionaries* dictionaries,
-                                     const uint8_t* parentDictionary,
-                                     void* childPtr, uint16_t childIndex,
-                                     uint16_t dictStartingOffset)
+static int bejUpdateLeafNodeMetaData(
+    const struct BejDictionaries* dictionaries, const uint8_t* parentDictionary,
+    void* childPtr, uint16_t childIndex, uint16_t dictStartingOffset)
 {
     struct RedfishPropertyLeaf* chNode = childPtr;
 
@@ -484,11 +477,10 @@ static int bejUpdateLeafNodeMetaData(const struct BejDictionaries* dictionaries,
  * @param nodeIndex - If this node is an array element, this is the array index.
  * @return 0 if successful.
  */
-static int bejUpdateParentMetaData(const struct BejDictionaries* dictionaries,
-                                   const uint8_t* parentDictionary,
-                                   uint16_t dictStartingOffset,
-                                   struct RedfishPropertyParent* node,
-                                   uint16_t nodeIndex)
+static int bejUpdateParentMetaData(
+    const struct BejDictionaries* dictionaries, const uint8_t* parentDictionary,
+    uint16_t dictStartingOffset, struct RedfishPropertyParent* node,
+    uint16_t nodeIndex)
 {
     const uint8_t* nodeDictionary;
     uint16_t childEntryOffset;
@@ -557,10 +549,10 @@ static int bejProcessChildNodes(const struct BejDictionaries* dictionaries,
             return 0;
         }
 
-        RETURN_IF_IERROR(
-            bejUpdateLeafNodeMetaData(dictionaries, parent->metaData.dictionary,
-                                      childPtr, parent->metaData.nextChildIndex,
-                                      parent->metaData.childrenDictPropOffset));
+        RETURN_IF_IERROR(bejUpdateLeafNodeMetaData(
+            dictionaries, parent->metaData.dictionary, childPtr,
+            parent->metaData.nextChildIndex,
+            parent->metaData.childrenDictPropOffset));
         // Use the child value size to update the parent value size.
         struct RedfishPropertyLeaf* leafChild = childPtr;
         // V: Include the child size in parent's value size.

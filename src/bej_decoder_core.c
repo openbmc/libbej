@@ -75,8 +75,8 @@ static void bejGetLocalBejSFLVOffsets(const uint8_t* enSegment,
     // Number of bytes need to represent the value length.
     const uint8_t valueLengthSize = *(enSegment + valueLenNnintOffset);
     // Start of the Value.
-    const uint32_t valueOffset = valueLenNnintOffset + sizeof(uint8_t) +
-                                 valueLengthSize;
+    const uint32_t valueOffset =
+        valueLenNnintOffset + sizeof(uint8_t) + valueLengthSize;
 
     offsets->formatOffset = formatOffset;
     offsets->valueLenNnintOffset = valueLenNnintOffset;
@@ -150,11 +150,10 @@ static uint32_t
  * property in a dictionary.
  * @return 0 if successful.
  */
-static int
-    bejGetDictionaryAndProperty(const struct BejHandleTypeFuncParam* params,
-                                uint8_t schemaType, uint32_t sequenceNumber,
-                                const uint8_t** dictionary,
-                                const struct BejDictionaryProperty** prop)
+static int bejGetDictionaryAndProperty(
+    const struct BejHandleTypeFuncParam* params, uint8_t schemaType,
+    uint32_t sequenceNumber, const uint8_t** dictionary,
+    const struct BejDictionaryProperty** prop)
 {
     uint16_t dictPropOffset;
     // We need to pick the correct dictionary.
@@ -175,8 +174,8 @@ static int
         return bejErrorInvalidSchemaType;
     }
 
-    int ret = bejDictGetProperty(*dictionary, dictPropOffset, sequenceNumber,
-                                 prop);
+    int ret =
+        bejDictGetProperty(*dictionary, dictPropOffset, sequenceNumber, prop);
     if (ret != 0)
     {
         fprintf(stderr, "Failed to get dictionary property for offset: %u\n",
@@ -580,11 +579,11 @@ static int bejHandleBejReal(struct BejHandleTypeFuncParam* params)
         // nnint      - Length of exp
         // bejInteger - exp (includes sign for the exponent)
         uint8_t wholeByteLen = (uint8_t)bejGetNnint(params->sflv.value);
-        const uint8_t* wholeBejInt = params->sflv.value +
-                                     bejGetNnintSize(params->sflv.value);
+        const uint8_t* wholeBejInt =
+            params->sflv.value + bejGetNnintSize(params->sflv.value);
         const uint8_t* fractZeroCountNnint = wholeBejInt + wholeByteLen;
-        const uint8_t* fractNnint = fractZeroCountNnint +
-                                    bejGetNnintSize(fractZeroCountNnint);
+        const uint8_t* fractNnint =
+            fractZeroCountNnint + bejGetNnintSize(fractZeroCountNnint);
         const uint8_t* lenExpNnint = fractNnint + bejGetNnintSize(fractNnint);
         const uint8_t* expBejInt = lenExpNnint + bejGetNnintSize(lenExpNnint);
 
@@ -669,8 +668,8 @@ static int bejHandleBejPropertyAnnotation(struct BejHandleTypeFuncParam* params)
     // We might have to change this for nested annotations.
     params->state.mainDictPropOffset = outerProp->childPointerOffset;
     // Point to the start of the value for next decoding.
-    params->state.encodedStreamOffset = params->sflv.valueEndOffset -
-                                        params->sflv.valueLength;
+    params->state.encodedStreamOffset =
+        params->sflv.valueEndOffset - params->sflv.valueLength;
     return 0;
 }
 
@@ -723,8 +722,8 @@ static int bejDecode(const uint8_t* schemaDictionary,
     while (params.state.encodedStreamOffset < streamLen)
     {
         // Go to the next encoded segment in the encoded stream.
-        params.state.encodedSubStream = enStream +
-                                        params.state.encodedStreamOffset;
+        params.state.encodedSubStream =
+            enStream + params.state.encodedStreamOffset;
         bejInitSFLVStruct(&params);
 
         if (params.sflv.format.readOnlyProperty)

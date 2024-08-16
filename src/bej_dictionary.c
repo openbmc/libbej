@@ -114,11 +114,10 @@ const char* bejDictGetPropertyName(const uint8_t* dictionary,
     return (const char*)(dictionary + nameOffset);
 }
 
-int bejDictGetPropertyByName(const uint8_t* dictionary,
-                             uint16_t startingPropertyOffset,
-                             const char* propertyName,
-                             const struct BejDictionaryProperty** property,
-                             uint16_t* propertyOffset)
+int bejDictGetPropertyByName(
+    const uint8_t* dictionary, uint16_t startingPropertyOffset,
+    const char* propertyName, const struct BejDictionaryProperty** property,
+    uint16_t* propertyOffset)
 {
     NULL_CHECK(property, "property in bejDictGetPropertyByName");
 

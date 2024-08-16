@@ -261,11 +261,10 @@ void addLinkToTree(struct RedfishPropertyParent* parent,
     bejTreeLinkChildToParent(parent, linkSet);
 }
 
-void redfishCreateArrayOfLinksJson(struct RedfishPropertyParent* parent,
-                                   const char* arrayName, int linkCount,
-                                   const char* const links[],
-                                   struct RedfishArrayOfLinksJson* linksInfo,
-                                   struct RedfishLinkJson* linkJsonArray)
+void redfishCreateArrayOfLinksJson(
+    struct RedfishPropertyParent* parent, const char* arrayName, int linkCount,
+    const char* const links[], struct RedfishArrayOfLinksJson* linksInfo,
+    struct RedfishLinkJson* linkJsonArray)
 {
     bejTreeInitArray(&linksInfo->array, arrayName);
     bejTreeLinkChildToParent(parent, &linksInfo->array);
@@ -436,7 +435,7 @@ INSTANTIATE_TEST_SUITE_P(
         {"Chassis", chassisTestFiles, "", &createChassisResource},
     }),
     [](const testing::TestParamInfo<BejEncoderTest::ParamType>& info) {
-    return info.param.testName;
-});
+        return info.param.testName;
+    });
 
 } // namespace libbej

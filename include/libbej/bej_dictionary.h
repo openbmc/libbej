@@ -109,11 +109,10 @@ const char* bejDictGetPropertyName(const uint8_t* dictionary,
  * pointer if this is not needed.
  * @return 0 if successful.
  */
-int bejDictGetPropertyByName(const uint8_t* dictionary,
-                             uint16_t startingPropertyOffset,
-                             const char* propertyName,
-                             const struct BejDictionaryProperty** property,
-                             uint16_t* propertyOffset);
+int bejDictGetPropertyByName(
+    const uint8_t* dictionary, uint16_t startingPropertyOffset,
+    const char* propertyName, const struct BejDictionaryProperty** property,
+    uint16_t* propertyOffset);
 
 #ifdef __cplusplus
 }
