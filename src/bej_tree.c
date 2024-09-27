@@ -8,6 +8,7 @@ static void bejTreeInitParent(struct RedfishPropertyParent* node,
     node->nodeAttr.format.deferredBinding = 0;
     node->nodeAttr.format.readOnlyProperty = 0;
     node->nodeAttr.format.nullableProperty = 0;
+    node->nodeAttr.format.reserved = 0;
     node->nodeAttr.sibling = NULL;
     node->nChildren = 0;
     node->firstChild = NULL;
@@ -46,6 +47,7 @@ static void bejTreeInitChildNode(struct RedfishPropertyLeaf* node,
     node->nodeAttr.format.deferredBinding = 0;
     node->nodeAttr.format.readOnlyProperty = 0;
     node->nodeAttr.format.nullableProperty = 0;
+    node->nodeAttr.format.reserved = 0;
     node->nodeAttr.sibling = NULL;
 }
 
