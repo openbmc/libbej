@@ -15,6 +15,17 @@ struct BejDecoderTestParams
 {
     const std::string testName;
     const BejTestInputFiles inputFiles;
+
+    static void* operator new(std::size_t count)
+    {
+        void* p = ::operator new(count);
+        memset(p, 0, count);
+        return p;
+    }
+    void operator delete(void* p, std::size_t count)
+    {
+        ::operator delete(p, count);
+    }
 };
 
 using BejDecoderTest = testing::TestWithParam<BejDecoderTestParams>;
