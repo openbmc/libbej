@@ -17,6 +17,10 @@ struct BejDecoderTestParams
     const BejTestInputFiles inputFiles;
 };
 
+void PrintTo(const BejDecoderTestParams& params, std::ostream* os) {
+    *os << params.testName;
+}
+
 using BejDecoderTest = testing::TestWithParam<BejDecoderTestParams>;
 
 const BejTestInputFiles driveOemTestFiles = {

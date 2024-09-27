@@ -23,6 +23,10 @@ struct BejEncoderTestParams
     struct RedfishPropertyParent* (*createResource)();
 };
 
+void PrintTo(const BejEncoderTestParams& params, std::ostream* os) {
+    *os << params.testName;
+}
+
 using BejEncoderTest = testing::TestWithParam<BejEncoderTestParams>;
 
 const BejTestInputFiles dummySimpleTestFiles = {
