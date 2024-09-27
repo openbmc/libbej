@@ -21,6 +21,17 @@ struct BejEncoderTestParams
     const BejTestInputFiles inputFiles;
     std::string expectedJson;
     struct RedfishPropertyParent* (*createResource)();
+
+    static void* operator new(std::size_t count)
+    {
+        void *p = ::operator new(count);
+        memset(p, 0, count);
+        return p;
+    }
+    void operator delete(void* p, std::size_t count)
+    {
+        ::operator delete(p, count);
+    }
 };
 
 using BejEncoderTest = testing::TestWithParam<BejEncoderTestParams>;
