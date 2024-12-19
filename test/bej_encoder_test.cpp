@@ -281,7 +281,7 @@ void redfishCreateArrayOfLinksJson(
 
     for (int i = 0; i < linkCount; ++i)
     {
-        addLinkToTree(&linksInfo->array, &linkJsonArray[i].set, NULL,
+        addLinkToTree(&linksInfo->array, &linkJsonArray[i].set, nullptr,
                       &linkJsonArray[i].odataId, links[i]);
     }
 }
@@ -361,7 +361,7 @@ TEST_P(BejEncoderTest, Encode)
         .stackPeek = stackPeek,
         .stackPop = stackPop,
         .stackPush = stackPush,
-        .deleteStack = NULL,
+        .deleteStack = nullptr,
     };
 
     bejEncode(&dictionaries, BEJ_DICTIONARY_START_AT_HEAD, bejMajorSchemaClass,
