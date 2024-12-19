@@ -61,13 +61,13 @@ static bool bejValidatePropertyOffset(const uint8_t* dictionary,
     return true;
 }
 
-uint16_t bejDictGetPropertyHeadOffset()
+uint16_t bejDictGetPropertyHeadOffset(void)
 {
     // First property is present soon after the dictionary header.
     return sizeof(struct BejDictionaryHeader);
 }
 
-uint16_t bejDictGetFirstAnnotatedPropertyOffset()
+uint16_t bejDictGetFirstAnnotatedPropertyOffset(void)
 {
     // The first property available is the "Annotations" set which is the parent
     // for all properties. Next immediate property is the first property we
