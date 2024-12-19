@@ -57,7 +57,7 @@ struct BejDictionaryHeader
  *
  * @return the offset to the first property.
  */
-uint16_t bejDictGetPropertyHeadOffset();
+uint16_t bejDictGetPropertyHeadOffset(void);
 
 /**
  * @brief Get the offset of the first annotated property in an annoation
@@ -66,7 +66,7 @@ uint16_t bejDictGetPropertyHeadOffset();
  * @return the offset to the first annotated property in an annoation
  * dictionary.
  */
-uint16_t bejDictGetFirstAnnotatedPropertyOffset();
+uint16_t bejDictGetFirstAnnotatedPropertyOffset(void);
 
 /**
  * @brief Get the property related to the given sequence number.
