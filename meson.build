@@ -15,7 +15,7 @@ project(
 libbej_incs = include_directories('include', 'include/libbej')
 subdir('src')
 subdir('include/libbej')
-if not get_option('tests').disabled()
+if get_option('tests').allowed()
   subdir('test')
 endif
 
