@@ -124,8 +124,8 @@ static void bejInitSFLVStruct(struct BejHandleTypeFuncParam* params)
  * @param[in] params - a valid BejHandleTypeFuncParam struct.
  * @return offset with respect to the start of the encoded stream.
  */
-static uint32_t
-    bejGetFirstTupleOffset(const struct BejHandleTypeFuncParam* params)
+static uint32_t bejGetFirstTupleOffset(
+    const struct BejHandleTypeFuncParam* params)
 {
     struct BejSFLVOffset localOffset;
     // Get the offset of the value with respect to the current encoded segment
