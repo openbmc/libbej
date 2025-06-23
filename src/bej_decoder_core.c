@@ -719,8 +719,16 @@ static int bejDecode(const uint8_t* schemaDictionary,
         .stackDataPtr = stackDataPtr,
     };
 
+    uint64_t maxOperations = 1000000;
+    uint64_t operationCount = 0;
+
     while (params.state.encodedStreamOffset < streamLen)
     {
+        if (++operationCount > maxOperations)
+        {
+            fprintf(stderr, "BEJ decoding exceeded max operations\n");
+            return bejErrorNotSuppoted;
+        }
         // Go to the next encoded segment in the encoded stream.
         params.state.encodedSubStream =
             enStream + params.state.encodedStreamOffset;
