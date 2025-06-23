@@ -202,6 +202,12 @@ static int callbackReal(const char* propertyName, const struct BejReal* value,
     struct BejJsonParam* params =
         reinterpret_cast<struct BejJsonParam*>(dataPtr);
 
+    // Sanity check for zeroCount
+    if (value->zeroCount > 100)
+    {
+        return bejErrorInvalidSize;
+    }
+
     addPropertyNameToOutput(params, propertyName);
     params->output->append(std::to_string(value->whole));
     params->output->push_back('.');

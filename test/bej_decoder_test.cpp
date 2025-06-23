@@ -141,6 +141,67 @@ TEST(BejDecoderSecurityTest, MaxOperationsLimit)
                 bejErrorNotSupported);
 }
 
+TEST(BejDecoderSecurityTest, RealWithTooManyLeadingZeros)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .errorDictionary = inputsOrErr->errorDictionary,
+    };
+
+    auto root = std::make_unique<RedfishPropertyParent>();
+    bejTreeInitSet(root.get(), "DummySimple");
+
+    // 1.003 was randomely chosen
+    auto real = std::make_unique<RedfishPropertyLeafReal>();
+    bejTreeAddReal(root.get(), real.get(), "SampleRealProperty", 1.003);
+
+    libbej::BejEncoderJson encoder;
+    encoder.encode(&dictionaries, bejMajorSchemaClass, root.get());
+    std::vector<uint8_t> outputBuffer = encoder.getOutput();
+
+    // Manually tamper with the encoded stream to create the attack vector.
+    // We will find the `bejReal` property and overwrite its `zeroCount`.
+    // The property "SampleRealProperty" has sequence number 4. The encoded
+    // sequence number is `(4 << 1) | 0 = 8`. The nnint for 8 is `0x01, 0x08`.
+    const std::vector<uint8_t> realPropSeqNum = {0x01, 0x08};
+    auto it = std::search(outputBuffer.begin(), outputBuffer.end(),
+                          realPropSeqNum.begin(), realPropSeqNum.end());
+    ASSERT_NE(it, outputBuffer.end()) << "Could not find bejReal property";
+
+    // The structure of a bejReal SFLV is: S(nnint) F(u8) L(nnint) V(...)
+    // The structure of V is: nnint(len(whole)), int(whole), nnint(zeroCount)...
+    // Find the start of the value (V) by skipping S, F, and L.
+    size_t sflvOffset = std::distance(outputBuffer.begin(), it);
+    const uint8_t* streamPtr = outputBuffer.data() + sflvOffset;
+    // Skip S
+    streamPtr += bejGetNnintSize(streamPtr);
+    // Skip F
+    streamPtr++;
+    // Skip L
+    const uint8_t* valuePtr = streamPtr + bejGetNnintSize(streamPtr);
+
+    // Find the start of zeroCount within V.
+    const uint8_t* zeroCountPtr = valuePtr + bejGetNnintSize(valuePtr);
+    zeroCountPtr += bejGetNnint(valuePtr); // Skip int(whole)
+
+    // The original zeroCount for 1.003 is 2. nnint(2) is `0x01, 0x02`.
+    // We replace it with a zeroCount of 101, which exceeds the limit.
+    // nnint(101) is `0x01, 101`. The size is the same (2 bytes), so we don't
+    // need to update the SFLV length field (L).
+    ASSERT_EQ(bejGetNnint(zeroCountPtr), 2);
+    size_t zeroCountOffset = zeroCountPtr - outputBuffer.data();
+    // nnint value for 101
+    outputBuffer[zeroCountOffset + 1] = 101;
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(outputBuffer)),
+                bejErrorInvalidSize);
+}
+
 /**
  * TODO: Add more test cases.
  * - Test Enums inside array elemets
