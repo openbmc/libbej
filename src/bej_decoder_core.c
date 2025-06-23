@@ -727,7 +727,7 @@ static int bejDecode(const uint8_t* schemaDictionary,
         if (++operationCount > maxOperations)
         {
             fprintf(stderr, "BEJ decoding exceeded max operations\n");
-            return bejErrorNotSuppoted;
+            return bejErrorNotSupported;
         }
         // Go to the next encoded segment in the encoded stream.
         params.state.encodedSubStream =
@@ -859,27 +859,27 @@ int bejDecodePldmBlock(const struct BejDictionaries* dictionaries,
     {
         fprintf(stderr, "Bej decoder doesn't support the bej version: %u\n",
                 pldmHeader->bejVersion);
-        return bejErrorNotSuppoted;
+        return bejErrorNotSupported;
     }
 
     if (pldmHeader->schemaClass == bejAnnotationSchemaClass)
     {
         fprintf(stderr,
                 "Encoder schema class cannot be BejAnnotationSchemaClass\n");
-        return bejErrorNotSuppoted;
+        return bejErrorNotSupported;
     }
     // TODO: Add support for CollectionMemberType schema class.
     if (pldmHeader->schemaClass == bejCollectionMemberTypeSchemaClass)
     {
         fprintf(stderr, "Decoder doesn't support "
                         "bejCollectionMemberTypeSchemaClass yet.\n");
-        return bejErrorNotSuppoted;
+        return bejErrorNotSupported;
     }
     // TODO: Add support for Error schema class.
     if (pldmHeader->schemaClass == bejErrorSchemaClass)
     {
         fprintf(stderr, "Decoder doesn't support BejErrorSchemaClass yet.\n");
-        return bejErrorNotSuppoted;
+        return bejErrorNotSupported;
     }
 
     // Skip the PLDM header.

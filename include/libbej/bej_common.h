@@ -51,7 +51,7 @@ enum BejError
     bejErrorNoError = 0,
     bejErrorUnknown,
     bejErrorInvalidSize,
-    bejErrorNotSuppoted,
+    bejErrorNotSupported,
     bejErrorUnknownProperty,
     bejErrorInvalidSchemaType,
     bejErrorInvalidPropertyOffset,

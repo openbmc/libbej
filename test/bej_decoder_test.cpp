@@ -138,7 +138,7 @@ TEST(BejDecoderSecurityTest, MaxOperationsLimit)
 
     BejDecoderJson decoder;
     EXPECT_THAT(decoder.decode(dictionaries, std::span(outputBuffer)),
-                bejErrorNotSuppoted);
+                bejErrorNotSupported);
 }
 
 /**
