@@ -90,7 +90,7 @@ static void bejGetLocalBejSFLVOffsets(const uint8_t* enSegment,
  * params->state.encodedSubStream pointing to the start of the encoded stream
  * and params->state.encodedStreamOffset pointing to the current bejTuple.
  */
-static void bejInitSFLVStruct(struct BejHandleTypeFuncParam* params)
+static bool bejInitSFLVStruct(struct BejHandleTypeFuncParam* params)
 {
     struct BejSFLVOffset localOffset;
     // Get offsets of different SFLV fields with respect to start of the encoded
@@ -109,9 +109,30 @@ static void bejInitSFLVStruct(struct BejHandleTypeFuncParam* params)
     sflv->format = *(struct BejTupleF*)(params->state.encodedSubStream +
                                         localOffset.formatOffset);
     sflv->valueLength = valueLength;
-    sflv->valueEndOffset = params->state.encodedStreamOffset +
-                           localOffset.valueOffset + valueLength;
+
+    if ((UINT32_MAX - localOffset.valueOffset) <
+        params->state.encodedStreamOffset)
+    {
+        fprintf(stderr,
+                "Overflow when adding encodedStreamOffset and valueOffset\n");
+        return false;
+    }
+
+    uint32_t valueStartLocation =
+        params->state.encodedStreamOffset + localOffset.valueOffset;
+
+    if ((UINT32_MAX - valueStartLocation) < valueLength)
+    {
+        fprintf(
+            stderr,
+            "Overflow when adding valueLength to encodedStreamOffset + valueOffset\n");
+        return false;
+    }
+
+    // Offset to the location soon after the value
+    sflv->valueEndOffset = valueStartLocation + valueLength;
     sflv->value = params->state.encodedSubStream + localOffset.valueOffset;
+    return true;
 }
 
 /**
@@ -733,7 +754,21 @@ static int bejDecode(const uint8_t* schemaDictionary,
         // Go to the next encoded segment in the encoded stream.
         params.state.encodedSubStream =
             enStream + params.state.encodedStreamOffset;
-        bejInitSFLVStruct(&params);
+        if (!bejInitSFLVStruct(&params))
+        {
+            return bejErrorInvalidSize;
+        }
+
+        // Make sure that the next value segment (SFLV) is within the streamLen
+        if (params.sflv.valueEndOffset > streamLen)
+        {
+            fprintf(
+                stderr,
+                "Value goes beyond stream length. SFLV Offset: %u, valueEndOffset: %u, streamLen: %u\n",
+                params.state.encodedStreamOffset, params.sflv.valueEndOffset,
+                streamLen);
+            return bejErrorInvalidSize;
+        }
 
         if (params.sflv.format.readOnlyProperty)
         {
