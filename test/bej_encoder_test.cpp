@@ -344,8 +344,11 @@ TEST_P(BejEncoderTest, Encode)
 
     BejDictionaries dictionaries = {
         .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
         .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
         .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
     };
 
     std::vector<uint8_t> outputBuffer;
@@ -388,8 +391,11 @@ TEST_P(BejEncoderTest, EncodeWrapper)
 
     BejDictionaries dictionaries = {
         .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
         .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
         .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
     };
 
     libbej::BejEncoderJson encoder;

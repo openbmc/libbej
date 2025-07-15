@@ -171,8 +171,11 @@ struct BejPldmBlockHeader
 struct BejDictionaries
 {
     const uint8_t* schemaDictionary;
+    uint32_t schemaDictionarySize;
     const uint8_t* annotationDictionary;
+    uint32_t annotationDictionarySize;
     const uint8_t* errorDictionary;
+    uint32_t errorDictionarySize;
 };
 
 /**

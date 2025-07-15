@@ -66,8 +66,11 @@ TEST_P(BejDecoderTest, Decode)
 
     BejDictionaries dictionaries = {
         .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
         .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
         .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
     };
 
     BejDecoderJson decoder;
@@ -108,8 +111,11 @@ TEST(BejDecoderSecurityTest, MaxOperationsLimit)
 
     BejDictionaries dictionaries = {
         .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
         .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
         .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
     };
 
     // Each array element below consists of a set and two properties, resulting
@@ -167,8 +173,11 @@ TEST(BejDecoderSecurityTest, RealWithTooManyLeadingZeros)
 
     BejDictionaries dictionaries = {
         .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
         .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
         .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
     };
 
     auto root = std::make_unique<RedfishPropertyParent>();
@@ -228,8 +237,11 @@ TEST(BejDecoderSecurityTest, StringTooLong)
 
     BejDictionaries dictionaries = {
         .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
         .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
         .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
     };
 
     auto root = std::make_unique<RedfishPropertyParent>();
@@ -258,8 +270,11 @@ TEST(BejDecoderSecurityTest, ValueBeyondStreamLength)
 
     BejDictionaries dictionaries = {
         .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
         .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
         .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
     };
 
     auto root = std::make_unique<RedfishPropertyParent>();
@@ -279,6 +294,63 @@ TEST(BejDecoderSecurityTest, ValueBeyondStreamLength)
 
     BejDecoderJson decoder;
     EXPECT_THAT(decoder.decode(dictionaries, std::span(outputBuffer)),
+                bejErrorInvalidSize);
+}
+
+TEST(BejDecoderSecurityTest, InvalidSchemaDictionarySize)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = 10,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, inputsOrErr->encodedStream),
+                bejErrorInvalidSize);
+}
+
+TEST(BejDecoderSecurityTest, InvalidAnnotationDictionarySize)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = 10,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, inputsOrErr->encodedStream),
+                bejErrorInvalidSize);
+}
+
+TEST(BejDecoderSecurityTest, InvalidErrorDictionarySize)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = 10,
+    };
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, inputsOrErr->encodedStream),
                 bejErrorInvalidSize);
 }
 
