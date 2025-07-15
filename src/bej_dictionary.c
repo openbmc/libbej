@@ -1,6 +1,7 @@
 #include "bej_dictionary.h"
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -61,6 +62,37 @@ static bool bejValidatePropertyOffset(const uint8_t* dictionary,
     return true;
 }
 
+static bool bejValidatePropertyNameLength(
+    const uint8_t* dictionary, uint32_t dictionarySize, uint16_t nameOffset,
+    uint8_t nameLength)
+{
+    if (nameLength == 0)
+    {
+        return true;
+    }
+    // After the property names, the dictionary has at least the
+    // uint8 CopyrightLength field. So we compare with dictionarySize - 1.
+    // nameOffset is uint16_t and nameLength is uint8_t so it cannot overflow
+    // uint32_t dictionarySize here.
+    if (((uint32_t)nameOffset) + (uint32_t)(nameLength) > (dictionarySize - 1))
+    {
+        fprintf(stderr, "Property name length goes beyond dictionary size\n");
+        return false;
+    }
+
+    // nameLength includes the NULL terminating. So the actual string size
+    // should be nameLength - 1.
+    const char* name = (const char*)dictionary + nameOffset;
+    const void* nullTerminator = memchr(name, '\0', nameLength);
+    if (nullTerminator == NULL ||
+        ((const char*)nullTerminator - name) != (ptrdiff_t)(nameLength - 1))
+    {
+        fprintf(stderr, "Property name length doesn't match actual length\n");
+        return false;
+    }
+    return true;
+}
+
 uint16_t bejDictGetPropertyHeadOffset(void)
 {
     // First property is present soon after the dictionary header.
@@ -96,6 +128,13 @@ int bejDictGetProperty(const uint8_t* dictionary,
             (const struct BejDictionaryProperty*)(dictionary + propertyOffset);
         if (p->sequenceNumber == sequenceNumber)
         {
+            if (!bejValidatePropertyNameLength(dictionary,
+                                               header->dictionarySize,
+                                               p->nameOffset, p->nameLength))
+            {
+                return bejErrorInvalidSize;
+            }
+
             *property = p;
             return 0;
         }
