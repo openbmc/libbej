@@ -109,6 +109,7 @@ static void bejInitSFLVStruct(struct BejHandleTypeFuncParam* params)
     sflv->format = *(struct BejTupleF*)(params->state.encodedSubStream +
                                         localOffset.formatOffset);
     sflv->valueLength = valueLength;
+    // Offset to the location soon after the value
     sflv->valueEndOffset = params->state.encodedStreamOffset +
                            localOffset.valueOffset + valueLength;
     sflv->value = params->state.encodedSubStream + localOffset.valueOffset;
@@ -734,6 +735,17 @@ static int bejDecode(const uint8_t* schemaDictionary,
         params.state.encodedSubStream =
             enStream + params.state.encodedStreamOffset;
         bejInitSFLVStruct(&params);
+
+        // Make sure that the next value segment (SFLV) is within the streamLen
+        if (params.sflv.valueEndOffset > streamLen)
+        {
+            fprintf(
+                stderr,
+                "Value goes beyond stream length. SFLV Offset: %u, valueEndOffset: %u, streamLen: %u\n",
+                params.state.encodedStreamOffset, params.sflv.valueEndOffset,
+                streamLen);
+            return bejErrorInvalidSize;
+        }
 
         if (params.sflv.format.readOnlyProperty)
         {

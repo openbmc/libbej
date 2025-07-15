@@ -82,6 +82,25 @@ TEST_P(BejDecoderTest, Decode)
     EXPECT_TRUE(jsonDecoded.dump() == inputsOrErr->expectedJson.dump());
 }
 
+/**
+ * TODO: Add more test cases.
+ * - Test Enums inside array elemets
+ * - Array inside an array: is this a valid case?
+ * - Real numbers with exponent part
+ * - Every type inside an array.
+ */
+INSTANTIATE_TEST_SUITE_P(
+    , BejDecoderTest,
+    testing::ValuesIn<BejDecoderTestParams>({
+        {"DriveOEM", driveOemTestFiles},
+        {"Circuit", circuitTestFiles},
+        {"Storage", storageTestFiles},
+        {"DummySimple", dummySimpleTestFiles},
+    }),
+    [](const testing::TestParamInfo<BejDecoderTest::ParamType>& info) {
+        return info.param.testName;
+    });
+
 TEST(BejDecoderSecurityTest, MaxOperationsLimit)
 {
     auto inputsOrErr = loadInputs(dummySimpleTestFiles);
@@ -232,23 +251,35 @@ TEST(BejDecoderSecurityTest, StringTooLong)
                 bejErrorInvalidSize);
 }
 
-/**
- * TODO: Add more test cases.
- * - Test Enums inside array elemets
- * - Array inside an array: is this a valid case?
- * - Real numbers with exponent part
- * - Every type inside an array.
- */
-INSTANTIATE_TEST_SUITE_P(
-    , BejDecoderTest,
-    testing::ValuesIn<BejDecoderTestParams>({
-        {"DriveOEM", driveOemTestFiles},
-        {"Circuit", circuitTestFiles},
-        {"Storage", storageTestFiles},
-        {"DummySimple", dummySimpleTestFiles},
-    }),
-    [](const testing::TestParamInfo<BejDecoderTest::ParamType>& info) {
-        return info.param.testName;
-    });
+TEST(BejDecoderSecurityTest, ValueBeyondStreamLength)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .errorDictionary = inputsOrErr->errorDictionary,
+    };
+
+    auto root = std::make_unique<RedfishPropertyParent>();
+    bejTreeInitSet(root.get(), "DummySimple");
+
+    auto intProp = std::make_unique<RedfishPropertyLeafInt>();
+    bejTreeAddInteger(root.get(), intProp.get(), "SampleIntegerProperty", 123);
+
+    libbej::BejEncoderJson encoder;
+    encoder.encode(&dictionaries, bejMajorSchemaClass, root.get());
+    std::vector<uint8_t> outputBuffer = encoder.getOutput();
+
+    // Tamper with the encoded stream to simulate a value extending beyond the
+    // stream length. This stream only has an integer 0x7b. The value before it
+    // is the length tuple.
+    outputBuffer[outputBuffer.size() - 2] = 0x05;
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(outputBuffer)),
+                bejErrorInvalidSize);
+}
 
 } // namespace libbej
