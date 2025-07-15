@@ -39,6 +39,30 @@
       },
       "revId": "dd85489d51a39567a4246717d5926943f94f1bbf",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe80f2c_3be24c86",
+        "filename": "include/libbej/bej_common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1001138
+      },
+      "writtenOn": "2025-07-15T17:31:53Z",
+      "side": 1,
+      "message": "That would add the restriction that we need to specify these values at structure definition. So I would prefer to keep it this way.",
+      "parentUuid": "4b59c3e4_3fb3322a",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 33
+      },
+      "revId": "dd85489d51a39567a4246717d5926943f94f1bbf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
