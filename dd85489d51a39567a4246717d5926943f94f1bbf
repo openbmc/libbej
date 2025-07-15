@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dbab2ba_7c6216e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2025-07-15T16:23:46Z",
+      "side": 1,
+      "message": "I guess the srcrev bump for this needs to go in together with bios-bmc-smm-error-logger (and other BEJ use cases)",
+      "revId": "dd85489d51a39567a4246717d5926943f94f1bbf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b59c3e4_3fb3322a",
+        "filename": "include/libbej/bej_common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2025-07-15T16:23:46Z",
+      "side": 1,
+      "message": "Should these new variables be consts?",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 33
+      },
+      "revId": "dd85489d51a39567a4246717d5926943f94f1bbf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
