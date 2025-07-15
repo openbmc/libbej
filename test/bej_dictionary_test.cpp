@@ -104,4 +104,31 @@ TEST(BejDictionaryTest, invalidPropertyOffsetTest)
                 bejErrorInvalidPropertyOffset);
 }
 
+TEST(BejDictionaryTest, InvalidPropertyNameLength)
+{
+    // Make a copy of the dummySimpleDict.
+    std::vector<uint8_t> modifiedDictionary = {dummySimpleDict.begin(),
+                                               dummySimpleDict.end()};
+
+    // Find a property and modify its nameLength to be out of bounds.
+    struct BejDictionaryHeader* header =
+        (struct BejDictionaryHeader*)modifiedDictionary.data();
+
+    ASSERT_GE(header->entryCount, 1);
+    struct BejDictionaryProperty* property =
+        (struct BejDictionaryProperty*)(modifiedDictionary.data() +
+                                        sizeof(BejDictionaryHeader));
+
+    // Increase the nameLength to go beyond the dictionary size.
+    property->nameLength = 255;
+
+    // Now try to get this property by sequence number; it should fail due to
+    // the invalid name length.
+    const struct BejDictionaryProperty* retrievedProperty = NULL;
+    EXPECT_EQ(bejDictGetProperty(modifiedDictionary.data(),
+                                 bejDictGetPropertyHeadOffset(),
+                                 property->sequenceNumber, &retrievedProperty),
+              bejErrorInvalidSize);
+}
+
 } // namespace libbej
