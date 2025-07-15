@@ -28,8 +28,11 @@ struct BejTestInputs
 {
     nlohmann::json expectedJson;
     const uint8_t* schemaDictionary;
+    uint32_t schemaDictionarySize;
     const uint8_t* annotationDictionary;
+    uint32_t annotationDictionarySize;
     const uint8_t* errorDictionary;
+    uint32_t errorDictionarySize;
     std::span<const uint8_t> encodedStream;
 };
 
@@ -65,15 +68,19 @@ std::optional<BejTestInputs> loadInputs(const BejTestInputFiles& files,
     jsonInput >> expJson;
 
     static uint8_t schemaDictBuffer[maxBufferSize];
-    if (readBinaryFile(files.schemaDictionaryFile,
-                       std::span(schemaDictBuffer, maxBufferSize)) == 0)
+    uint32_t schemaDictSize = 0;
+    if ((schemaDictSize =
+             readBinaryFile(files.schemaDictionaryFile,
+                            std::span(schemaDictBuffer, maxBufferSize))) == 0)
     {
         return std::nullopt;
     }
 
     static uint8_t annoDictBuffer[maxBufferSize];
-    if (readBinaryFile(files.annotationDictionaryFile,
-                       std::span(annoDictBuffer, maxBufferSize)) == 0)
+    uint32_t annoDictSize = 0;
+    if ((annoDictSize =
+             readBinaryFile(files.annotationDictionaryFile,
+                            std::span(annoDictBuffer, maxBufferSize))) == 0)
     {
         return std::nullopt;
     }
@@ -87,10 +94,12 @@ std::optional<BejTestInputs> loadInputs(const BejTestInputFiles& files,
     }
 
     static uint8_t errorDict[maxBufferSize];
+    uint32_t errorDictSize = 0;
     if (readErrorDictionary)
     {
-        if (readBinaryFile(files.errorDictionaryFile,
-                           std::span(errorDict, maxBufferSize)) == 0)
+        if ((errorDictSize =
+                 readBinaryFile(files.errorDictionaryFile,
+                                std::span(errorDict, maxBufferSize))) == 0)
         {
             return std::nullopt;
         }
@@ -99,8 +108,11 @@ std::optional<BejTestInputs> loadInputs(const BejTestInputFiles& files,
     BejTestInputs inputs = {
         .expectedJson = expJson,
         .schemaDictionary = schemaDictBuffer,
+        .schemaDictionarySize = schemaDictSize,
         .annotationDictionary = annoDictBuffer,
+        .annotationDictionarySize = annoDictSize,
         .errorDictionary = errorDict,
+        .errorDictionarySize = errorDictSize,
         .encodedStream = std::span(encBuffer, encLen),
     };
     return inputs;
