@@ -1,5 +1,9 @@
 #include "bej_decoder_json.hpp"
 
+#include <string.h>
+
+#define MAX_BEJ_STRING_LEN 65536
+
 namespace libbej
 {
 
@@ -172,16 +176,29 @@ static int callbackEnum(const char* propertyName, const char* value,
  *
  * @param[in] propertyName - a NULL terminated string.
  * @param[in] value - a NULL terminated string.
+ * @param[in] length - length of the string.
  * @param[in] dataPtr - pointing to a valid BejJsonParam struct.
  * @return 0 if successful.
  */
 static int callbackString(const char* propertyName, const char* value,
-                          void* dataPtr)
+                          size_t length, void* dataPtr)
 {
+    if ((length > MAX_BEJ_STRING_LEN) ||
+        (strnlen(value, length) != (length - 1)))
+    {
+        fprintf(stderr,
+                "Incorrect BEJ string length %zu or it exceeds maximum %u.\n",
+                (length - 1), MAX_BEJ_STRING_LEN);
+        return bejErrorInvalidSize;
+    }
     struct BejJsonParam* params =
         reinterpret_cast<struct BejJsonParam*>(dataPtr);
     addPropertyNameToOutput(params, propertyName);
     params->output->push_back('\"');
+    if (length > 0)
+    {
+        params->output->append(value, length - 1);
+    }
     params->output->append(value);
     params->output->push_back('\"');
     *params->isPrevAnnotated = false;

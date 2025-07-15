@@ -546,9 +546,10 @@ static int bejHandleBejString(struct BejHandleTypeFuncParam* params)
     }
     else
     {
-        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackString,
-                                  propName, (const char*)(params->sflv.value),
-                                  params->callbacksDataPtr);
+        RETURN_IF_CALLBACK_IERROR(
+            params->decodedCallback->callbackString, propName,
+            (const char*)(params->sflv.value), params->sflv.valueLength,
+            params->callbacksDataPtr);
     }
     params->state.encodedStreamOffset = params->sflv.valueEndOffset;
     return bejProcessEnding(params, /*canBeEmpty=*/false);
