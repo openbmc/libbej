@@ -202,6 +202,36 @@ TEST(BejDecoderSecurityTest, RealWithTooManyLeadingZeros)
                 bejErrorInvalidSize);
 }
 
+TEST(BejDecoderSecurityTest, StringTooLong)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .errorDictionary = inputsOrErr->errorDictionary,
+    };
+
+    auto root = std::make_unique<RedfishPropertyParent>();
+    bejTreeInitSet(root.get(), "DummySimple");
+
+    // Create a string with a length greater than MAX_BEJ_STRING_LEN (65536).
+    std::string longString(65537, 'A');
+
+    auto stringProp = std::make_unique<RedfishPropertyLeafString>();
+    bejTreeAddString(root.get(), stringProp.get(), "Id", longString.c_str());
+
+    libbej::BejEncoderJson encoder;
+    encoder.encode(&dictionaries, bejMajorSchemaClass, root.get());
+    std::vector<uint8_t> outputBuffer = encoder.getOutput();
+
+    // The decoder should return an error because the string is too long.
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(outputBuffer)),
+                bejErrorInvalidSize);
+}
+
 /**
  * TODO: Add more test cases.
  * - Test Enums inside array elemets

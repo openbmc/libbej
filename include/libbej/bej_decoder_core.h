@@ -109,7 +109,7 @@ struct BejDecodedCallback
      * @brief Calls when a String property is found.
      */
     int (*callbackString)(const char* propertyName, const char* value,
-                          void* dataPtr);
+                          size_t length, void* dataPtr);
 
     /**
      * @brief Calls when a Real value property is found.
