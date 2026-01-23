@@ -1,0 +1,9 @@
+Code-Review+1: Jagpal S Gill <paligill@gmail.com>
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+2: Willy Tu <wltu@google.com>
+Code-Review+2: Brandon Kim <brandonkim@google.com>
+Submitted-by: Willy Tu <wltu@google.com>
+Submitted-at: Fri, 23 Jan 2026 20:55:19 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/libbej/+/86902
+Project: openbmc/libbej
+Branch: refs/heads/main
