@@ -653,6 +653,32 @@ static int bejHandleBejBoolean(struct BejHandleTypeFuncParam* params)
 }
 
 /**
+ * @brief Decodes a BejResourceLink type SFLV BEJ tuple.
+ *
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
+ * @return 0 if successful.
+ */
+static int bejHandleBejResourceLink(struct BejHandleTypeFuncParam* params)
+{
+    const char* propName = bejGetPropName(params);
+
+    if (params->sflv.valueLength == 0)
+    {
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackNull,
+                                  propName, params->callbacksDataPtr);
+    }
+    else
+    {
+        // ResourceLink value is a PDR ID (NNINT).
+        uint64_t pdrId = bejGetNnint(params->sflv.value);
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackResourceLink,
+                                  propName, pdrId, params->callbacksDataPtr);
+    }
+    params->state.encodedStreamOffset = params->sflv.valueEndOffset;
+    return bejProcessEnding(params, /*canBeEmpty=*/false);
+}
+
+/**
  * @brief Decodes a BejPropertyAnnotation type SFLV BEJ tuple.
  *
  * @param[in] params - a valid BejHandleTypeFuncParam struct.
@@ -819,9 +845,7 @@ static int bejDecode(const uint8_t* schemaDictionary,
                 RETURN_IF_IERROR(bejHandleBejPropertyAnnotation(&params));
                 break;
             case bejResourceLink:
-                // TODO: Add support for BejResourceLink decoding.
-                fprintf(stderr, "No BejResourceLink support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejResourceLink(&params));
                 break;
             case bejResourceLinkExpansion:
                 // TODO: Add support for BejResourceLinkExpansion decoding.
@@ -829,6 +853,8 @@ static int bejDecode(const uint8_t* schemaDictionary,
                 params.state.encodedStreamOffset = params.sflv.valueEndOffset;
                 break;
             default:
+                fprintf(stderr, "[BEJ] Unknown format type: %u\n",
+                        params.sflv.format.principalDataType);
                 break;
         }
     }
