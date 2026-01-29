@@ -346,6 +346,31 @@ static int stackPush(const struct BejStackProperty* const property,
     return 0;
 }
 
+/**
+ * @brief Callback for bejResourceLink type.
+ *
+ * @param[in] propertyName - a NULL terminated string.
+ * @param[in] linkId - Resource Link ID.
+ * @param[in] dataPtr - pointing to a valid BejJsonParam struct.
+ * @return 0 if successful.
+ */
+static int callbackResourceLink(const char* propertyName, uint64_t linkId,
+                                void* dataPtr)
+{
+    struct BejJsonParam* params =
+        reinterpret_cast<struct BejJsonParam*>(dataPtr);
+    addPropertyNameToOutput(params, propertyName);
+    params->output->push_back('\"');
+
+    // Format: %L<ID>
+    std::string s = "%L" + std::to_string(linkId);
+    params->output->append(s);
+
+    params->output->push_back('\"');
+    *params->isPrevAnnotated = false;
+    return 0;
+}
+
 int BejDecoderJson::decode(const BejDictionaries& dictionaries,
                            const std::span<const uint8_t> encodedPldmBlock)
 {
@@ -381,6 +406,7 @@ int BejDecoderJson::decode(const BejDictionaries& dictionaries,
         .callbackBool = callbackBool,
         .callbackAnnotation = callbackAnnotation,
         .callbackReadonlyProperty = nullptr,
+        .callbackResourceLink = callbackResourceLink,
     };
 
     isPrevAnnotated = false;
