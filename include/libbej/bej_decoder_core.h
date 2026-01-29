@@ -128,6 +128,12 @@ struct BejDecodedCallback
     int (*callbackAnnotation)(const char* propertyName, void* dataPtr);
 
     /**
+     * @brief Calls when a ResourceLink property is found.
+     */
+    int (*callbackResourceLink)(const char* propertyName, uint64_t linkId,
+                                void* dataPtr);
+
+    /**
      * @brief Calls when a read only property is found.
      */
     int (*callbackReadonlyProperty)(uint32_t sequenceNumber, void* dataPtr);

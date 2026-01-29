@@ -354,4 +354,121 @@ TEST(BejDecoderSecurityTest, InvalidErrorDictionarySize)
                 bejErrorInvalidSize);
 }
 
+TEST(BejDecoderResourceLinkTest, DecodeResourceLink)
+{
+    // Test that ResourceLink is decoded as "%L<ID>" format.
+    // Manually craft a BEJ encoded stream with a ResourceLink property.
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    // Manually construct BEJ encoded stream:
+    // Format byte = principalDataType << 4, so bejResourceLink(14) = 0xE0
+    //
+    // Structure:
+    // - PLDM header (7 bytes)
+    // - Root Set: S(2) + F(1) + L(2) + V(9) where V = count(2) + child(7)
+    // - Child ResourceLink: S(2) + F(1) + L(2) + V(2) = 7 bytes
+    std::vector<uint8_t> encodedStream = {
+        // PLDM header (7 bytes)
+        0x00,
+        0xF0,
+        0xF0,
+        0xF1, // bejVersion (0xF1F0F000 little endian)
+        0x00,
+        0x00, // reserved
+        0x00, // schemaClass (major)
+        // Root Set (DummySimple, seq=0)
+        0x01,
+        0x00, // S: nnint(0) -> seq=0
+        0x00, // F: bejSet (0 << 4 = 0x00)
+        0x01,
+        0x09, // L: nnint(9) -> value is 9 bytes
+        // Set value: element count + child SFLV
+        0x01,
+        0x01, // element count: nnint(1) -> 1 child
+        // Child ResourceLink (Id, seq=1)
+        0x01,
+        0x02, // S: nnint(2) -> seq=1, schema=primary
+        0xE0, // F: bejResourceLink (14 << 4 = 0xE0)
+        0x01,
+        0x02, // L: nnint(2) -> value is 2 bytes
+        0x01,
+        0x2A, // V: nnint(42) -> PDR ID = 42
+    };
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(encodedStream)), 0);
+
+    std::string decoded = decoder.getOutput();
+    nlohmann::json jsonDecoded = nlohmann::json::parse(decoded);
+
+    // Verify the ResourceLink is decoded as "%L42"
+    EXPECT_TRUE(jsonDecoded.contains("Id"));
+    EXPECT_EQ(jsonDecoded["Id"].get<std::string>(), "%L42");
+}
+
+TEST(BejDecoderResourceLinkTest, DecodeResourceLinkNull)
+{
+    // Test that ResourceLink with zero length is decoded as null.
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    // Same structure but with zero-length value (null ResourceLink)
+    // Child SFLV with L=0: S(2) + F(1) + L(2) + V(0) = 5 bytes
+    // Set value: count(2) + child(5) = 7 bytes
+    std::vector<uint8_t> encodedStream = {
+        // PLDM header (7 bytes)
+        0x00,
+        0xF0,
+        0xF0,
+        0xF1, // bejVersion
+        0x00,
+        0x00, // reserved
+        0x00, // schemaClass
+        // Root Set (DummySimple, seq=0)
+        0x01,
+        0x00, // S: nnint(0) -> seq=0
+        0x00, // F: bejSet
+        0x01,
+        0x07, // L: nnint(7) -> value is 7 bytes
+        // Set value: element count + child SFLV
+        0x01,
+        0x01, // element count: nnint(1) -> 1 child
+        // Child ResourceLink (Id, seq=1) with null value
+        0x01,
+        0x02, // S: nnint(2) -> seq=1
+        0xE0, // F: bejResourceLink (14 << 4 = 0xE0)
+        0x01,
+        0x00, // L: nnint(0) -> zero length means null
+    };
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(encodedStream)), 0);
+
+    std::string decoded = decoder.getOutput();
+    nlohmann::json jsonDecoded = nlohmann::json::parse(decoded);
+
+    // Verify the ResourceLink is decoded as null
+    EXPECT_TRUE(jsonDecoded.contains("Id"));
+    EXPECT_TRUE(jsonDecoded["Id"].is_null());
+}
+
 } // namespace libbej
