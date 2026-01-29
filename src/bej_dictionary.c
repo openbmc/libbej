@@ -116,6 +116,11 @@ int bejDictGetProperty(const uint8_t* dictionary,
     const struct BejDictionaryHeader* header =
         (const struct BejDictionaryHeader*)dictionary;
 
+    if (propertyOffset == 0)
+    {
+        propertyOffset = bejDictGetPropertyHeadOffset();
+    }
+
     if (!bejValidatePropertyOffset(dictionary, propertyOffset))
     {
         return bejErrorInvalidPropertyOffset;
@@ -163,6 +168,11 @@ int bejDictGetPropertyByName(
     uint16_t curPropertyOffset = startingPropertyOffset;
     const struct BejDictionaryHeader* header =
         (const struct BejDictionaryHeader*)dictionary;
+
+    if (curPropertyOffset == 0)
+    {
+        curPropertyOffset = bejDictGetPropertyHeadOffset();
+    }
 
     if (!bejValidatePropertyOffset(dictionary, curPropertyOffset))
     {
