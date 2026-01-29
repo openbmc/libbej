@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "566e7efa_67a39335",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-01-29T08:31:55Z",
+      "side": 1,
+      "message": "# Proposal Overview\n\nI am currently working on implementing support for the bejResourceLink (0xE) data type within libbej. As part of my ongoing implementation, I\u0027ve encountered an architectural choice regarding how this type should be presented to the user after decoding.\n\nI would like to share my current approach and gather feedback from the community before finalizing the implementation and submitting a patch.\n\n# The Proposed Strategy\n\nI suggest that libbej should coerce the binary ResourceID into the macro format (%L) during the first phase of decoding.\n\nProblem Statement \u0026 Observations\n\nIn the RDE (DSP0218) specification, devices can represent resource references in two ways:\n\n`bejString` with %L: Used when path concatenation is needed (e.g., %L200).\n\n`bejResourceLink`: Used for maximum binary compression by sending a 16-byte raw ID.\n\nFrom my implementation experience, I\u0027ve observed that a Management Controller (MC) already must implement a translation layer to resolve %L macros within standard strings. However, if libbej decodes bejResourceLink as a raw integer or byte array, the MC application is forced to maintain two separate logic paths to handle the same semantic goal (resolving a resource link).\n\n# Why I Propose Normalization to %L\nUnified Post-Processing: Since users of libbej are already required to handle %L for standard strings, my solution normalizes bejResourceLink into the same format. This allows the application to use a single \"Macro Resolver\" function for all resource references.\n\nSimplified Integration: In my current prototype, the application layer no longer needs to check the underlying BEJ type (Integer vs. String) of an @odata.id field. It simply scans all decoded strings for the % prefix.\n\nSeparation of Concerns: Let libbej focus on Phase 1: Format Normalization, while leaving Phase 2: Contextual Binding (resolving URIs from PDRs) to the application.\n\n# Request for Feedback\nI have a working proof-of-concept for this approach and believe it provides a much cleaner interface for RDE stack developers.",
+      "revId": "861465929d3a6392bc7b3dc907b41afa3fb275fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
