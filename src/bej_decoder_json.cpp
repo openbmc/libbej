@@ -2,6 +2,8 @@
 
 #include <string.h>
 
+#include <format>
+
 #define MAX_BEJ_STRING_LEN 65536
 
 namespace libbej
@@ -285,6 +287,25 @@ static int callbackAnnotation(const char* propertyName, void* dataPtr)
 }
 
 /**
+ * @brief Callback for bejResourceLink type.
+ *
+ * @param[in] propertyName - a NULL terminated string.
+ * @param[in] linkId - Resource Link ID.
+ * @param[in] dataPtr - pointing to a valid BejJsonParam struct.
+ * @return 0 if successful.
+ */
+static int callbackResourceLink(const char* propertyName, uint64_t linkId,
+                                void* dataPtr)
+{
+    struct BejJsonParam* params =
+        reinterpret_cast<struct BejJsonParam*>(dataPtr);
+    addPropertyNameToOutput(params, propertyName);
+    params->output->append(std::format("\"%L{}\"", linkId));
+    *params->isPrevAnnotated = false;
+    return 0;
+}
+
+/**
  * @brief Callback for stackEmpty.
  *
  * @param[in] dataPtr - pointer to a valid std::vector<BejStackProperty>
@@ -380,6 +401,7 @@ int BejDecoderJson::decode(const BejDictionaries& dictionaries,
         .callbackReal = callbackReal,
         .callbackBool = callbackBool,
         .callbackAnnotation = callbackAnnotation,
+        .callbackResourceLink = callbackResourceLink,
         .callbackReadonlyProperty = nullptr,
     };
 

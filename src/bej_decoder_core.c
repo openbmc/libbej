@@ -696,6 +696,36 @@ static int bejHandleBejPropertyAnnotation(struct BejHandleTypeFuncParam* params)
 }
 
 /**
+ * @brief Decodes a BejResourceLink type SFLV BEJ tuple.
+ *
+ * @param[in] params - a valid BejHandleTypeFuncParam struct.
+ * @return 0 if successful.
+ */
+static int bejHandleBejResourceLink(struct BejHandleTypeFuncParam* params)
+{
+    const char* propName = bejGetPropName(params);
+
+    if (params->sflv.valueLength == 0)
+    {
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackNull,
+                                  propName, params->callbacksDataPtr);
+    }
+    else
+    {
+        if (params->sflv.valueLength < bejGetNnintSize(params->sflv.value))
+        {
+            return bejErrorInvalidSize;
+        }
+        // ResourceLink value is a PDR ID (NNINT).
+        uint64_t pdrId = bejGetNnint(params->sflv.value);
+        RETURN_IF_CALLBACK_IERROR(params->decodedCallback->callbackResourceLink,
+                                  propName, pdrId, params->callbacksDataPtr);
+    }
+    params->state.encodedStreamOffset = params->sflv.valueEndOffset;
+    return bejProcessEnding(params, /*canBeEmpty=*/false);
+}
+
+/**
  * @brief Decodes an encoded bej stream.
  *
  * @param[in] schemaDictionary - main schema dictionary to use.
@@ -819,9 +849,7 @@ static int bejDecode(const uint8_t* schemaDictionary,
                 RETURN_IF_IERROR(bejHandleBejPropertyAnnotation(&params));
                 break;
             case bejResourceLink:
-                // TODO: Add support for BejResourceLink decoding.
-                fprintf(stderr, "No BejResourceLink support\n");
-                RETURN_IF_IERROR(bejHandleBejNull(&params));
+                RETURN_IF_IERROR(bejHandleBejResourceLink(&params));
                 break;
             case bejResourceLinkExpansion:
                 // TODO: Add support for BejResourceLinkExpansion decoding.
