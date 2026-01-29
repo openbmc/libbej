@@ -92,13 +92,63 @@ TEST(BejDictionaryTest, ValidPropertyTest)
     }
 }
 
+TEST(BejDictionaryTest, ZeroOffsetMapsToHeadTest)
+{
+    // Test that offset 0 is treated as HEAD offset for compatibility with
+    // tools that use 0-based logical referencing.
+    const struct BejDictionaryProperty* propertyFromZero;
+    const struct BejDictionaryProperty* propertyFromHead;
+    uint16_t propHead = bejDictGetPropertyHeadOffset();
+
+    // Both offset 0 and HEAD offset should return success and the same property
+    EXPECT_THAT(bejDictGetProperty(dummySimpleDict.data(), /*offset=*/0,
+                                   /*sequenceNumber=*/0, &propertyFromZero),
+                0);
+    EXPECT_THAT(bejDictGetProperty(dummySimpleDict.data(), propHead,
+                                   /*sequenceNumber=*/0, &propertyFromHead),
+                0);
+
+    // Verify both return the same property (first property in dictionary)
+    EXPECT_EQ(propertyFromZero, propertyFromHead);
+
+    // Verify the property name is correct (first property is "DummySimple")
+    EXPECT_THAT(
+        bejDictGetPropertyName(dummySimpleDict.data(),
+                               propertyFromZero->nameOffset,
+                               propertyFromZero->nameLength),
+        std::get<0>(propertyNameSeq[0]));
+}
+
+TEST(BejDictionaryTest, ZeroOffsetGetPropertyByNameTest)
+{
+    // Test that bejDictGetPropertyByName also handles offset 0 correctly
+    const struct BejDictionaryProperty* propertyFromZero;
+    const struct BejDictionaryProperty* propertyFromHead;
+    uint16_t offsetFromZero = 0;
+    uint16_t offsetFromHead = 0;
+    uint16_t propHead = bejDictGetPropertyHeadOffset();
+
+    // Search for "DummySimple" starting from offset 0 and HEAD offset
+    EXPECT_THAT(bejDictGetPropertyByName(dummySimpleDict.data(), /*offset=*/0,
+                                         "DummySimple", &propertyFromZero,
+                                         &offsetFromZero),
+                0);
+    EXPECT_THAT(bejDictGetPropertyByName(dummySimpleDict.data(), propHead,
+                                         "DummySimple", &propertyFromHead,
+                                         &offsetFromHead),
+                0);
+
+    // Verify both return the same property and offset
+    EXPECT_EQ(propertyFromZero, propertyFromHead);
+    EXPECT_EQ(offsetFromZero, offsetFromHead);
+    EXPECT_EQ(offsetFromZero, propHead);
+}
+
 TEST(BejDictionaryTest, invalidPropertyOffsetTest)
 {
     const struct BejDictionaryProperty* property;
-    EXPECT_THAT(bejDictGetProperty(dummySimpleDict.data(), /*offset=*/0,
-                                   /*sequenceNumber=*/0, &property),
-                bejErrorInvalidPropertyOffset);
     uint16_t propHead = bejDictGetPropertyHeadOffset();
+    // Offset that doesn't align to property boundary should fail
     EXPECT_THAT(bejDictGetProperty(dummySimpleDict.data(), propHead + 1,
                                    /*sequenceNumber=*/0, &property),
                 bejErrorInvalidPropertyOffset);
