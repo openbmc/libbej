@@ -28,13 +28,13 @@ struct BejEncoderOutputHandler
  *
  * @param dictionaries - dictionaries used for encoding.
  * @param majorSchemaStartingOffset - starting dictionary offset for
- * endcoding. Use BEJ_DICTIONARY_START_AT_HEAD to encode a complete
+ * encoding. Use BEJ_DICTIONARY_START_AT_HEAD to encode a complete
  * resource. Use the correct offset when encoding a subsection of a redfish
  * resource.
  * @param schemaClass - schema class for the resource.
  * @param root - root node of the resource to be encoded. Root node has to
  * be a bejSet.
- * @param output - An intialized BejEncoderOutputHandler struct.
+ * @param output - An initialized BejEncoderOutputHandler struct.
  * @param stack - An initialized BejPointerStackCallback struct.
  * @return 0 if successful.
  */

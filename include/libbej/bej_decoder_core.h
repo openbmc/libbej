@@ -162,7 +162,7 @@ struct BejStackCallback
 
     /**
      * @brief Push an object into the stack. Returns 0 if the operation is
-     * successfull. Client of the decoder core is responsible for allocating
+     * successful. Client of the decoder core is responsible for allocating
      * memory for the new object.
      */
     int (*stackPush)(const struct BejStackProperty* const property,

@@ -87,7 +87,7 @@ TEST_P(BejDecoderTest, Decode)
 
 /**
  * TODO: Add more test cases.
- * - Test Enums inside array elemets
+ * - Test Enums inside array elements
  * - Array inside an array: is this a valid case?
  * - Real numbers with exponent part
  * - Every type inside an array.

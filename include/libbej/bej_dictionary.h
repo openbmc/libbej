@@ -60,10 +60,10 @@ struct BejDictionaryHeader
 uint16_t bejDictGetPropertyHeadOffset(void);
 
 /**
- * @brief Get the offset of the first annotated property in an annoation
+ * @brief Get the offset of the first annotated property in an annotation
  * dictionary.
  *
- * @return the offset to the first annotated property in an annoation
+ * @return the offset to the first annotated property in an annotation
  * dictionary.
  */
 uint16_t bejDictGetFirstAnnotatedPropertyOffset(void);

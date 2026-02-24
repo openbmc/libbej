@@ -9,7 +9,7 @@ extern "C"
 #endif
 
 /**
- * @brief Use this value to indicate that the dictonary needs to be traversed
+ * @brief Use this value to indicate that the dictionary needs to be traversed
  * starting at the first property of the dictionary.
  */
 #define BEJ_DICTIONARY_START_AT_HEAD 0
@@ -30,7 +30,7 @@ extern "C"
 #endif
 
 /**
- * @brief Check a given varable is NULL. If it is NULL, this will return with
+ * @brief Check a given variable is NULL. If it is NULL, this will return with
  * bejErrorNullParameter. If the variable is not NULL, this will not return.
  */
 #define NULL_CHECK(param, structStr)                                           \
@@ -141,7 +141,7 @@ struct BejReal
 };
 
 /**
- * @brief SFLV BEJ tuple infomation.
+ * @brief SFLV BEJ tuple information.
  */
 struct BejSFLV
 {
@@ -149,7 +149,7 @@ struct BejSFLV
     struct BejTupleF format;
     // Value portion size in bytes.
     uint32_t valueLength;
-    // Value end-offset with respect to the begining of the encoded stream.
+    // Value end-offset with respect to the beginning of the encoded stream.
     uint32_t valueEndOffset;
     // Pointer to the value.
     const uint8_t* value;
