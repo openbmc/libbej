@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "605ef744_e2be98bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2026-02-27T23:44:13Z",
+      "side": 1,
+      "message": "I haven\u0027t worked on BEJ in a long time. @kasunath@google.com do you think you may be able to help review this?",
+      "revId": "4414b4b74c0509734f48454a936434282fef755e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae8667ea_fd52f7a7",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2026-02-27T23:44:13Z",
+      "side": 1,
+      "message": "nit: whitespace",
+      "range": {
+        "startLine": 856,
+        "startChar": 66,
+        "endLine": 856,
+        "endChar": 67
+      },
+      "revId": "4414b4b74c0509734f48454a936434282fef755e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
