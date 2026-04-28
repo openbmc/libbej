@@ -80,6 +80,30 @@
       },
       "revId": "4414b4b74c0509734f48454a936434282fef755e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f0376fa_bcf9af8a",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-04-28T02:19:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ec6aaa7_d3b06da0",
+      "range": {
+        "startLine": 856,
+        "startChar": 66,
+        "endLine": 856,
+        "endChar": 67
+      },
+      "revId": "4414b4b74c0509734f48454a936434282fef755e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
