@@ -808,12 +808,12 @@ static int bejDecode(const uint8_t* schemaDictionary,
             case bejBytestring:
                 // TODO: Add support for BejBytestring decoding.
                 fprintf(stderr, "No BejBytestring support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejNull(&params));
                 break;
             case bejChoice:
                 // TODO: Add support for BejChoice decoding.
                 fprintf(stderr, "No BejChoice support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejNull(&params));
                 break;
             case bejPropertyAnnotation:
                 RETURN_IF_IERROR(bejHandleBejPropertyAnnotation(&params));
@@ -821,14 +821,16 @@ static int bejDecode(const uint8_t* schemaDictionary,
             case bejResourceLink:
                 // TODO: Add support for BejResourceLink decoding.
                 fprintf(stderr, "No BejResourceLink support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejNull(&params));
                 break;
             case bejResourceLinkExpansion:
                 // TODO: Add support for BejResourceLinkExpansion decoding.
                 fprintf(stderr, "No BejResourceLinkExpansion support\n");
-                params.state.encodedStreamOffset = params.sflv.valueEndOffset;
+                RETURN_IF_IERROR(bejHandleBejNull(&params));
                 break;
             default:
+                fprintf(stderr, "Unknown Bej format\n");
+                RETURN_IF_IERROR(bejHandleBejNull(&params));
                 break;
         }
     }
