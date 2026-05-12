@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c372b791_fabe2c00",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-05-12T13:54:13Z",
+      "side": 1,
+      "message": "While I\u0027ve started to work on the BejResourceLink support myself, I\u0027ve found out a bug with the current approach to unsupported Bej formats.\n\nI\u0027ve tried to address it in the `90137: bej_decoder: Output values for unsupported bej formats as null` | https://gerrit.openbmc.org/c/openbmc/libbej/+/90137\n\nPlease review.\n\nI think this addition is unrelated to the current patchset.",
+      "revId": "6bd7b6291dac908dc2fd0c73c360709e04bab107",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
