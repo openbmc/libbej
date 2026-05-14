@@ -6,7 +6,7 @@ static void bejTreeInitParent(struct RedfishPropertyParent* node,
     node->nodeAttr.name = name;
     node->nodeAttr.format.principalDataType = type;
     node->nodeAttr.format.deferredBinding = 0;
-    node->nodeAttr.format.readOnlyProperty = 0;
+    node->nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation = 0;
     node->nodeAttr.format.nullableProperty = 0;
     node->nodeAttr.format.reserved = 0;
     node->nodeAttr.sibling = NULL;
@@ -45,7 +45,7 @@ static void bejTreeInitChildNode(struct RedfishPropertyLeaf* node,
     node->nodeAttr.name = name;
     node->nodeAttr.format.principalDataType = type;
     node->nodeAttr.format.deferredBinding = 0;
-    node->nodeAttr.format.readOnlyProperty = 0;
+    node->nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation = 0;
     node->nodeAttr.format.nullableProperty = 0;
     node->nodeAttr.format.reserved = 0;
     node->nodeAttr.sibling = NULL;
@@ -129,12 +129,13 @@ void bejTreeLinkChildToParent(struct RedfishPropertyParent* parent, void* child)
     parent->nChildren += 1;
 }
 
-void bejTreeUpdateNodeFlags(struct RedfishPropertyNode* node,
-                            bool deferredBinding, bool readOnlyProperty,
-                            bool nullableProperty)
+void bejTreeUpdateNodeFlags(
+    struct RedfishPropertyNode* node, bool deferredBinding,
+    bool readOnlyPropertyAndTopLevelAnnotation, bool nullableProperty)
 {
     node->format.deferredBinding = deferredBinding;
-    node->format.readOnlyProperty = readOnlyProperty;
+    node->format.readOnlyPropertyAndTopLevelAnnotation =
+        readOnlyPropertyAndTopLevelAnnotation;
     node->format.nullableProperty = nullableProperty;
 }
 

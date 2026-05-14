@@ -288,12 +288,13 @@ void bejTreeLinkChildToParent(struct RedfishPropertyParent* parent,
  *
  * @param node - an initialized node.
  * @param deferredBinding - set deferred binding flag.
- * @param readOnlyProperty - set read only property flag.
+ * @param readOnlyPropertyAndTopLevelAnnotation - set read only and top level
+ * annotation property flag.
  * @param nullableProperty - set nullable property flag.
  */
-void bejTreeUpdateNodeFlags(struct RedfishPropertyNode* node,
-                            bool deferredBinding, bool readOnlyProperty,
-                            bool nullableProperty);
+void bejTreeUpdateNodeFlags(
+    struct RedfishPropertyNode* node, bool deferredBinding,
+    bool readOnlyPropertyAndTopLevelAnnotation, bool nullableProperty);
 
 /**
  * @brief Get the next child node to be processed.
