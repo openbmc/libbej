@@ -770,10 +770,12 @@ static int bejDecode(const uint8_t* schemaDictionary,
             return bejErrorInvalidSize;
         }
 
-        if (params.sflv.format.readOnlyProperty)
+        if (params.sflv.format
+                .readOnlyPropertyAndTopLevelAnnotationAndTopLevelAnnotation)
         {
             RETURN_IF_CALLBACK_IERROR(
-                params.decodedCallback->callbackReadonlyProperty,
+                params.decodedCallback
+                    ->callbackReadonlyPropertyAndTopLevelAnnotation,
                 params.sflv.tupleS.sequenceNumber, params.callbacksDataPtr);
         }
 

@@ -16,7 +16,7 @@ TEST(BejTreeTest, InitSet)
     EXPECT_THAT(node.nodeAttr.name, name);
     EXPECT_THAT(node.nodeAttr.format.principalDataType, bejSet);
     EXPECT_THAT(node.nodeAttr.format.deferredBinding, 0);
-    EXPECT_THAT(node.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(node.nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation, 0);
     EXPECT_THAT(node.nodeAttr.format.nullableProperty, 0);
     EXPECT_THAT(node.nodeAttr.sibling, nullptr);
     EXPECT_THAT(node.nChildren, 0);
@@ -33,7 +33,7 @@ TEST(BejTreeTest, InitArray)
     EXPECT_THAT(node.nodeAttr.name, name);
     EXPECT_THAT(node.nodeAttr.format.principalDataType, bejArray);
     EXPECT_THAT(node.nodeAttr.format.deferredBinding, 0);
-    EXPECT_THAT(node.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(node.nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation, 0);
     EXPECT_THAT(node.nodeAttr.format.nullableProperty, 0);
     EXPECT_THAT(node.nodeAttr.sibling, nullptr);
     EXPECT_THAT(node.nChildren, 0);
@@ -50,7 +50,7 @@ TEST(BejTreeTest, InitAnnotatedProp)
     EXPECT_THAT(node.nodeAttr.name, name);
     EXPECT_THAT(node.nodeAttr.format.principalDataType, bejPropertyAnnotation);
     EXPECT_THAT(node.nodeAttr.format.deferredBinding, 0);
-    EXPECT_THAT(node.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(node.nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation, 0);
     EXPECT_THAT(node.nodeAttr.format.nullableProperty, 0);
     EXPECT_THAT(node.nodeAttr.sibling, nullptr);
     EXPECT_THAT(node.nChildren, 0);
@@ -95,7 +95,8 @@ TEST(BejTreeTest, AddInteger)
     EXPECT_THAT(child.leaf.nodeAttr.name, name);
     EXPECT_THAT(child.leaf.nodeAttr.format.principalDataType, bejInteger);
     EXPECT_THAT(child.leaf.nodeAttr.format.deferredBinding, 0);
-    EXPECT_THAT(child.leaf.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(
+        child.leaf.nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation, 0);
     EXPECT_THAT(child.leaf.nodeAttr.format.nullableProperty, 0);
     EXPECT_THAT(child.leaf.nodeAttr.sibling, nullptr);
     EXPECT_THAT(child.value, 1024);
@@ -128,7 +129,8 @@ TEST(BejTreeTest, AddEnum)
     EXPECT_THAT(child.leaf.nodeAttr.name, name);
     EXPECT_THAT(child.leaf.nodeAttr.format.principalDataType, bejEnum);
     EXPECT_THAT(child.leaf.nodeAttr.format.deferredBinding, 0);
-    EXPECT_THAT(child.leaf.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(
+        child.leaf.nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation, 0);
     EXPECT_THAT(child.leaf.nodeAttr.format.nullableProperty, 0);
     EXPECT_THAT(child.leaf.nodeAttr.sibling, nullptr);
     EXPECT_THAT(child.value, enumValue);
@@ -147,7 +149,8 @@ TEST(BejTreeTest, AddString)
     EXPECT_THAT(child.leaf.nodeAttr.name, name);
     EXPECT_THAT(child.leaf.nodeAttr.format.principalDataType, bejString);
     EXPECT_THAT(child.leaf.nodeAttr.format.deferredBinding, 0);
-    EXPECT_THAT(child.leaf.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(
+        child.leaf.nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation, 0);
     EXPECT_THAT(child.leaf.nodeAttr.format.nullableProperty, 0);
     EXPECT_THAT(child.leaf.nodeAttr.sibling, nullptr);
     EXPECT_THAT(child.value, stringValue);
@@ -166,7 +169,8 @@ TEST(BejTreeTest, AddReal)
     EXPECT_THAT(child.leaf.nodeAttr.name, name);
     EXPECT_THAT(child.leaf.nodeAttr.format.principalDataType, bejReal);
     EXPECT_THAT(child.leaf.nodeAttr.format.deferredBinding, 0);
-    EXPECT_THAT(child.leaf.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(
+        child.leaf.nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation, 0);
     EXPECT_THAT(child.leaf.nodeAttr.format.nullableProperty, 0);
     EXPECT_THAT(child.leaf.nodeAttr.sibling, nullptr);
     EXPECT_THAT(child.value, value);
@@ -185,7 +189,8 @@ TEST(BejTreeTest, AddBool)
     EXPECT_THAT(child.leaf.nodeAttr.name, name);
     EXPECT_THAT(child.leaf.nodeAttr.format.principalDataType, bejBoolean);
     EXPECT_THAT(child.leaf.nodeAttr.format.deferredBinding, 0);
-    EXPECT_THAT(child.leaf.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(
+        child.leaf.nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation, 0);
     EXPECT_THAT(child.leaf.nodeAttr.format.nullableProperty, 0);
     EXPECT_THAT(child.leaf.nodeAttr.sibling, nullptr);
     EXPECT_THAT(child.value, value);
@@ -196,12 +201,14 @@ TEST(BejTreeTest, NodeFlags)
     struct RedfishPropertyParent parent;
     bejTreeInitSet(&parent, nullptr);
     EXPECT_THAT(parent.nodeAttr.format.deferredBinding, 0);
-    EXPECT_THAT(parent.nodeAttr.format.readOnlyProperty, 0);
+    EXPECT_THAT(parent.nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation,
+                0);
     EXPECT_THAT(parent.nodeAttr.format.nullableProperty, 0);
 
     bejTreeUpdateNodeFlags(&parent.nodeAttr, true, true, true);
     EXPECT_THAT(parent.nodeAttr.format.deferredBinding, 1);
-    EXPECT_THAT(parent.nodeAttr.format.readOnlyProperty, 1);
+    EXPECT_THAT(parent.nodeAttr.format.readOnlyPropertyAndTopLevelAnnotation,
+                1);
     EXPECT_THAT(parent.nodeAttr.format.nullableProperty, 1);
 }
 

@@ -380,7 +380,7 @@ int BejDecoderJson::decode(const BejDictionaries& dictionaries,
         .callbackReal = callbackReal,
         .callbackBool = callbackBool,
         .callbackAnnotation = callbackAnnotation,
-        .callbackReadonlyProperty = nullptr,
+        .callbackReadonlyPropertyAndTopLevelAnnotation = nullptr,
     };
 
     isPrevAnnotated = false;

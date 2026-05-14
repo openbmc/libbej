@@ -99,7 +99,7 @@ enum BejPrincipalDataType
 struct BejTupleF
 {
     uint8_t deferredBinding:1;
-    uint8_t readOnlyProperty:1;
+    uint8_t readOnlyPropertyAndTopLevelAnnotation:1;
     uint8_t nullableProperty:1;
     uint8_t reserved:1;
     enum BejPrincipalDataType principalDataType:4;
