@@ -59,6 +59,15 @@ struct RedfishPropertyParent* createDummyResource()
     static struct RedfishPropertyParent root;
     bejTreeInitSet(&root, "DummySimple");
 
+    static struct RedfishPropertyParent annotationSet;
+    bejTreeInitSet(&annotationSet, "@Redfish.Settings");
+
+    static struct RedfishPropertyLeafString annotationType;
+    bejTreeAddString(&annotationSet, &annotationType, "@odata.type",
+                     "#Settings.v1_0_0.Settings");
+
+    bejTreeLinkChildToParent(&root, &annotationSet);
+
     static struct RedfishPropertyLeafString id;
     bejTreeAddString(&root, &id, "Id", "Dummy ID");
 
