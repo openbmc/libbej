@@ -69,6 +69,24 @@
       "parentUuid": "75e13b6c_9c67c5ca",
       "revId": "8d6c662fc92d4792713e29d11bc02b700722ae90",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81db9ba7_5e53d3d4",
+        "filename": "src/bej_dictionary.c",
+        "patchSetId": 11
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-05-14T09:22:24Z",
+      "side": 1,
+      "message": "I have sent my fix for the `read_only_property_and_top_level_annotation` flag here:\n\n- 90213: Rename bejTupleF readOnly flag | https://gerrit.openbmc.org/c/openbmc/libbej/+/90213\n- 90214: bej_decoder: Handle top level annotation flag | https://gerrit.openbmc.org/c/openbmc/libbej/+/90214",
+      "parentUuid": "b46229fb_497d06fa",
+      "revId": "8d6c662fc92d4792713e29d11bc02b700722ae90",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
