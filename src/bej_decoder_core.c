@@ -186,7 +186,14 @@ static int bejGetDictionaryAndProperty(
     else if (schemaType == bejAnnotation)
     {
         *dictionary = params->annotDictionary;
-        dictPropOffset = params->state.annoDictPropOffset;
+        if (params->sflv.format.readOnlyPropertyAndTopLevelAnnotation)
+        {
+            dictPropOffset = bejDictGetFirstAnnotatedPropertyOffset();
+        }
+        else
+        {
+            dictPropOffset = params->state.annoDictPropOffset;
+        }
     }
     else
     {
