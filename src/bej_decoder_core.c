@@ -896,10 +896,11 @@ static int bejDecode(
             return bejErrorInvalidSize;
         }
 
-        if (params.sflv.format.readOnlyProperty)
+        if (params.sflv.format.readOnlyPropertyAndTopLevelAnnotation)
         {
             RETURN_IF_CALLBACK_IERROR(
-                params.decodedCallback->callbackReadonlyProperty,
+                params.decodedCallback
+                    ->callbackReadonlyPropertyAndTopLevelAnnotation,
                 params.sflv.tupleS.sequenceNumber, params.callbacksDataPtr);
         }
 

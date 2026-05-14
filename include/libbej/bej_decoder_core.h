@@ -137,7 +137,8 @@ struct BejDecodedCallback
     /**
      * @brief Calls when a read only property is found.
      */
-    int (*callbackReadonlyProperty)(uint32_t sequenceNumber, void* dataPtr);
+    int (*callbackReadonlyPropertyAndTopLevelAnnotation)(
+        uint32_t sequenceNumber, void* dataPtr);
 };
 
 /**
