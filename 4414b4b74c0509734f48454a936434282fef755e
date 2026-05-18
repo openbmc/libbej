@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f02859d_ca2c9eda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-05-18T10:15:57Z",
+      "side": 1,
+      "message": "I personally think that deffered bindings should be resolved not in the libbej, but in the application that have all the information about PDR, i.e. PLDM daemon",
+      "parentUuid": "3157f149_64395650",
+      "revId": "4414b4b74c0509734f48454a936434282fef755e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae8667ea_fd52f7a7",
