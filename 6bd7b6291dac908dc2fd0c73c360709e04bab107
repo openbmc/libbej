@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c63d6d6_66bbcdc6",
+        "filename": "include/libbej/bej_decoder_core.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-05-18T01:33:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba11d703_9c71e51a",
+      "revId": "6bd7b6291dac908dc2fd0c73c360709e04bab107",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0b3fbf5_5e3da423",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-05-14T14:37:35Z",
       "side": 1,
       "message": "Shis should probably be moved after the `bejHandleBejPropertyAnnotation` function",
+      "revId": "6bd7b6291dac908dc2fd0c73c360709e04bab107",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66b928e3_ade0c969",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-05-18T01:33:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0b3fbf5_5e3da423",
       "revId": "6bd7b6291dac908dc2fd0c73c360709e04bab107",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -87,6 +123,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d72698c5_15dd9b01",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-05-18T01:33:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26ff6098_dfa7a818",
+      "revId": "6bd7b6291dac908dc2fd0c73c360709e04bab107",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7d43d99_6dafcdc9",
@@ -100,6 +154,24 @@
       "writtenOn": "2026-05-14T14:37:35Z",
       "side": 1,
       "message": "This should probably be placed after the `.callbackAnnotation \u003d callbackAnnotation,`",
+      "revId": "6bd7b6291dac908dc2fd0c73c360709e04bab107",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d3ecf0_545af98d",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-05-18T01:33:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7d43d99_6dafcdc9",
       "revId": "6bd7b6291dac908dc2fd0c73c360709e04bab107",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
