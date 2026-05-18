@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "495a4704_6f38a4c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-05-18T10:07:21Z",
+      "side": 1,
+      "message": "I\u0027ve tested this patchset on RDE-capable NIC. Looks good to me.",
+      "revId": "6c42eab18f57746e38ac6178b08fbcc545453a92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
