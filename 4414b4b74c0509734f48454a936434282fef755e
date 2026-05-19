@@ -53,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d552666f_23eca2f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-05-19T02:16:05Z",
+      "side": 1,
+      "message": "Do the authors have any other thoughts on this?\nThere is another angle to consider: since libbej knows the deferred binding byte and pldm knows the PDR, should we extend libbej to accept PDR relationships in order to assemble the final result?\n\nSince I\u0027m not entirely sure what the authors\u0027 ultimate goal for libbej was, I\u0027d love to discuss this with you all from multiple perspectives. Just to add, we have actually already implemented this approach on our end, but we wanted to discuss it first because we are concerned it might conflict with your original design intent.\n\nThanks,\nRyan",
+      "parentUuid": "4f02859d_ca2c9eda",
+      "revId": "4414b4b74c0509734f48454a936434282fef755e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae8667ea_fd52f7a7",
