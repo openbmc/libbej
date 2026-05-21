@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d7bd346_e089610c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-05-21T09:39:46Z",
+      "side": 1,
+      "message": "To share some personal experience I think I\u0027ve encountered several RDE devices that return data beyond the main root SFLV value length.\n\nI had problems with several SmartNIC cards with Intel E810 chips on \"Settings\" resources (`Settings`, `Ports/\u003cx\u003e/\u003cy\u003e/Settings` , `NetworkDeviceFunctions/\u003cx\u003e/Settings`...)\n\nFor example here is the answer from GET for the `Settings` resource:\n```\nBEJ Set\n  BEJ String (@odata.etag \u003d W/\\\"77880D60\\\")\n  BEJ Resource Link (@odata.id \u003d %L11)\n  BEJ String (@odata.type \u003d #NetworkAdapter.v1_9_0.NetworkAdapter)\n  BEJ String (Id \u003d Settings)\n  BEJ Boolean (LLDPEnabled \u003d True)\n  BEJ String (Name \u003d E810 Network Adapter Current Setting)\nBEJ Enum \u003c------------------------------ ???\n```\n\nThe last enum has the following values:\n```\n// bejTupleS\n0x01\n0x04 // Major schema (Sequence number\u003d2)\n// bejTupleF\n0x40 //BEJ Enum\n// bejTupleL\n0x01\n0x02 // Length\u003d2\n// bejTupleV\n0x01\n0x01 // Enum value \u003d 1\n```\nI really don\u0027t know what it is. But since this BEJ Enum is outside of the main BEJ Set, libbej decode function fails.\n\nAnd in this case as a BMC user I would still want to correctly display these pages, even if RDE device reports some data beyond the root SFLV value length.\n\nSo I think this patchset brings some good. But maybe other users would want different behaviour, so perharps we need to make it conditional (see comment above)",
+      "revId": "847b0d518cc7e42dea6674e155baff06b8d560de",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f070248_5969c05c",
