@@ -389,10 +389,10 @@ int BejDecoderJson::decode(const BejDictionaries& dictionaries,
         .output = &output,
     };
 
-    return bejDecodePldmBlock(
+    return bejDecodePldmBlockEx(
         &dictionaries, encodedPldmBlock.data(), encodedPldmBlock.size_bytes(),
         &stackCallback, &decodedCallback, (void*)(&callbackData),
-        (void*)(&stack));
+        (void*)(&stack), trailingPolicy);
 }
 
 std::string BejDecoderJson::getOutput()

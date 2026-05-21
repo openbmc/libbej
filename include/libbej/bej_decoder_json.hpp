@@ -34,10 +34,28 @@ class BejDecoderJson
      */
     std::string getOutput();
 
+    /**
+     * @brief Choose how the decoder reacts to buffer bytes that lie
+     * past the encoded payload (i.e. past the root SFLV's value
+     * length).
+     *
+     * Defaults to bejTrailingIgnore so existing callers see no
+     * behavior change. Use bejTrailingWarn for diagnostics or
+     * bejTrailingError to reject malformed input.
+     *
+     * @param[in] policy - trailing-data policy to apply on subsequent
+     * decode() calls.
+     */
+    void setTrailingDataPolicy(BejTrailingDataPolicy policy)
+    {
+        trailingPolicy = policy;
+    }
+
   private:
     bool isPrevAnnotated;
     std::string output;
     std::vector<BejStackProperty> stack;
+    BejTrailingDataPolicy trailingPolicy = bejTrailingIgnore;
 };
 
 } // namespace libbej

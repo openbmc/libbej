@@ -11,6 +11,13 @@
 // TODO: Support nested annotations for version 0xF1F1F000
 const uint32_t supportedBejVersions[] = {0xF1F0F000};
 
+// Smallest legal non-empty BEJ root tuple, in bytes:
+//   nnint(seq=0)        : 1   (single count byte 0x00)
+//   format              : 1
+//   nnint(valueLen=1)   : 2   (count byte 0x01 + value byte 0x01)
+//   value               : 1   (e.g. nnint(0) marking an empty Set/Array)
+static const uint32_t bejMinRootSflvSize = 5;
+
 /**
  * @brief Call a callback function. If the callback function is NULL, this will
  * not do anything. If the callback function returns a non-zero value, this will
@@ -711,12 +718,12 @@ static int bejHandleBejPropertyAnnotation(struct BejHandleTypeFuncParam* params)
  *
  * @return 0 if successful.
  */
-static int bejDecode(const uint8_t* schemaDictionary,
-                     const uint8_t* annotationDictionary,
-                     const uint8_t* enStream, uint32_t streamLen,
-                     const struct BejStackCallback* stackCallback,
-                     const struct BejDecodedCallback* decodedCallback,
-                     void* callbacksDataPtr, void* stackDataPtr)
+static int bejDecode(
+    const uint8_t* schemaDictionary, const uint8_t* annotationDictionary,
+    const uint8_t* enStream, uint32_t streamLen,
+    const struct BejStackCallback* stackCallback,
+    const struct BejDecodedCallback* decodedCallback, void* callbacksDataPtr,
+    void* stackDataPtr, enum BejTrailingDataPolicy trailingPolicy)
 {
     struct BejHandleTypeFuncParam params = {
         .state =
@@ -744,7 +751,62 @@ static int bejDecode(const uint8_t* schemaDictionary,
     uint64_t maxOperations = 1000000;
     uint64_t operationCount = 0;
 
-    while (params.state.encodedStreamOffset < streamLen)
+    // BEJ is self-delimiting via the root SFLV's value length field. Derive
+    // the actual payload size from the encoded data itself so callers may
+    // pass an over-sized buffer (e.g. a fixed-size PLDM message) and the
+    // trailing padding bytes are safely ignored instead of being mis-parsed
+    // as more SFLV tuples.
+    //
+    // Reject buffers smaller than the smallest legal non-empty root tuple
+    // before bejInitSFLVStruct dereferences past the buffer.
+    if (streamLen < bejMinRootSflvSize)
+    {
+        fprintf(stderr, "Stream too short for a BEJ root tuple (%u < %u)\n",
+                streamLen, bejMinRootSflvSize);
+        return bejErrorInvalidSize;
+    }
+    if (!bejInitSFLVStruct(&params))
+    {
+        return bejErrorInvalidSize;
+    }
+    if (params.sflv.valueEndOffset > streamLen)
+    {
+        fprintf(
+            stderr,
+            "Root tuple extends beyond buffer. valueEndOffset: %u, streamLen: %u\n",
+            params.sflv.valueEndOffset, streamLen);
+        return bejErrorInvalidSize;
+    }
+    const uint32_t payloadLen = params.sflv.valueEndOffset;
+
+    // React to bytes that lie past the encoded payload according to the
+    // caller-selected policy. The bound check above already rejected the
+    // case where payloadLen > streamLen, so any difference here means the
+    // buffer is over-sized.
+    if (payloadLen < streamLen)
+    {
+        const uint32_t trailingBytes = streamLen - payloadLen;
+        switch (trailingPolicy)
+        {
+            case bejTrailingError:
+                fprintf(
+                    stderr,
+                    "BEJ has %u trailing bytes after root SFLV (payloadLen=%u, streamLen=%u)\n",
+                    trailingBytes, payloadLen, streamLen);
+                return bejErrorInvalidSize;
+            case bejTrailingWarn:
+                fprintf(
+                    stderr,
+                    "BEJ has %u trailing bytes after root SFLV (payloadLen=%u, streamLen=%u); ignored\n",
+                    trailingBytes, payloadLen, streamLen);
+                break;
+            case bejTrailingIgnore:
+            default:
+                break;
+        }
+    }
+
+    while (params.state.encodedStreamOffset < payloadLen)
     {
         if (++operationCount > maxOperations)
         {
@@ -759,14 +821,14 @@ static int bejDecode(const uint8_t* schemaDictionary,
             return bejErrorInvalidSize;
         }
 
-        // Make sure that the next value segment (SFLV) is within the streamLen
-        if (params.sflv.valueEndOffset > streamLen)
+        // Make sure that the next value segment (SFLV) is within the payload
+        if (params.sflv.valueEndOffset > payloadLen)
         {
             fprintf(
                 stderr,
-                "Value goes beyond stream length. SFLV Offset: %u, valueEndOffset: %u, streamLen: %u\n",
+                "Value goes beyond payload length. SFLV Offset: %u, valueEndOffset: %u, payloadLen: %u\n",
                 params.state.encodedStreamOffset, params.sflv.valueEndOffset,
-                streamLen);
+                payloadLen);
             return bejErrorInvalidSize;
         }
 
@@ -867,6 +929,17 @@ int bejDecodePldmBlock(const struct BejDictionaries* dictionaries,
                        const struct BejDecodedCallback* decodedCallback,
                        void* callbacksDataPtr, void* stackDataPtr)
 {
+    return bejDecodePldmBlockEx(
+        dictionaries, encodedPldmBlock, blockLength, stackCallback,
+        decodedCallback, callbacksDataPtr, stackDataPtr, bejTrailingIgnore);
+}
+
+int bejDecodePldmBlockEx(
+    const struct BejDictionaries* dictionaries, const uint8_t* encodedPldmBlock,
+    uint32_t blockLength, const struct BejStackCallback* stackCallback,
+    const struct BejDecodedCallback* decodedCallback, void* callbacksDataPtr,
+    void* stackDataPtr, enum BejTrailingDataPolicy trailingPolicy)
+{
     NULL_CHECK(dictionaries, "dictionaries");
     NULL_CHECK(dictionaries->schemaDictionary, "schemaDictionary");
     NULL_CHECK(dictionaries->annotationDictionary, "annotationDictionary");
@@ -962,5 +1035,5 @@ int bejDecodePldmBlock(const struct BejDictionaries* dictionaries,
     return bejDecode(dictionaries->schemaDictionary,
                      dictionaries->annotationDictionary, enStream, streamLen,
                      stackCallback, decodedCallback, callbacksDataPtr,
-                     stackDataPtr);
+                     stackDataPtr, trailingPolicy);
 }
