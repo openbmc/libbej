@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52da11ce_302b4ca7",
+        "filename": "include/libbej/bej_decoder_json.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-05-28T21:22:12Z",
+      "side": 1,
+      "message": "I don\u0027t think we should mix adding new api with changing of the behavoiur of the current one.\n\nI think it would be more clear if this patchset leaves it with `bejTrailingError`\n\nAnd if we really want to, modify default setting in the next patch",
+      "revId": "16973b74601dc0b43997d7a85a62850c95445976",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
