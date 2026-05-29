@@ -424,7 +424,7 @@ TEST(BejDecoderPayloadLengthTest, RejectsBufferShorterThanRootTuple)
     EXPECT_EQ(decoder.decode(dictionaries, truncated), bejErrorInvalidSize);
 }
 
-TEST(BejDecoderPayloadLengthTest, RejectsTrailingBytesByDefault)
+TEST(BejDecoderPayloadLengthTest, IgnoresTrailingBytesByDefault)
 {
     auto inputsOrErr = loadInputs(dummySimpleTestFiles);
     ASSERT_TRUE(inputsOrErr);
@@ -438,17 +438,20 @@ TEST(BejDecoderPayloadLengthTest, RejectsTrailingBytesByDefault)
         .errorDictionarySize = inputsOrErr->errorDictionarySize,
     };
 
+    BejDecoderJson refDecoder;
+    ASSERT_EQ(refDecoder.decode(dictionaries, inputsOrErr->encodedStream), 0);
+    std::string refOutput = refDecoder.getOutput();
+
     std::vector<uint8_t> padded(inputsOrErr->encodedStream.begin(),
                                 inputsOrErr->encodedStream.end());
     padded.insert(padded.end(), {0xFF, 0xFF, 0xFF, 0xFF});
 
-    // The default policy is bejTrailingError, so a buffer with bytes past
-    // the root SFLV's value length must be rejected without an explicit
-    // policy being set. This preserves the pre-existing behavior where an
-    // over-sized buffer fails to decode.
+    // The default policy is now bejTrailingIgnore, so a buffer with bytes
+    // past the root SFLV's value length must decode successfully without an
+    // explicit policy being set, matching the unpadded decoding.
     BejDecoderJson decoder;
-    EXPECT_EQ(decoder.decode(dictionaries, std::span(padded)),
-              bejErrorInvalidSize);
+    EXPECT_EQ(decoder.decode(dictionaries, std::span(padded)), 0);
+    EXPECT_EQ(decoder.getOutput(), refOutput);
 }
 
 TEST(BejDecoderPayloadLengthTest, WarnsOnTrailingBytes)

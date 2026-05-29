@@ -933,7 +933,7 @@ int bejDecodePldmBlock(const struct BejDictionaries* dictionaries,
 {
     return bejDecodePldmBlockEx(
         dictionaries, encodedPldmBlock, blockLength, stackCallback,
-        decodedCallback, callbacksDataPtr, stackDataPtr, bejTrailingError);
+        decodedCallback, callbacksDataPtr, stackDataPtr, bejTrailingIgnore);
 }
 
 int bejDecodePldmBlockEx(
