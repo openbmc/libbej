@@ -16,6 +16,24 @@
       "message": "Need to add description for the `trailingPolicy` argument",
       "revId": "1fb6478f73ef9af0a0a3c8a134c0d53335efaff3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb667a5d_acaf4ec9",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-05-29T08:58:37Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "c836a4fe_5efa79e6",
+      "revId": "1fb6478f73ef9af0a0a3c8a134c0d53335efaff3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
