@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c836a4fe_5efa79e6",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-05-29T08:06:26Z",
+      "side": 0,
+      "message": "Need to add description for the `trailingPolicy` argument",
+      "revId": "1fb6478f73ef9af0a0a3c8a134c0d53335efaff3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
