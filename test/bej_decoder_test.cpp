@@ -471,4 +471,163 @@ TEST(BejDecoderResourceLinkTest, DecodeResourceLinkNull)
     EXPECT_TRUE(jsonDecoded["Id"].is_null());
 }
 
+TEST(BejDecoderPayloadLengthTest, IgnoresTrailingBytes)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    // Decode the reference (un-padded) stream so we can compare against it.
+    BejDecoderJson refDecoder;
+    ASSERT_EQ(refDecoder.decode(dictionaries, inputsOrErr->encodedStream), 0);
+    std::string refOutput = refDecoder.getOutput();
+
+    // The decoder must derive the payload length from the root SFLV alone,
+    // so its output has to be byte-identical to the unpadded decoding
+    // regardless of how much padding is appended or what byte pattern it
+    // uses. Cover the common real-world cases (zero padding from a
+    // fixed-size PLDM buffer, 0xFF sentinel, arbitrary pattern) at several
+    // sizes to make the equivalence robust.
+    const std::vector<std::pair<size_t, uint8_t>> paddings = {
+        {1, 0x00}, {8, 0x00}, {64, 0x00}, // zero padding (typical PLDM)
+        {1, 0xFF}, {8, 0xFF}, {64, 0xFF}, // sentinel padding
+        {1, 0xA5}, {8, 0xA5},             // arbitrary pattern
+    };
+
+    for (const auto& [padSize, padByte] : paddings)
+    {
+        std::vector<uint8_t> padded(inputsOrErr->encodedStream.begin(),
+                                    inputsOrErr->encodedStream.end());
+        padded.insert(padded.end(), padSize, padByte);
+
+        BejDecoderJson decoder;
+        decoder.setTrailingDataPolicy(bejTrailingIgnore);
+        EXPECT_EQ(decoder.decode(dictionaries, std::span(padded)), 0)
+            << "padSize=" << padSize << " padByte=" << int(padByte);
+        EXPECT_EQ(decoder.getOutput(), refOutput)
+            << "padSize=" << padSize << " padByte=" << int(padByte);
+    }
+}
+
+TEST(BejDecoderPayloadLengthTest, RejectsBufferShorterThanRootTuple)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    // Truncate the buffer mid-payload. The root SFLV claims a value length
+    // that no longer fits, so the decoder must reject the input upfront
+    // rather than partially decoding it.
+    std::span<const uint8_t> truncated(inputsOrErr->encodedStream.data(),
+                                       inputsOrErr->encodedStream.size() - 1);
+
+    BejDecoderJson decoder;
+    EXPECT_EQ(decoder.decode(dictionaries, truncated), bejErrorInvalidSize);
+}
+
+TEST(BejDecoderPayloadLengthTest, RejectsTrailingBytesByDefault)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    std::vector<uint8_t> padded(inputsOrErr->encodedStream.begin(),
+                                inputsOrErr->encodedStream.end());
+    padded.insert(padded.end(), {0xFF, 0xFF, 0xFF, 0xFF});
+
+    // The default policy is bejTrailingError, so a buffer with bytes past
+    // the root SFLV's value length must be rejected without an explicit
+    // policy being set. This preserves the pre-existing behavior where an
+    // over-sized buffer fails to decode.
+    BejDecoderJson decoder;
+    EXPECT_EQ(decoder.decode(dictionaries, std::span(padded)),
+              bejErrorInvalidSize);
+}
+
+TEST(BejDecoderPayloadLengthTest, WarnsOnTrailingBytes)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    BejDecoderJson refDecoder;
+    ASSERT_EQ(refDecoder.decode(dictionaries, inputsOrErr->encodedStream), 0);
+    std::string refOutput = refDecoder.getOutput();
+
+    std::vector<uint8_t> padded(inputsOrErr->encodedStream.begin(),
+                                inputsOrErr->encodedStream.end());
+    padded.insert(padded.end(), {0xFF, 0xFF, 0xFF, 0xFF});
+
+    // Warn policy must still decode successfully and produce the same
+    // output as the unpadded reference, while emitting a diagnostic to
+    // stderr that mentions the trailing bytes.
+    BejDecoderJson decoder;
+    decoder.setTrailingDataPolicy(bejTrailingWarn);
+
+    testing::internal::CaptureStderr();
+    EXPECT_EQ(decoder.decode(dictionaries, std::span(padded)), 0);
+    std::string captured = testing::internal::GetCapturedStderr();
+
+    EXPECT_EQ(decoder.getOutput(), refOutput);
+    EXPECT_THAT(captured, testing::HasSubstr("trailing bytes after root SFLV"));
+    EXPECT_THAT(captured, testing::HasSubstr("ignored"));
+}
+
+TEST(BejDecoderPayloadLengthTest, ErrorsOnTrailingBytes)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    std::vector<uint8_t> padded(inputsOrErr->encodedStream.begin(),
+                                inputsOrErr->encodedStream.end());
+    padded.insert(padded.end(), {0xFF, 0xFF, 0xFF, 0xFF});
+
+    // Explicit error policy rejects the input as bejErrorInvalidSize.
+    BejDecoderJson strict;
+    strict.setTrailingDataPolicy(bejTrailingError);
+    EXPECT_EQ(strict.decode(dictionaries, std::span(padded)),
+              bejErrorInvalidSize);
+}
+
 } // namespace libbej
