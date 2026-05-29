@@ -964,7 +964,7 @@ int bejDecodePldmBlock(const struct BejDictionaries* dictionaries,
 {
     return bejDecodePldmBlockWithPolicy(
         dictionaries, encodedPldmBlock, blockLength, stackCallback,
-        decodedCallback, callbacksDataPtr, stackDataPtr, bejTrailingError);
+        decodedCallback, callbacksDataPtr, stackDataPtr, bejTrailingIgnore);
 }
 
 int bejDecodePldmBlockWithPolicy(

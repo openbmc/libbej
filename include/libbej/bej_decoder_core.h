@@ -200,7 +200,7 @@ struct BejHandleTypeFuncParam
  */
 enum BejTrailingDataPolicy
 {
-    // Silently ignore trailing bytes. Decode succeeds.
+    // Silently ignore trailing bytes. Decode succeeds. Default.
     bejTrailingIgnore = 0,
     // Ignore trailing bytes but print a warning to stderr.
     bejTrailingWarn,
@@ -227,7 +227,7 @@ enum BejTrailingDataPolicy
  *
  * @return 0 if successful.
  *
- * @note Equivalent to bejDecodePldmBlockWithPolicy with bejTrailingError.
+ * @note Equivalent to bejDecodePldmBlockWithPolicy with bejTrailingIgnore.
  */
 int bejDecodePldmBlock(const struct BejDictionaries* dictionaries,
                        const uint8_t* encodedPldmBlock, uint32_t blockLength,
