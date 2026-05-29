@@ -185,6 +185,24 @@ struct BejHandleTypeFuncParam
 };
 
 /**
+ * @brief Policy for handling buffer bytes that lie past the encoded
+ * payload (i.e. past the root SFLV's value length).
+ *
+ * Trailing bytes can come from a fixed-size PLDM transport buffer or
+ * from a device that emits extra tuples beyond what the root SFLV
+ * declares. Callers pick the policy that fits their use case.
+ */
+enum BejTrailingDataPolicy
+{
+    // Silently ignore trailing bytes. Decode succeeds.
+    bejTrailingIgnore = 0,
+    // Ignore trailing bytes but print a warning to stderr.
+    bejTrailingWarn,
+    // Return bejErrorInvalidSize if trailing bytes are present.
+    bejTrailingError,
+};
+
+/**
  * @brief Decodes a PLDM block. Maximum encoded stream size the decoder
  * supports is 32bits.
  *
@@ -202,12 +220,31 @@ struct BejHandleTypeFuncParam
  * can be used pass additional data.
  *
  * @return 0 if successful.
+ *
+ * @note Equivalent to bejDecodePldmBlockWithPolicy with bejTrailingError.
  */
 int bejDecodePldmBlock(const struct BejDictionaries* dictionaries,
                        const uint8_t* encodedPldmBlock, uint32_t blockLength,
                        const struct BejStackCallback* stackCallback,
                        const struct BejDecodedCallback* decodedCallback,
                        void* callbacksDataPtr, void* stackDataPtr);
+
+/**
+ * @brief Decodes a PLDM block with an explicit trailing-data policy.
+ *
+ * Same as bejDecodePldmBlock but lets the caller choose how to react
+ * when the buffer contains bytes past the encoded BEJ payload.
+ *
+ * @param[in] trailingPolicy - policy for handling trailing bytes.
+ *
+ * @return 0 if successful, bejErrorInvalidSize when the policy is
+ * bejTrailingError and trailing bytes are present.
+ */
+int bejDecodePldmBlockWithPolicy(
+    const struct BejDictionaries* dictionaries, const uint8_t* encodedPldmBlock,
+    uint32_t blockLength, const struct BejStackCallback* stackCallback,
+    const struct BejDecodedCallback* decodedCallback, void* callbacksDataPtr,
+    void* stackDataPtr, enum BejTrailingDataPolicy trailingPolicy);
 
 #ifdef __cplusplus
 }
