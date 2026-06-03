@@ -16,6 +16,23 @@
       "message": "I\u0027ve tested this patchset on RDE-capable NIC. Looks good to me.",
       "revId": "6c42eab18f57746e38ac6178b08fbcc545453a92",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e642abf_136da949",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 13
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2026-06-03T22:35:40Z",
+      "side": 1,
+      "message": "I think this could introduce risk of OOB reads if the length is not sanitized first:\n\nMaybe something like\n\n```suggestion\n        if (params-\u003esflv.valueLength \u003c bejGetNnintSize(params-\u003esflv.value))\n        {\n            return bejErrorInvalidSize;\n        }\n        // ResourceLink value is a PDR ID (NNINT).\n```",
+      "revId": "6c42eab18f57746e38ac6178b08fbcc545453a92",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
