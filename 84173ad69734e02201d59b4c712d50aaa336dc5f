@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1eed5f55_58863182",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2026-06-03T23:26:08Z",
+      "side": 1,
+      "message": "@kasunath@google.com do you forsee this change in default behavior causing any issues?",
+      "revId": "84173ad69734e02201d59b4c712d50aaa336dc5f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
