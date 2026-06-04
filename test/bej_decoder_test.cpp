@@ -58,6 +58,19 @@ const BejTestInputFiles dummySimpleTestFiles = {
     .encodedStreamFile = "../test/encoded/dummy_simple_enc.bin",
 };
 
+// Build a BejDictionaries view over already-loaded test inputs.
+BejDictionaries makeDictionaries(const BejTestInputs& inputs)
+{
+    return BejDictionaries{
+        .schemaDictionary = inputs.schemaDictionary,
+        .schemaDictionarySize = inputs.schemaDictionarySize,
+        .annotationDictionary = inputs.annotationDictionary,
+        .annotationDictionarySize = inputs.annotationDictionarySize,
+        .errorDictionary = inputs.errorDictionary,
+        .errorDictionarySize = inputs.errorDictionarySize,
+    };
+}
+
 TEST_P(BejDecoderTest, Decode)
 {
     const BejDecoderTestParams& test_case = GetParam();
@@ -294,6 +307,51 @@ TEST(BejDecoderSecurityTest, ValueBeyondStreamLength)
 
     BejDecoderJson decoder;
     EXPECT_THAT(decoder.decode(dictionaries, std::span(outputBuffer)),
+                bejErrorInvalidSize);
+}
+
+TEST(BejDecoderSecurityTest, MalformedRootSequenceSizeTooLarge)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+    BejDictionaries dictionaries = makeDictionaries(*inputsOrErr);
+
+    // byte[0]=0xFF claims a 255-byte sequence number, far past this 5-byte
+    // buffer; must be rejected before bejGetNnint reads the sequence value.
+    std::vector<uint8_t> malformed = {0xFF, 0x00, 0x00, 0x00, 0x00};
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(malformed)),
+                bejErrorInvalidSize);
+}
+
+TEST(BejDecoderSecurityTest, MalformedRootValueLengthSizeTooLarge)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+    BejDictionaries dictionaries = makeDictionaries(*inputsOrErr);
+
+    // seq size=1, seq=0, format=0, then byte[3]=0xFF claims a 255-byte value
+    // length that runs past this 5-byte buffer.
+    std::vector<uint8_t> malformed = {0x01, 0x00, 0x00, 0xFF, 0x00};
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(malformed)),
+                bejErrorInvalidSize);
+}
+
+TEST(BejDecoderSecurityTest, MalformedRootHeaderTruncated)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+    BejDictionaries dictionaries = makeDictionaries(*inputsOrErr);
+
+    // byte[0]=0x0A pushes the value-length size byte to index 12, past this
+    // 6-byte buffer, even though it clears the minimum-root-size check.
+    std::vector<uint8_t> malformed = {0x0A, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(malformed)),
                 bejErrorInvalidSize);
 }
 
