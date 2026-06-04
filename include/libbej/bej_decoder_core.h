@@ -41,8 +41,8 @@ struct BejStackProperty
 };
 
 /**
- * @brief Holds the information related to the current bejTuple being
- * decoded.
+ * @brief Holds the decoder state: the stream-wide length bound plus the
+ * position of the current bejTuple being decoded.
  */
 struct BejDecoderStates
 {
@@ -51,6 +51,7 @@ struct BejDecoderStates
     uint16_t annoDictPropOffset;
     uint32_t encodedStreamOffset;
     const uint8_t* encodedSubStream;
+    uint32_t streamLen;
 };
 
 /**

@@ -61,10 +61,12 @@ static int64_t bejGetIntegerValue(const uint8_t* bytes, uint8_t numOfBytes)
  * @brief Get offsets of SFLV fields with respect to the enSegment start.
  *
  * @param[in] enSegment - a valid pointer to a start of a SFLV bejTuple.
+ * @param[in] remaining - number of valid bytes available from enSegment.
  * @param[out] offsets - this will hold the local offsets.
+ * @return true if the SFLV header fits within remaining, false otherwise.
  */
-static void bejGetLocalBejSFLVOffsets(const uint8_t* enSegment,
-                                      struct BejSFLVOffset* offsets)
+static bool bejGetLocalBejSFLVOffsets(
+    const uint8_t* enSegment, uint32_t remaining, struct BejSFLVOffset* offsets)
 {
     // Structure of the SFLV.
     //   [Number of bytes need to represent the sequence number] - uint8_t
@@ -73,21 +75,40 @@ static void bejGetLocalBejSFLVOffsets(const uint8_t* enSegment,
     //   [Number of bytes need to represent the value length] - uint8_t
     //   [Value length] - multi byte
 
+    // Need the sequence-number size byte itself.
+    if (remaining < sizeof(uint8_t))
+    {
+        return false;
+    }
     // Number of bytes need to represent the sequence number.
     const uint8_t seqSize = *enSegment;
     // Start of format.
     const uint32_t formatOffset = sizeof(uint8_t) + seqSize;
     // Start of length of the value-length bytes.
     const uint32_t valueLenNnintOffset = formatOffset + sizeof(uint8_t);
+    // valueLenNnintOffset is an index we dereference, so it must be <
+    // remaining; this also covers the sequence-number bytes and the format
+    // byte.
+    if (valueLenNnintOffset >= remaining)
+    {
+        return false;
+    }
     // Number of bytes need to represent the value length.
     const uint8_t valueLengthSize = *(enSegment + valueLenNnintOffset);
     // Start of the Value.
     const uint32_t valueOffset =
         valueLenNnintOffset + sizeof(uint8_t) + valueLengthSize;
+    // valueOffset is a count of header bytes, so it may equal remaining; a
+    // larger value means the value-length nnint runs past the buffer.
+    if (valueOffset > remaining)
+    {
+        return false;
+    }
 
     offsets->formatOffset = formatOffset;
     offsets->valueLenNnintOffset = valueLenNnintOffset;
     offsets->valueOffset = valueOffset;
+    return true;
 }
 
 /**
@@ -100,9 +121,19 @@ static void bejGetLocalBejSFLVOffsets(const uint8_t* enSegment,
 static bool bejInitSFLVStruct(struct BejHandleTypeFuncParam* params)
 {
     struct BejSFLVOffset localOffset;
+    if (params->state.encodedStreamOffset >= params->state.streamLen)
+    {
+        return false;
+    }
+    const uint32_t remaining =
+        params->state.streamLen - params->state.encodedStreamOffset;
     // Get offsets of different SFLV fields with respect to start of the encoded
     // segment.
-    bejGetLocalBejSFLVOffsets(params->state.encodedSubStream, &localOffset);
+    if (!bejGetLocalBejSFLVOffsets(params->state.encodedSubStream, remaining,
+                                   &localOffset))
+    {
+        return false;
+    }
     struct BejSFLV* sflv = &params->sflv;
     const uint32_t valueLength = (uint32_t)(bejGetNnint(
         params->state.encodedSubStream + localOffset.valueLenNnintOffset));
@@ -155,12 +186,12 @@ static bool bejInitSFLVStruct(struct BejHandleTypeFuncParam* params)
 static uint32_t bejGetFirstTupleOffset(
     const struct BejHandleTypeFuncParam* params)
 {
-    struct BejSFLVOffset localOffset;
-    // Get the offset of the value with respect to the current encoded segment
-    // being decoded.
-    bejGetLocalBejSFLVOffsets(params->state.encodedSubStream, &localOffset);
-    return params->state.encodedStreamOffset + localOffset.valueOffset +
-           bejGetNnintSize(params->sflv.value);
+    // bejInitSFLVStruct already validated and recorded the value bounds; the
+    // value starts at valueEndOffset - valueLength. Skip the leading count
+    // nnint to reach the first tuple.
+    const uint32_t valueStartOffset =
+        params->sflv.valueEndOffset - params->sflv.valueLength;
+    return valueStartOffset + bejGetNnintSize(params->sflv.value);
 }
 
 /**
@@ -771,6 +802,7 @@ static int bejDecode(
                 // Current location of the encoded segment we are processing.
                 .encodedStreamOffset = 0,
                 .encodedSubStream = enStream,
+                .streamLen = streamLen,
             },
         .mainDictionary = schemaDictionary,
         .annotDictionary = annotationDictionary,
