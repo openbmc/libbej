@@ -99,6 +99,24 @@
       "parentUuid": "3af683a9_a2c59df5",
       "revId": "3223e2af6db44f9dc31d278f47fa797deda37de8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36d92561_1cbe3bd4",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-04T04:36:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24181291_157a9d77",
+      "revId": "3223e2af6db44f9dc31d278f47fa797deda37de8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
