@@ -22,6 +22,30 @@
       },
       "revId": "f23d2b3daf35a2a8694fc413d15eae71f111bf19",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cbb3283_bb33d946",
+        "filename": "src/bej_decoder_core.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-04T08:52:02Z",
+      "side": 1,
+      "message": "I think the corruption should be very specific for this to be an issue.\n\nThe code processes SFLV tuples. So to get the issue we need every L small enough to get many records. And in every message we need to have F with some unknown value.\n\nSo in this regard this case becomes no different from JSON with many BejBytestring/BejChoice/BejResourceLink records, where the current code simply prints:\n```No BejBytestring/BejChoice/BejResourceLink support```\n\nSo if we would want to introduce some debug flag / rate limit, we should probably do it general in libbej, including the print mentioned above. With this in mind I think this is a completely separate change and shouldn\u0027 be covered in this patchset",
+      "parentUuid": "d6a81b5a_c8549930",
+      "range": {
+        "startLine": 832,
+        "startChar": 0,
+        "endLine": 832,
+        "endChar": 59
+      },
+      "revId": "f23d2b3daf35a2a8694fc413d15eae71f111bf19",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
