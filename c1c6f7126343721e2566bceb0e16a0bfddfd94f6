@@ -16,6 +16,24 @@
       "message": "looks like this may be superseded by the other changes in review",
       "revId": "c1c6f7126343721e2566bceb0e16a0bfddfd94f6",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1352552a_6a9eac25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-05T02:52:54Z",
+      "side": 1,
+      "message": "I\u0027ve rebased onto current main (PS15) and resolved the conflict in the\nbejResourceLink case by keeping the real decoder; the null fallback is\nretained for the other still-unsupported formats.\n\nsee \n\nhttps://gerrit.openbmc.org/c/openbmc/libbej/+/90137",
+      "parentUuid": "c8db565e_a40708e1",
+      "revId": "c1c6f7126343721e2566bceb0e16a0bfddfd94f6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
