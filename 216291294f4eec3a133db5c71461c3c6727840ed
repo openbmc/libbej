@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a6f65d8_2e881841",
+        "filename": "include/libbej/bej_common.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-08T15:40:29Z",
+      "side": 1,
+      "message": "I see that patchset has a merge conflict now. I\u0027m waiting for resolve on this thread before continue.\n\nBTW: what would be the policy if this is indeed API breaking?",
+      "parentUuid": "a2f413b5_e935fc3f",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 49
+      },
+      "revId": "216291294f4eec3a133db5c71461c3c6727840ed",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c9602fb_96da14d3",
         "filename": "include/libbej/bej_tree.h",
         "patchSetId": 2
