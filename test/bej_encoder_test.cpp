@@ -4,6 +4,7 @@
 
 #include "bej_common_test.hpp"
 #include "bej_decoder_json.hpp"
+#include "bej_deferred_binding_format.hpp"
 #include "bej_encoder_json.hpp"
 
 #include <vector>
@@ -432,6 +433,258 @@ TEST_P(BejEncoderTest, EncodeWrapper)
             nlohmann::json::parse(test_case.expectedJson);
     }
     EXPECT_TRUE(jsonDecoded.dump() == inputsOrErr->expectedJson.dump());
+}
+
+TEST(BejEncoderDeferredBindingTest, DeferredBindingEncodeDecode)
+{
+    auto inputsOrErr = loadInputs(driveOemTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    // We will use DriveOEM which has `@odata.id`: `/redfish/v1/drives/1`.
+    // Let's create a reverse mapping config where resourceId = 30 points to
+    // this URI.
+    BejDeferredBindingMap bindings;
+    bindings[bejBinding::resourceLink(30)] = "/redfish/v1/drives/1";
+    bindings[bejBinding::instanceId(30)] = "Drive1";
+    // Target action mapping simulation
+    bindings[bejBinding::action(30, 1)] =
+        "/redfish/v1/drives/1/Actions/Drive.Reset";
+
+    libbej::BejEncoderJson encoder;
+    struct RedfishPropertyParent* root = createDriveOem();
+
+    // Encode with binding map
+    encoder.encode(&dictionaries, bejMajorSchemaClass, root, bindings);
+
+    std::vector<uint8_t> outputBuffer = encoder.getOutput();
+
+    // Decode with binding map
+    libbej::BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(outputBuffer), bindings),
+                0);
+    std::string decoded = decoder.getOutput();
+    nlohmann::json jsonDecoded = nlohmann::json::parse(decoded);
+
+    // After decode, the json should perfectly match the input strings
+    // because `%L30`, `%I30` should be resolved back to their original strings.
+    std::string odataId = jsonDecoded["@odata.id"].get<std::string>();
+    EXPECT_EQ(odataId, "/redfish/v1/drives/1");
+
+    std::string id = jsonDecoded["Id"].get<std::string>();
+    EXPECT_EQ(id, "Drive1");
+
+    // Action URI
+    std::string actionTarget =
+        jsonDecoded["Actions"]["#Drive.Reset"]["target"].get<std::string>();
+    EXPECT_EQ(actionTarget, "/redfish/v1/drives/1/Actions/Drive.Reset");
+}
+
+TEST(BejEncoderDeferredBindingTest, EncodeDoesNotMutateInputTree)
+{
+    auto inputsOrErr = loadInputs(driveOemTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    BejDeferredBindingMap bindings;
+    bindings[bejBinding::resourceLink(30)] = "/redfish/v1/drives/1";
+    bindings[bejBinding::instanceId(30)] = "Drive1";
+    bindings[bejBinding::action(30, 1)] =
+        "/redfish/v1/drives/1/Actions/Drive.Reset";
+
+    // encode() temporarily rewrites matching leaf values to placeholders, then
+    // must restore them (value pointers and deferred-binding flags) before
+    // returning.
+    struct RedfishPropertyParent* root = createDriveOem();
+    libbej::BejEncoderJson boundEncoder;
+    boundEncoder.encode(&dictionaries, bejMajorSchemaClass, root, bindings);
+
+    // Re-encoding the same tree WITHOUT bindings must reproduce a clean encode
+    // of an untouched tree; any residual placeholder or flag would differ.
+    libbej::BejEncoderJson reuseEncoder;
+    reuseEncoder.encode(&dictionaries, bejMajorSchemaClass, root);
+    std::vector<uint8_t> afterRestore = reuseEncoder.getOutput();
+
+    libbej::BejEncoderJson referenceEncoder;
+    referenceEncoder.encode(&dictionaries, bejMajorSchemaClass,
+                            createDriveOem());
+    std::vector<uint8_t> reference = referenceEncoder.getOutput();
+
+    EXPECT_EQ(afterRestore, reference);
+}
+
+TEST(BejEncoderDeferredBindingTest, UnresolvedPlaceholdersBecomeInvalidForm)
+{
+    auto inputsOrErr = loadInputs(driveOemTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    BejDeferredBindingMap bindings;
+    bindings[bejBinding::resourceLink(30)] = "/redfish/v1/drives/1";
+    bindings[bejBinding::instanceId(30)] = "Drive1";
+    bindings[bejBinding::action(30, 1)] =
+        "/redfish/v1/drives/1/Actions/Drive.Reset";
+
+    libbej::BejEncoderJson encoder;
+    encoder.encode(&dictionaries, bejMajorSchemaClass, createDriveOem(),
+                   bindings);
+    std::vector<uint8_t> outputBuffer = encoder.getOutput();
+
+    // Decode with a non-empty map that does NOT contain resource 30: resolution
+    // is enabled, so each unresolved placeholder must become its DSP0218
+    // Table 42 invalid form rather than being left raw.
+    BejDeferredBindingMap unrelated;
+    unrelated[bejBinding::resourceLink(99)] = "/redfish/v1/unrelated";
+
+    libbej::BejDecoderJson decoder;
+    EXPECT_THAT(
+        decoder.decode(dictionaries, std::span(outputBuffer), unrelated), 0);
+    nlohmann::json jsonDecoded = nlohmann::json::parse(decoder.getOutput());
+
+    EXPECT_EQ(jsonDecoded["@odata.id"].get<std::string>(), "/invalid.PDR30");
+    EXPECT_EQ(jsonDecoded["Id"].get<std::string>(), "invalid");
+    EXPECT_EQ(
+        jsonDecoded["Actions"]["#Drive.Reset"]["target"].get<std::string>(),
+        "/invalid.30.1");
+}
+
+TEST(BejEncoderDeferredBindingTest, DisabledModeLeavesPlaceholdersRaw)
+{
+    auto inputsOrErr = loadInputs(driveOemTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    BejDeferredBindingMap bindings;
+    bindings[bejBinding::resourceLink(30)] = "/redfish/v1/drives/1";
+    bindings[bejBinding::instanceId(30)] = "Drive1";
+    bindings[bejBinding::action(30, 1)] =
+        "/redfish/v1/drives/1/Actions/Drive.Reset";
+
+    libbej::BejEncoderJson encoder;
+    encoder.encode(&dictionaries, bejMajorSchemaClass, createDriveOem(),
+                   bindings);
+    std::vector<uint8_t> outputBuffer = encoder.getOutput();
+
+    // Decode without a map (the default): resolution is disabled, so every
+    // placeholder is preserved verbatim instead of being substituted.
+    libbej::BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(outputBuffer)), 0);
+    nlohmann::json jsonDecoded = nlohmann::json::parse(decoder.getOutput());
+
+    EXPECT_EQ(jsonDecoded["@odata.id"].get<std::string>(), "%L30");
+    EXPECT_EQ(jsonDecoded["Id"].get<std::string>(), "%I30");
+    EXPECT_EQ(
+        jsonDecoded["Actions"]["#Drive.Reset"]["target"].get<std::string>(),
+        "%T30.1");
+}
+
+TEST(BejEncoderDeferredBindingTest, IdlessMarkerRoundTrips)
+{
+    auto inputsOrErr = loadInputs(driveOemTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    // Map only the id-less %C token to the DriveOEM @odata.id value, so the
+    // encoder rewrites that leaf to "%C". Exercises a marker carrying no
+    // resource id end to end.
+    BejDeferredBindingMap bindings;
+    bindings[bejBinding::chassis()] = "/redfish/v1/drives/1";
+
+    libbej::BejEncoderJson encoder;
+    encoder.encode(&dictionaries, bejMajorSchemaClass, createDriveOem(),
+                   bindings);
+    std::vector<uint8_t> outputBuffer = encoder.getOutput();
+
+    // Enabled: %C resolves back to the bound value.
+    libbej::BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(outputBuffer), bindings),
+                0);
+    nlohmann::json bound = nlohmann::json::parse(decoder.getOutput());
+    EXPECT_EQ(bound["@odata.id"].get<std::string>(), "/redfish/v1/drives/1");
+
+    // Disabled: the id-less placeholder is preserved raw as "%C".
+    libbej::BejDecoderJson rawDecoder;
+    EXPECT_THAT(rawDecoder.decode(dictionaries, std::span(outputBuffer)), 0);
+    nlohmann::json raw = nlohmann::json::parse(rawDecoder.getOutput());
+    EXPECT_EQ(raw["@odata.id"].get<std::string>(), "%C");
+}
+
+TEST(BejEncoderDeferredBindingTest, SystemMarkerRoundTrips)
+{
+    auto inputsOrErr = loadInputs(driveOemTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+
+    // Map only the id-less %S token to the DriveOEM @odata.id value, so the
+    // encoder rewrites that leaf to "%S".
+    BejDeferredBindingMap bindings;
+    bindings[bejBinding::system()] = "/redfish/v1/drives/1";
+
+    libbej::BejEncoderJson encoder;
+    encoder.encode(&dictionaries, bejMajorSchemaClass, createDriveOem(),
+                   bindings);
+    std::vector<uint8_t> outputBuffer = encoder.getOutput();
+
+    // Enabled: %S resolves back to the bound value.
+    libbej::BejDecoderJson decoder;
+    EXPECT_THAT(decoder.decode(dictionaries, std::span(outputBuffer), bindings),
+                0);
+    nlohmann::json bound = nlohmann::json::parse(decoder.getOutput());
+    EXPECT_EQ(bound["@odata.id"].get<std::string>(), "/redfish/v1/drives/1");
+
+    // Disabled: the id-less placeholder is preserved raw as "%S".
+    libbej::BejDecoderJson rawDecoder;
+    EXPECT_THAT(rawDecoder.decode(dictionaries, std::span(outputBuffer)), 0);
+    nlohmann::json raw = nlohmann::json::parse(rawDecoder.getOutput());
+    EXPECT_EQ(raw["@odata.id"].get<std::string>(), "%S");
 }
 
 /**

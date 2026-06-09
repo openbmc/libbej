@@ -1,0 +1,10 @@
+{
+    "%L1": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1",
+    "%I1": "RDE1_1",
+    "%L10": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/Ports",
+    "%L20": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/NetworkDeviceFunctions",
+    "%L100": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/Ports/RDE1_100",
+    "%L101": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/Ports/RDE1_101",
+    "%L200": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/NetworkDeviceFunctions/RDE1_200",
+    "%L201": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/NetworkDeviceFunctions/RDE1_201"
+}
