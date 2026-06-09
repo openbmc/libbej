@@ -1,0 +1,8 @@
+Code-Review+2: Brandon Kim <brandonkim@google.com>
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Submitted-by: <ryan_huang@jabil.com>
+Submitted-at: Tue, 09 Jun 2026 02:35:26 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/libbej/+/90662
+Comments-Total: 2
+Project: openbmc/libbej
+Branch: refs/heads/main
