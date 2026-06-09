@@ -602,7 +602,6 @@ static int bejHandleBejEnum(struct BejHandleTypeFuncParam* params)
  */
 static int bejHandleBejString(struct BejHandleTypeFuncParam* params)
 {
-    // TODO: Handle deferred bindings.
     const char* propName = bejGetPropName(params);
 
     if (params->sflv.valueLength == 0)
@@ -615,7 +614,7 @@ static int bejHandleBejString(struct BejHandleTypeFuncParam* params)
         RETURN_IF_CALLBACK_IERROR(
             params->decodedCallback->callbackString, propName,
             (const char*)(params->sflv.value), params->sflv.valueLength,
-            params->callbacksDataPtr);
+            params->sflv.format.deferredBinding, params->callbacksDataPtr);
     }
     params->state.encodedStreamOffset = params->sflv.valueEndOffset;
     return bejProcessEnding(params, /*canBeEmpty=*/false);

@@ -2,6 +2,8 @@ libbej_headers = files(
     'bej_common.h',
     'bej_decoder_core.h',
     'bej_decoder_json.hpp',
+    'bej_deferred_binding.hpp',
+    'bej_deferred_binding_format.hpp',
     'bej_dictionary.h',
     'bej_encoder_core.h',
     'bej_encoder_json.hpp',

@@ -1,0 +1,71 @@
+{
+    "@odata.etag": "E98A4709",
+    "@odata.id": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1",
+    "@odata.type": "#NetworkAdapter.v1_3_0.NetworkAdapter",
+    "Id": "RDE1_1",
+    "Actions": {
+        "ResetSettingsToDefault": {}
+    },
+    "Controllers": [
+        {
+            "ControllerCapabilities": {
+                "DataCenterBridging": {
+                    "Capable": true
+                },
+                "NetworkDeviceFunctionCount": 2,
+                "NetworkPortCount": 2,
+                "VirtualizationOffload": {
+                    "SRIOV": {
+                        "SRIOVVEPACapable": true
+                    },
+                    "VirtualFunction": {
+                        "DeviceMaxCount": 256,
+                        "MinAssignmentGroupSize": 1,
+                        "NetworkPortMaxCount": 256
+                    }
+                }
+            },
+            "FirmwarePackageVersion": "5.1.9",
+            "Links": {
+                "NetworkDeviceFunctions": [
+                    {
+                        "@odata.id": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/NetworkDeviceFunctions/RDE1_200"
+                    },
+                    {
+                        "@odata.id": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/NetworkDeviceFunctions/RDE1_201"
+                    }
+                ],
+                "NetworkPorts": [
+                    {
+                        "@odata.id": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/Ports/RDE1_100"
+                    },
+                    {
+                        "@odata.id": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/Ports/RDE1_101"
+                    }
+                ]
+            },
+            "PCIeInterface": {
+                "LanesInUse": 4,
+                "MaxLanes": 8,
+                "MaxPCIeType": "Gen2",
+                "PCIeType": "Gen4"
+            }
+        }
+    ],
+    "Manufacturer": "Intel Corp.",
+    "Model": "E810-XXVAM2",
+    "Name": "E810 Network Adapter",
+    "NetworkDeviceFunctions": {
+        "@odata.id": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/NetworkDeviceFunctions"
+    },
+    "NetworkPorts": {
+        "@odata.id": "/redfish/v1/Chassis/RDE/NetworkAdapters/RDE1_1/Ports"
+    },
+    "PartNumber": "K71121-002",
+    "SKU": "XXVAM2",
+    "SerialNumber": "30B1A8FFFF9196B4",
+    "Status": {
+        "State": "Starting",
+        "HealthRollup": "OK"
+    }
+}

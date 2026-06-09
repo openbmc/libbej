@@ -3,6 +3,8 @@
 #include "bej_common.h"
 #include "bej_encoder_core.h"
 
+#include "bej_deferred_binding.hpp"
+
 #include <vector>
 
 namespace libbej
@@ -69,11 +71,15 @@ class BejEncoderJson
      * @param[in] dictionaries - dictionaries needed for encoding.
      * @param[in] schemaClass - BEJ schema class.
      * @param[in] root - pointer to a RedfishPropertyParent struct.
+     * @param[in] bindings - resource-id to substitution map. bejString leaves
+     * whose value matches a substitution are encoded as the corresponding
+     * placeholder. Defaults to empty (no substitution).
      * @return 0 if successful.
      */
     int encode(const struct BejDictionaries* dictionaries,
                enum BejSchemaClass schemaClass,
-               struct RedfishPropertyParent* root);
+               struct RedfishPropertyParent* root,
+               const BejDeferredBindingMap& bindings = {});
 
     /**
      * @brief Get the JSON encoded payload.

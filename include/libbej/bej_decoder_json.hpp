@@ -3,6 +3,8 @@
 #include "bej_common.h"
 #include "bej_decoder_core.h"
 
+#include "bej_deferred_binding.hpp"
+
 #include <span>
 #include <string>
 #include <vector>
@@ -21,10 +23,17 @@ class BejDecoderJson
      *
      * @param[in] dictionaries - dictionaries needed for decoding.
      * @param[in] encodedPldmBlock - encoded PLDM block.
+     * @param[in] bindings - resource-id to substitution map selecting one of
+     * two modes. Empty (the default) disables resolution: deferred binding
+     * placeholders and bejResourceLink ids are left raw (e.g. %L<id>),
+     * preserving the input. Non-empty enables resolution: a recognized id is
+     * substituted, and an unrecognized one becomes its DSP0218 Table 42 invalid
+     * form (%L -> /invalid.PDR<id>, %I -> invalid, %T -> /invalid.<id>.<n>).
      * @return 0 if successful.
      */
     int decode(const BejDictionaries& dictionaries,
-               const std::span<const uint8_t> encodedPldmBlock);
+               const std::span<const uint8_t> encodedPldmBlock,
+               const BejDeferredBindingMap& bindings = {});
 
     /**
      * @brief Get the JSON output related to the latest call to decode.
