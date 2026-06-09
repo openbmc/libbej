@@ -1,5 +1,6 @@
 #include "bej_common_test.hpp"
 #include "bej_decoder_json.hpp"
+#include "bej_deferred_binding_format.hpp"
 #include "bej_encoder_json.hpp"
 
 #include <memory>
@@ -474,6 +475,89 @@ TEST(BejDecoderResourceLinkTest, DecodeResourceLink)
     EXPECT_EQ(jsonDecoded["Id"].get<std::string>(), "%L42");
 }
 
+// Same ResourceLink (PDR id 42) as DecodeResourceLink, exercising the two
+// resolution modes a bindings map selects.
+static std::vector<uint8_t> resourceLink42Stream()
+{
+    return {
+        // PLDM header (7 bytes)
+        0x00,
+        0xF0,
+        0xF0,
+        0xF1, // bejVersion
+        0x00,
+        0x00, // reserved
+        0x00, // schemaClass (major)
+        // Root Set (DummySimple, seq=0)
+        0x01,
+        0x00, // S: seq=0
+        0x00, // F: bejSet
+        0x01,
+        0x09, // L: 9 bytes
+        0x01,
+        0x01, // element count: 1 child
+        // Child ResourceLink (Id, seq=1)
+        0x01,
+        0x02, // S: seq=1
+        0xE0, // F: bejResourceLink
+        0x01,
+        0x02, // L: 2 bytes
+        0x01,
+        0x2A, // V: PDR ID = 42
+    };
+}
+
+TEST(BejDecoderResourceLinkTest, DecodeResourceLinkResolvesUri)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+    std::vector<uint8_t> encodedStream = resourceLink42Stream();
+
+    // Map contains resource 42: the link resolves to its URI.
+    BejDeferredBindingMap bindings;
+    bindings[bejBinding::resourceLink(42)] = "/redfish/v1/Systems/1";
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(
+        decoder.decode(dictionaries, std::span(encodedStream), bindings), 0);
+    nlohmann::json jsonDecoded = nlohmann::json::parse(decoder.getOutput());
+    EXPECT_EQ(jsonDecoded["Id"].get<std::string>(), "/redfish/v1/Systems/1");
+}
+
+TEST(BejDecoderResourceLinkTest, DecodeResourceLinkUnrecognizedIsInvalidForm)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+    std::vector<uint8_t> encodedStream = resourceLink42Stream();
+
+    // Non-empty map without resource 42: resolution is enabled, so the link
+    // takes the DSP0218 Table 42 invalid form rather than the raw "%L42".
+    BejDeferredBindingMap unrelated;
+    unrelated[bejBinding::resourceLink(99)] = "/redfish/v1/unrelated";
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(
+        decoder.decode(dictionaries, std::span(encodedStream), unrelated), 0);
+    nlohmann::json jsonDecoded = nlohmann::json::parse(decoder.getOutput());
+    EXPECT_EQ(jsonDecoded["Id"].get<std::string>(), "/invalid.PDR42");
+}
+
 TEST(BejDecoderResourceLinkTest, DecodeResourceLinkNull)
 {
     // Test that ResourceLink with zero length is decoded as null.
@@ -689,6 +773,106 @@ TEST(BejDecoderPayloadLengthTest, ErrorsOnTrailingBytes)
     strict.setTrailingDataPolicy(bejTrailingError);
     EXPECT_EQ(strict.decode(dictionaries, std::span(padded)),
               bejErrorInvalidSize);
+}
+
+// Fixtures captured from a real Intel E810 NIC. The BEJ payload is produced by
+// the device's RDE stack (not by this library's encoder) and its string
+// elements carry the deferred-binding bit, so it exercises the decode path
+// against an externally generated binary. See Gerrit 91082.
+const BejTestInputFiles networkAdapterDeferredBindingFiles = {
+    .jsonFile = "../test/json/network_adapter.json",
+    .schemaDictionaryFile = "../test/dictionaries/network_adapter_dict.bin",
+    .annotationDictionaryFile = "../test/dictionaries/annotation_dict.bin",
+    .errorDictionaryFile = "",
+    .encodedStreamFile = "../test/encoded/network_adapter_enc.bin",
+};
+
+constexpr const char* networkAdapterPdrFile =
+    "../test/pdr/network_adapter_pdr.json";
+constexpr const char* networkAdapterResolvedJsonFile =
+    "../test/json/network_adapter_resolved.json";
+
+/**
+ * @brief Load a deferred-binding map from a pdr.json mapping table.
+ *
+ * @param[in] pdrFile - path to a JSON object whose keys are placeholders with
+ *            the leading '%' marker (e.g. "%L1") and whose values are the
+ *            substitutions.
+ * @return map keyed by token body (no '%'), matching the decoder's keys, or
+ *         nullopt on a missing file or a malformed key.
+ */
+std::optional<BejDeferredBindingMap> loadBindingMap(const char* pdrFile)
+{
+    std::ifstream pdrInput(pdrFile);
+    if (!pdrInput.is_open())
+    {
+        return std::nullopt;
+    }
+    nlohmann::json pdr;
+    pdrInput >> pdr;
+
+    BejDeferredBindingMap bindings;
+    for (const auto& [placeholder, uri] : pdr.items())
+    {
+        // The decoder keys on the token body; pdr.json keeps the '%' marker
+        // only for readability, so strip it here.
+        if (placeholder.empty() ||
+            placeholder.front() != bejDeferredBindingMarker)
+        {
+            return std::nullopt;
+        }
+        bindings.emplace(placeholder.substr(1), uri.get<std::string>());
+    }
+    return bindings;
+}
+
+// Without a binding map the decoder must leave deferred-binding placeholders
+// untouched (DSP0218 8.3 passthrough), so a device payload stays decodable
+// before its resource links are known.
+TEST(BejDeferredBindingDecodeTest, PreservesPlaceholdersWithoutBindings)
+{
+    auto inputsOrErr = loadInputs(networkAdapterDeferredBindingFiles);
+    ASSERT_TRUE(inputsOrErr);
+    BejDictionaries dictionaries = makeDictionaries(*inputsOrErr);
+
+    BejDecoderJson decoder;
+    ASSERT_EQ(decoder.decode(dictionaries, inputsOrErr->encodedStream), 0);
+    nlohmann::json decoded = nlohmann::json::parse(decoder.getOutput());
+
+    // network_adapter.json still holds the "%L.."/"%I.." placeholders.
+    EXPECT_EQ(decoded.dump(), inputsOrErr->expectedJson.dump());
+}
+
+// With the PDR-derived map every placeholder must be substituted with its
+// resource URI. The resolved golden is produced independently of libbej, so
+// matching it proves the decoder applied the mapping table rather than echoing
+// its own substitution back.
+TEST(BejDeferredBindingDecodeTest, ResolvesPlaceholdersWithBindings)
+{
+    auto inputsOrErr = loadInputs(networkAdapterDeferredBindingFiles);
+    ASSERT_TRUE(inputsOrErr);
+    BejDictionaries dictionaries = makeDictionaries(*inputsOrErr);
+
+    auto bindings = loadBindingMap(networkAdapterPdrFile);
+    ASSERT_TRUE(bindings);
+
+    std::ifstream resolvedInput(networkAdapterResolvedJsonFile);
+    ASSERT_TRUE(resolvedInput.is_open());
+    nlohmann::json expectedResolved;
+    resolvedInput >> expectedResolved;
+
+    BejDecoderJson decoder;
+    ASSERT_EQ(
+        decoder.decode(dictionaries, inputsOrErr->encodedStream, *bindings), 0);
+    nlohmann::json decoded = nlohmann::json::parse(decoder.getOutput());
+    EXPECT_EQ(decoded.dump(), expectedResolved.dump());
+
+    // Tie the result to the mapping table, not to a coincidental literal: the
+    // self link and id must equal the map entries for resource id 1.
+    EXPECT_EQ(decoded.at("@odata.id").get<std::string>(),
+              bindings->at(bejBinding::resourceLink(1)));
+    EXPECT_EQ(decoded.at("Id").get<std::string>(),
+              bindings->at(bejBinding::instanceId(1)));
 }
 
 } // namespace libbej
