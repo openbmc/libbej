@@ -1,5 +1,6 @@
 #include "bej_common_test.hpp"
 #include "bej_decoder_json.hpp"
+#include "bej_deferred_binding_format.hpp"
 #include "bej_encoder_json.hpp"
 
 #include <memory>
@@ -472,6 +473,89 @@ TEST(BejDecoderResourceLinkTest, DecodeResourceLink)
     // Verify the ResourceLink is decoded as "%L42"
     EXPECT_TRUE(jsonDecoded.contains("Id"));
     EXPECT_EQ(jsonDecoded["Id"].get<std::string>(), "%L42");
+}
+
+// Same ResourceLink (PDR id 42) as DecodeResourceLink, exercising the two
+// resolution modes a bindings map selects.
+static std::vector<uint8_t> resourceLink42Stream()
+{
+    return {
+        // PLDM header (7 bytes)
+        0x00,
+        0xF0,
+        0xF0,
+        0xF1, // bejVersion
+        0x00,
+        0x00, // reserved
+        0x00, // schemaClass (major)
+        // Root Set (DummySimple, seq=0)
+        0x01,
+        0x00, // S: seq=0
+        0x00, // F: bejSet
+        0x01,
+        0x09, // L: 9 bytes
+        0x01,
+        0x01, // element count: 1 child
+        // Child ResourceLink (Id, seq=1)
+        0x01,
+        0x02, // S: seq=1
+        0xE0, // F: bejResourceLink
+        0x01,
+        0x02, // L: 2 bytes
+        0x01,
+        0x2A, // V: PDR ID = 42
+    };
+}
+
+TEST(BejDecoderResourceLinkTest, DecodeResourceLinkResolvesUri)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+    std::vector<uint8_t> encodedStream = resourceLink42Stream();
+
+    // Map contains resource 42: the link resolves to its URI.
+    BejDeferredBindingMap bindings;
+    bindings[bejBinding::resourceLink(42)] = "/redfish/v1/Systems/1";
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(
+        decoder.decode(dictionaries, std::span(encodedStream), bindings), 0);
+    nlohmann::json jsonDecoded = nlohmann::json::parse(decoder.getOutput());
+    EXPECT_EQ(jsonDecoded["Id"].get<std::string>(), "/redfish/v1/Systems/1");
+}
+
+TEST(BejDecoderResourceLinkTest, DecodeResourceLinkUnrecognizedIsInvalidForm)
+{
+    auto inputsOrErr = loadInputs(dummySimpleTestFiles);
+    ASSERT_TRUE(inputsOrErr);
+    BejDictionaries dictionaries = {
+        .schemaDictionary = inputsOrErr->schemaDictionary,
+        .schemaDictionarySize = inputsOrErr->schemaDictionarySize,
+        .annotationDictionary = inputsOrErr->annotationDictionary,
+        .annotationDictionarySize = inputsOrErr->annotationDictionarySize,
+        .errorDictionary = inputsOrErr->errorDictionary,
+        .errorDictionarySize = inputsOrErr->errorDictionarySize,
+    };
+    std::vector<uint8_t> encodedStream = resourceLink42Stream();
+
+    // Non-empty map without resource 42: resolution is enabled, so the link
+    // takes the DSP0218 Table 42 invalid form rather than the raw "%L42".
+    BejDeferredBindingMap unrelated;
+    unrelated[bejBinding::resourceLink(99)] = "/redfish/v1/unrelated";
+
+    BejDecoderJson decoder;
+    EXPECT_THAT(
+        decoder.decode(dictionaries, std::span(encodedStream), unrelated), 0);
+    nlohmann::json jsonDecoded = nlohmann::json::parse(decoder.getOutput());
+    EXPECT_EQ(jsonDecoded["Id"].get<std::string>(), "/invalid.PDR42");
 }
 
 TEST(BejDecoderResourceLinkTest, DecodeResourceLinkNull)

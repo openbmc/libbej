@@ -108,9 +108,13 @@ struct BejDecodedCallback
 
     /**
      * @brief Calls when a String property is found.
+     *
+     * @note deferredBinding is true when the bejString SFLV had the
+     * deferred-binding format bit set; the value may then contain
+     * %-placeholders for the callback to substitute.
      */
     int (*callbackString)(const char* propertyName, const char* value,
-                          size_t length, void* dataPtr);
+                          size_t length, bool deferredBinding, void* dataPtr);
 
     /**
      * @brief Calls when a Real value property is found.
