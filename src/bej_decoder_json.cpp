@@ -1,8 +1,17 @@
 #include "bej_decoder_json.hpp"
 
-#include <string.h>
+#include "bej_common.h"
+#include "bej_decoder_core.h"
 
+#include "bej_deferred_binding_format.hpp"
+
+#include <charconv>
+#include <cstdio>
+#include <cstring>
 #include <format>
+#include <limits>
+#include <optional>
+#include <string>
 
 #define MAX_BEJ_STRING_LEN 65536
 
@@ -16,6 +25,7 @@ struct BejJsonParam
 {
     bool* isPrevAnnotated;
     std::string* output;
+    const libbej::BejDeferredBindingMap* bindings;
 };
 
 /**
@@ -174,16 +184,183 @@ static int callbackEnum(const char* propertyName, const char* value,
 }
 
 /**
+ * @brief Parse a base-10 integer at str[start] without throwing.
+ *
+ * @param[in] str - the string to parse from (start must be <= str.length()).
+ * @param[in] start - index to begin parsing.
+ * @param[out] out - parsed value, valid only on success.
+ * @param[out] end - index just past the last parsed digit.
+ * @return true if at least one digit was parsed and the value fit in T.
+ */
+template <typename T>
+static bool parseDecimalAt(const std::string& str, size_t start, T& out,
+                           size_t& end)
+{
+    auto result =
+        std::from_chars(str.data() + start, str.data() + str.length(), out);
+    end = static_cast<size_t>(result.ptr - str.data());
+    return result.ec == std::errc{};
+}
+
+/**
+ * @brief Resolve a resource id to its URI substitution. Shared by the %L
+ * placeholder path and the numeric bejResourceLink path.
+ *
+ * @param[in] bindings - resource id to substitution parameters.
+ * @param[in] resourceId - resource id to look up.
+ * @return the URI, or nullopt if the resource is absent or its URI is empty.
+ */
+static std::optional<std::string> resolveResourceUri(
+    const BejDeferredBindingMap& bindings, uint32_t resourceId)
+{
+    auto it = bindings.find(resourceId);
+    if (it == bindings.end() || it->second.uri.empty())
+    {
+        return std::nullopt;
+    }
+    return it->second.uri;
+}
+
+/**
+ * @brief Resolve one deferred binding placeholder to its substitution value.
+ *
+ * @param[in] bindings - resource id to substitution parameters.
+ * @param[in] resourceId - parsed resource id from the placeholder.
+ * @param[in] subType - substitution character following the '%'.
+ * @param[in] str - the string being substituted.
+ * @param[in,out] idEnd - index just past the resource id; advanced past the
+ * parsed action id on a %T<id>.<action> match.
+ * @return the replacement, or nullopt to leave the placeholder untouched. A
+ * missing resource, missing action or empty mapping is never substituted.
+ */
+static std::optional<std::string> resolveDeferredBinding(
+    const BejDeferredBindingMap& bindings, uint32_t resourceId, char subType,
+    const std::string& str, size_t& idEnd)
+{
+    if (subType == bejDeferredBindingResourceLink)
+    {
+        return resolveResourceUri(bindings, resourceId);
+    }
+
+    auto it = bindings.find(resourceId);
+    if (it == bindings.end())
+    {
+        return std::nullopt;
+    }
+    const BejDeferredBindingResource& resource = it->second;
+
+    if (subType == bejDeferredBindingInstanceId)
+    {
+        if (resource.instanceId.empty())
+        {
+            return std::nullopt;
+        }
+        return resource.instanceId;
+    }
+    if (subType == bejDeferredBindingActionUri)
+    {
+        // Action URI expects %T<id>.<action>.
+        if (idEnd >= str.length() ||
+            str[idEnd] != bejDeferredBindingActionSeparator)
+        {
+            return std::nullopt;
+        }
+        uint8_t actionId = 0;
+        size_t actEnd = 0;
+        if (!parseDecimalAt(str, idEnd + 1, actionId, actEnd))
+        {
+            return std::nullopt;
+        }
+        auto actIt = resource.actionUris.find(actionId);
+        if (actIt == resource.actionUris.end() || actIt->second.empty())
+        {
+            return std::nullopt;
+        }
+        // Advance past the parsed action id so the whole placeholder is
+        // replaced.
+        idEnd = actEnd;
+        return actIt->second;
+    }
+    // Custom/future DSP0218 substitutions.
+    auto otherIt = resource.otherParameters.find(subType);
+    if (otherIt == resource.otherParameters.end() || otherIt->second.empty())
+    {
+        return std::nullopt;
+    }
+    return otherIt->second;
+}
+
+/**
+ * @brief Substitute deferred binding placeholders in a string and append the
+ * result to the output.
+ */
+static void addDeferredBindingString(struct BejJsonParam* params,
+                                     const char* value, size_t length)
+{
+    if (!params->bindings || params->bindings->empty())
+    {
+        // No bindings provided, just output the raw string.
+        if (length > 0)
+        {
+            params->output->append(value, length - 1);
+        }
+        return;
+    }
+
+    std::string str(value, length > 0 ? length - 1 : 0);
+    size_t pos = 0;
+    while ((pos = str.find(bejDeferredBindingMarker, pos)) != std::string::npos)
+    {
+        if (pos + 1 < str.length() && str[pos + 1] == bejDeferredBindingMarker)
+        {
+            // Escaped marker. Replace "%%" with "%".
+            str.replace(pos, 2, 1, bejDeferredBindingMarker);
+            pos++;
+            continue;
+        }
+
+        if (pos + 1 >= str.length())
+        {
+            pos++;
+            continue;
+        }
+
+        char subType = str[pos + 1];
+
+        // Parse the resource id without throwing (from_chars reports overflow
+        // and "no digits" via its return, unlike std::stoul whose exception
+        // would unwind across the C decoder frames). idEnd marks the first
+        // non-digit, where an optional ".<action>" suffix may begin.
+        uint32_t resourceId = 0;
+        size_t idEnd = 0;
+        if (parseDecimalAt(str, pos + 2, resourceId, idEnd))
+        {
+            if (auto replacement = resolveDeferredBinding(
+                    *params->bindings, resourceId, subType, str, idEnd))
+            {
+                str.replace(pos, idEnd - pos, *replacement);
+                pos += replacement->length();
+                continue;
+            }
+        }
+        pos += 2; // skip % and subtype
+    }
+    params->output->append(str);
+}
+
+/**
  * @brief Callback for bejString type.
  *
  * @param[in] propertyName - a NULL terminated string.
  * @param[in] value - a NULL terminated string.
  * @param[in] length - length of the string.
+ * @param[in] deferredBinding - indicates if string contains deferred binding
+ * placeholders.
  * @param[in] dataPtr - pointing to a valid BejJsonParam struct.
  * @return 0 if successful.
  */
 static int callbackString(const char* propertyName, const char* value,
-                          size_t length, void* dataPtr)
+                          size_t length, bool deferredBinding, void* dataPtr)
 {
     if ((length > MAX_BEJ_STRING_LEN) ||
         (strnlen(value, length) != (length - 1)))
@@ -197,7 +374,11 @@ static int callbackString(const char* propertyName, const char* value,
         reinterpret_cast<struct BejJsonParam*>(dataPtr);
     addPropertyNameToOutput(params, propertyName);
     params->output->push_back('\"');
-    if (length > 0)
+    if (deferredBinding)
+    {
+        addDeferredBindingString(params, value, length);
+    }
+    else if (length > 0)
     {
         params->output->append(value, length - 1);
     }
@@ -300,7 +481,26 @@ static int callbackResourceLink(const char* propertyName, uint64_t linkId,
     struct BejJsonParam* params =
         reinterpret_cast<struct BejJsonParam*>(dataPtr);
     addPropertyNameToOutput(params, propertyName);
-    params->output->append(std::format("\"%L{}\"", linkId));
+
+    // bejResourceLink carries a numeric resource id, not a placeholder string,
+    // so it is resolved here rather than inside addDeferredBindingString. The
+    // map is keyed by uint32_t; a link id beyond that range cannot match and
+    // must fall through to the raw placeholder rather than alias a 32-bit id.
+    if (params->bindings && linkId <= std::numeric_limits<uint32_t>::max())
+    {
+        if (auto uri = resolveResourceUri(*params->bindings,
+                                          static_cast<uint32_t>(linkId)))
+        {
+            params->output->append(std::format("\"{}\"", *uri));
+            *params->isPrevAnnotated = false;
+            return 0;
+        }
+    }
+
+    // Fallback: no binding found, emit the raw %L<id> placeholder.
+    params->output->append(std::format(
+        "\"{}\"",
+        bejFormatDeferredBinding(bejDeferredBindingResourceLink, linkId)));
     *params->isPrevAnnotated = false;
     return 0;
 }
@@ -368,7 +568,8 @@ static int stackPush(const struct BejStackProperty* const property,
 }
 
 int BejDecoderJson::decode(const BejDictionaries& dictionaries,
-                           const std::span<const uint8_t> encodedPldmBlock)
+                           const std::span<const uint8_t> encodedPldmBlock,
+                           const BejDeferredBindingMap& bindings)
 {
     // Clear the previous output if any.
     output.clear();
@@ -409,6 +610,7 @@ int BejDecoderJson::decode(const BejDictionaries& dictionaries,
     struct BejJsonParam callbackData = {
         .isPrevAnnotated = &isPrevAnnotated,
         .output = &output,
+        .bindings = &bindings,
     };
 
     return bejDecodePldmBlockWithPolicy(
