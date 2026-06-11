@@ -16,6 +16,24 @@
       "message": "Can I ask, how is is supposed to be working in the grand scheme of things?\n\nFor example pldm daemon has discovered a SmartNIC which reports via its PLDM PDR 3 Redfish Resources with `\"ContainingResourceID\": 0` (EXTERNAL):\n1)\n```\n\"ProposedContainingResourceName\": \"NetworkAdapterCollection.NetworkAdapterCollection\"\n\"MajorSchemaName\": \"NetworkAdapter.NetworkAdapter\"\n```\n2)\n```\n\"ProposedContainingResourceName\": \"PCIeDeviceCollection.PCIeDeviceCollection\"\n\"MajorSchemaName\": \"PCIeDevice.PCIeDevice\"\n```\n3)\n```\n\"ProposedContainingResourceName\": \"NetworkInterfaceCollection.NetworkInterfaceCollection\"\n\"MajorSchemaName\": \"NetworkInterface.NetworkInterface\"\n```\n\nHow will PLDM daemon know which absolute URLs correspond to these resources?",
       "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8789d9b1_8f96e544",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-11T08:44:00Z",
+      "side": 1,
+      "message": "By design this is not resolved here in libbej — this patch only\n  performs the DSP0218 Table 42 placeholder \u003c-\u003e value substitution against a\n  caller-supplied BejDeferredBindingMap. Deciding the absolute URLs is the\n  consumer\u0027s (pldmd\u0027s) responsibility, and it is not arbitrary: pldmd follows the\n  Redfish spec, encoded as a static collection-URI table.\n\n  On the pldmd side the flow is:\n\n  1. The Redfish Resource PDRs are parsed into per-resource metadata\n     (resourceId, ProposedContainingResourceName, MajorSchemaName,\n     ContainingResourceID, resource flags).\n  2. pldmd maps each resource to its canonical Redfish collection via a static\n     table derived from the Redfish schema/collection-URI conventions\n     (e.g. NetworkAdapterCollection -\u003e /redfish/v1/Chassis/\u003cns\u003e/NetworkAdapters).\n     It then builds the map entry: uri (for %L\u003cid\u003e), instanceId (for %I\u003cid\u003e),\n     and action targets (for %T\u003cid\u003e.\u003caction\u003e). The final URI is\n     \u003ccollection-prefix\u003e/\u003cinstanceId\u003e.\n  3. That map is passed to decode()/encode().\n\n  For ContainingResourceID \u003d 0 (EXTERNAL), pldmd does not rely on the device\u0027s\n  proposed position; it places the resource under the spec-defined collection\n  keyed by ProposedContainingResourceName / MajorSchemaName. So for your SmartNIC\n  example (tid \u003d T, resourceId \u003d R) these resolve to:\n\n  - NetworkAdapterCollection / NetworkAdapter\n      -\u003e /redfish/v1/Chassis/\u003cns\u003e/NetworkAdapters/\u003cinstanceId\u003e\n  - PCIeDeviceCollection / PCIeDevice\n      -\u003e /redfish/v1/Systems/\u003cns\u003e/PCIeDevices/\u003cinstanceId\u003e\n  - NetworkInterfaceCollection / NetworkInterface\n      -\u003e /redfish/v1/Systems/\u003cns\u003e/NetworkInterfaces/\u003cinstanceId\u003e\n\n  Note: the \u003cns\u003e namespace segment (e.g. \"RDE\") and the \u003cinstanceId\u003e form\n  (e.g. RDE_\u003ctid\u003e_\u003cresourceId\u003e) are pldmd implementation choices and can be\n  changed by the implementation; libbej just substitutes the placeholders with those values.",
+      "parentUuid": "30d9ace3_fecb2fc7",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
