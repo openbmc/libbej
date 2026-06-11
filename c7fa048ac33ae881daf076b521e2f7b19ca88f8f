@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30d9ace3_fecb2fc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-11T08:25:07Z",
+      "side": 1,
+      "message": "Can I ask, how is is supposed to be working in the grand scheme of things?\n\nFor example pldm daemon has discovered a SmartNIC which reports via its PLDM PDR 3 Redfish Resources with `\"ContainingResourceID\": 0` (EXTERNAL):\n1)\n```\n\"ProposedContainingResourceName\": \"NetworkAdapterCollection.NetworkAdapterCollection\"\n\"MajorSchemaName\": \"NetworkAdapter.NetworkAdapter\"\n```\n2)\n```\n\"ProposedContainingResourceName\": \"PCIeDeviceCollection.PCIeDeviceCollection\"\n\"MajorSchemaName\": \"PCIeDevice.PCIeDevice\"\n```\n3)\n```\n\"ProposedContainingResourceName\": \"NetworkInterfaceCollection.NetworkInterfaceCollection\"\n\"MajorSchemaName\": \"NetworkInterface.NetworkInterface\"\n```\n\nHow will PLDM daemon know which absolute URLs correspond to these resources?",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
