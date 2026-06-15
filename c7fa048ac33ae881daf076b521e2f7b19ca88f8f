@@ -34,6 +34,262 @@
       "parentUuid": "30d9ace3_fecb2fc7",
       "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16dd9319_73071ddc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "Do you have open-source implementation of pldmd patches for this functionality?",
+      "parentUuid": "8789d9b1_8f96e544",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1db5d28_b013c705",
+        "filename": "include/libbej/bej_decoder_core.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "I think earlier you\u0027ve asked is libbej a correct place for placeholder substitution.\n\nI\u0027ve read RDE specification more thoroughly and indeed looks like the best place for such kind of substitution is libbej:\n\n\u003e DSP0218_1.2.0\n\u003e 8.3 Deferred binding of data \n\n\u003e All substitution macros are bracketed with the percent sign (%) character. \nWhile it would in theory be possible for the MC to check every string it decodes for the presence of this escape character, in practice that would be an inefficient waste of MC processing time. Instead, the RDE Device shall flag any string containing substitution macros with the deferred binding bit set to inform the MC of their presence; the MC shall only perform macro substitution if the deferred binding bit is set.",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc490adc_ad033cd4",
+        "filename": "include/libbej/bej_decoder_json.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "\u003e Defaults to empty, which leaves placeholders / raw %L\u003cid\u003e in the output.\n\nI\u0027m not sure of the actual benefit, but specification requires to translate placeholders without bindings too:\n\n\u003e % L\u003cresource-ID\u003e \n\n\u003e The MC-assigned URI of an RDE Provider defined resource (specified by a\n\u003e resource ID within the target PDR), or /invalid.PDR\u003cresource-ID\u003e if\n\u003e unrecognized resource ID\n\nSo it looks like if we don\u0027t have mapping for resource id 123 for example, we need to translate it from `%L123` to `/invalid.PDR123`",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ee3ecf4_aaed92c4",
+        "filename": "include/libbej/bej_deferred_binding.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "DSP0218 Table 42 has many other markers. Please note in the commit message which markers are currently supported with this change",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e99c06db_17fde8ec",
+        "filename": "include/libbej/bej_deferred_binding.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "Do we really need to have all the fields for each resource? This seems excessive\n\nIf we would have first key of `BejDeferredBindingMap` as `enum bejMacroType`, I think we can get away from this",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0de1a125_e1e2866d",
+        "filename": "include/libbej/bej_deferred_binding.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "I don\u0027t think that every deferred binding correspond to particular resource id\n\nFor example\n\n\u003e %C \n\u003e The MC-assigned link to the Chassis\n\u003e resource within which the RDE Device is located\n\nHow the current API would handle such cases?\n\nI think first level key should be enum to `Macro`",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "958d92e4_396d7f93",
+        "filename": "include/libbej/bej_deferred_binding_format.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "This works only for `%L\u003cresource-ID\u003e` and `%I\u003cresource-ID\u003e` and don\u0027t work for 10+ other macros from the Table 42.\n\nTherefore I think we should clarify name of this function from the start instead of using generic name `bejFormatDeferredBinding` like it is for most cases",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "126bd7a4_2e059e40",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "This code is already in the `libbej::` namespace",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9c4cc41_27034f9e",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "break?",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "291b5cfd_d6d32be6",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "Subtypes encoded with more than one symbol also exist.\n\nFor example `%PD`, `%PF`, `%PI`, `%P\u003cresource-ID\u003e.PAGE\u003cpagination-offset\u003e`",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e260075_6a62c552",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "Not all deferred bindings has resource_id",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58e03997_9fa6defb",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "Not all deferred bindings are encoded with 2 symbols (see comment above)",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8650785_8ad939f6",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "I think there is no point calling `addDeferredBindingString` if `length \u003c\u003d 0`\n```\nif (length \u003e 0)\n{\n  if (deferredBinding)\n  {\n      addDeferredBindingString(params, value, length);\n  } else {\n      params-\u003eoutput-\u003eappend(value, length - 1);\n  }\n}\n```",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09861f91_d47e5cc4",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "We shouldn\u0027t duplicate this setting between code branches inside the function",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78c7865a_02934fe2",
+        "filename": "test/bej_encoder_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-06-15T11:28:42Z",
+      "side": 1,
+      "message": "Could you add test to bej_decoder_test.cpp as well?",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
