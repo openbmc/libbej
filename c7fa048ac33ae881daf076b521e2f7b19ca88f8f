@@ -56,6 +56,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a033868b_f2490ef7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "Not yet.The pldmd side is a local/downstream integration at the moment, so I don\u0027t have public patches to point at. I provide a small consumer example here.\n\n1.\npldmd parses the Redfish\nResource PDRs per device (tid) into a binding map, caches it by tid, and passes\nthe matching map to decode()/encode(); libbej itself is tid-agnostic and only\nsubstitutes placeholders.\n2.\n// Built once per device from its PDRs, cached as perDevice[tid].\nBejDeferredBindingMap bindings;\nbindings[bejBinding::resourceLink(30)] \u003d\n\"/redfish/v1/Systems/1/Storage/1/Drives/1\"; // %L30\nbindings[bejBinding::instanceId(30)] \u003d \"1\"; // %I30\nbindings[bejBinding::action(30, 1)] \u003d\n\"/redfish/v1/Systems/1/Storage/1/Drives/1/Actions/Drive.Reset\"; // %T30.1\nbindings[bejBinding::chassis()] \u003d \"/redfish/v1/Chassis/1U\"; // %C (no id)\n\n3.\n// Decode a device response into client-facing JSON (placeholders resolved):\ndecoder.decode(dictionaries, encodedResponse, bindings);\n\n// Encode a request to the device (values rewritten back to placeholders):\nencoder.encode(\u0026dictionaries, schemaClass, requestTree, bindings);",
+      "parentUuid": "16dd9319_73071ddc",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b1db5d28_b013c705",
         "filename": "include/libbej/bej_decoder_core.h",
         "patchSetId": 1
@@ -88,6 +106,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "964d77ed_93247a6c",
+        "filename": "include/libbej/bej_decoder_json.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "For the default (empty map) \n\nI\u0027d like to keep the current passthrough\nthe raw string is left untouched as an explicit \"resolution disabled\" mode for callers.\n\nDecode without supplying bindings, and document the two modes (empty \u003d\ndisabled/passthrough; non-empty \u003d resolve, unknown id -\u003e /invalid.PDR\u003cXX\u003e form).\n\nSubstitution is already gated on the per-string deferred-binding bit, so ordinary\ndata is unaffected either way.",
+      "parentUuid": "cc490adc_ad033cd4",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ee3ecf4_aaed92c4",
@@ -101,6 +137,24 @@
       "writtenOn": "2026-06-15T11:28:42Z",
       "side": 1,
       "message": "DSP0218 Table 42 has many other markers. Please note in the commit message which markers are currently supported with this change",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2574f6d8_f840a7f3",
+        "filename": "include/libbej/bej_deferred_binding.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ee3ecf4_aaed92c4",
       "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -122,6 +176,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee8cd509_424c2224",
+        "filename": "include/libbej/bej_deferred_binding.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "reworked the data model in this revision.\n\nBejDeferredBindingMap is no\nlonger keyed by resource id with a per-resource struct. It is now a flat map keyed\nby the placeholder token (the text after \u0027%\u0027), value \u003d substitution\n\nusing BejDeferredBindingMap \u003d std::unordered_map\u003cstd::string, std::string\u003e;\n\nId-less markers are first-class -- %C/%S are just tokens \"C\"/\"S\", no resource id,\nno empty fields:\n\nbindings[bejBinding::resourceLink(30)] \u003d \"/redfish/v1/.../Drives/1\"; // %L30\nbindings[bejBinding::instanceId(30)] \u003d \"1\"; // %I30\nbindings[bejBinding::action(30, 1)] \u003d \".../Actions/Drive.Reset\"; // %T30.1\nbindings[bejBinding::chassis()] \u003d \"/redfish/v1/Chassis/1U\"; // %C\nbindings[bejBinding::system()] \u003d \"/redfish/v1/Systems/1\"; // %S",
+      "parentUuid": "e99c06db_17fde8ec",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0de1a125_e1e2866d",
@@ -135,6 +207,24 @@
       "writtenOn": "2026-06-15T11:28:42Z",
       "side": 1,
       "message": "I don\u0027t think that every deferred binding correspond to particular resource id\n\nFor example\n\n\u003e %C \n\u003e The MC-assigned link to the Chassis\n\u003e resource within which the RDE Device is located\n\nHow the current API would handle such cases?\n\nI think first level key should be enum to `Macro`",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3112edb_bfb0bca3",
+        "filename": "include/libbej/bej_deferred_binding.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "see above",
+      "parentUuid": "0de1a125_e1e2866d",
       "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -156,6 +246,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d02dfbcb_b8c08209",
+        "filename": "include/libbej/bej_deferred_binding_format.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "958d92e4_396d7f93",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "126bd7a4_2e059e40",
@@ -169,6 +277,24 @@
       "writtenOn": "2026-06-15T11:28:42Z",
       "side": 1,
       "message": "This code is already in the `libbej::` namespace",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cea576b_daaac6a7",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "126bd7a4_2e059e40",
       "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -190,6 +316,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17ddbf25_6f779ea8",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9c4cc41_27034f9e",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "291b5cfd_d6d32be6",
@@ -203,6 +347,24 @@
       "writtenOn": "2026-06-15T11:28:42Z",
       "side": 1,
       "message": "Subtypes encoded with more than one symbol also exist.\n\nFor example `%PD`, `%PF`, `%PI`, `%P\u003cresource-ID\u003e.PAGE\u003cpagination-offset\u003e`",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70fcc0e6_5f2e0f75",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "This revision scopes to %L, %I, %T, %C, %S",
+      "parentUuid": "291b5cfd_d6d32be6",
       "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -224,6 +386,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b80b012_4e9d77e1",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e260075_6a62c552",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58e03997_9fa6defb",
@@ -237,6 +417,24 @@
       "writtenOn": "2026-06-15T11:28:42Z",
       "side": 1,
       "message": "Not all deferred bindings are encoded with 2 symbols (see comment above)",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7da1ad4_f0f03e6e",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58e03997_9fa6defb",
       "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -258,6 +456,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d5d2c90_1fa0ad87",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8650785_8ad939f6",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09861f91_d47e5cc4",
@@ -275,6 +491,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d4d736f_55753aac",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09861f91_d47e5cc4",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78c7865a_02934fe2",
@@ -288,6 +522,24 @@
       "writtenOn": "2026-06-15T11:28:42Z",
       "side": 1,
       "message": "Could you add test to bej_decoder_test.cpp as well?",
+      "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00bcdfe6_a38e4fab",
+        "filename": "test/bej_encoder_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-16T08:04:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78c7865a_02934fe2",
       "revId": "c7fa048ac33ae881daf076b521e2f7b19ca88f8f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
