@@ -155,6 +155,13 @@ static int bejFindSeqNumAndChildDictOffset(
     const struct BejDictionaryProperty* property;
     int ret = bejDictGetPropertyByName(dictionary, dictStartingOffset,
                                        node->name, &property, NULL);
+    if ((ret != 0) && isAnnotation && (dictionary == parentDictionary))
+    {
+        dictStartingOffset = bejDictGetFirstAnnotatedPropertyOffset();
+        ret = bejDictGetPropertyByName(dictionary, dictStartingOffset,
+                                       node->name, &property, NULL);
+        bejTreeUpdateNodeFlags(node, false, true, false);
+    }
     if (ret != 0)
     {
         fprintf(stderr,

@@ -1,4 +1,7 @@
 {
+    "@Redfish.Settings": {
+        "@odata.type": "#Settings.v1_0_0.Settings"
+    },
     "Id": "Dummy ID",
     "SampleIntegerProperty": -5,
     "SampleRealProperty": -5576.90001,
