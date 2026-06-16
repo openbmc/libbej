@@ -16,6 +16,24 @@
       "message": "@brandonkim@google.com I\u0027m really sorry, I think on the last rebase I\u0027ve accidently lost some changes for the bej_encoder that I\u0027ve mentioned here earlier.\n\nPlease review them in the patchset `91344: bej_encoder: Handle top level annotation flag` | https://gerrit.openbmc.org/c/openbmc/libbej/+/91344 which adds necessary changes for the bej_encoder as well as unit tests for the new functionality",
       "revId": "eaca560c8469788568a14aa72800e7e8cec7d337",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bc996de_5e1d6ccf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000388
+      },
+      "writtenOn": "2026-06-16T16:19:15Z",
+      "side": 1,
+      "message": "Ack, I see that it got lost in https://gerrit.openbmc.org/c/openbmc/libbej/+/90214/4..5",
+      "parentUuid": "b992eb97_5417aee6",
+      "revId": "eaca560c8469788568a14aa72800e7e8cec7d337",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ],
   "submitRequirementResults": []
