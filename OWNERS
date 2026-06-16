@@ -33,7 +33,6 @@
 
 owners:
 - brandonkim@google.com
-- ed@tanous.net
 - wltu@google.com
 
 reviewers:
@@ -43,9 +42,6 @@ openbmc:
 - name: Brandon Kim
   email: brandonkim@google.com
   discord: brandonk
-- name: Ed Tanous
-  email: ed@tanous.net
-  discord: edtanous
 - name: Kasun Athukorala
   email: kasunath@google.com
   discord: kasunath
