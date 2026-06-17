@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef071dc8_96e2cd73",
+        "filename": "test/bej_decoder_test.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-17T03:13:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "512c1190_000faec8",
+      "revId": "7bf41e41f75bad0a523775bdf615195d9cf4692d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d3129e3_6e2d1a81",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-06-16T09:48:54Z",
       "side": 1,
       "message": "I think the current tests are okay, but honestly some changes are needed...\n\nCurrently there is a clear matching between:\n```\n- test/json/xxx.json\n- test/encoded/xxx_enc.bin\n- test/dictionaries/xxx_dict.bin\n```\nIf we want to really test deferred bindings I think it would be beneficial to have something like:\n```\n- test/json/xxx.json            \u003c--- json with binded links \"%L101\"\n- test/json/xxx_unbinded.json   \u003c--- json with full links \"/redfish/v1/...\"\n- test/pdr/xxx_pdr.json         \u003c--- json with array of elements \"%L101 \u003c--\u003e \"/redfish/v1/...\" \"\n- test/encoded/xxx_enc.bin      \u003c--- binary which has string elements with deferred binding bit set and without full link strings\n- test/dictionaries/xxx_dict.bin\n```\n\nBecause right now there is no binary with strings with deferred binding bit",
+      "revId": "7bf41e41f75bad0a523775bdf615195d9cf4692d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f994d705_6e2e2378",
+        "filename": "test/bej_encoder_test.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-06-17T03:13:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d3129e3_6e2d1a81",
       "revId": "7bf41e41f75bad0a523775bdf615195d9cf4692d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
