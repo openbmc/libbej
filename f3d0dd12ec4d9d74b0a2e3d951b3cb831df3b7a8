@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5d1ba56_34094790",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000926
+      },
+      "writtenOn": "2026-07-14T21:28:10Z",
+      "side": 1,
+      "message": "I\u0027ve wanted to nitice, that I\u0027ve tested this code with the real BEJ output from E810, and everything seems to be working just fine.\n\nOnce again +1",
+      "revId": "f3d0dd12ec4d9d74b0a2e3d951b3cb831df3b7a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
