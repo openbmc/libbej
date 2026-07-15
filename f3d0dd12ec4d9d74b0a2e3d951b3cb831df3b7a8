@@ -161,6 +161,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2634075f_93a0747a",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-07-15T06:02:43Z",
+      "side": 1,
+      "message": "Correction to my previous note: only a marker that fits an existing arity is a\n  single new table row. A marker with a new operand shape such as\n  %P\u003cid\u003e.PAGE\u003coffset\u003e also needs a new BejMacroArity and a parse branch -- the\n  table just removes the single-character identification limit, not the per-marker\n  parsing work.",
+      "parentUuid": "c9490a7a_cdaafb78",
+      "range": {
+        "startLine": 306,
+        "startChar": 39,
+        "endLine": 306,
+        "endChar": 61
+      },
+      "revId": "f3d0dd12ec4d9d74b0a2e3d951b3cb831df3b7a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb94d93f_98a9d57a",
         "filename": "src/bej_encoder_json.cpp",
         "patchSetId": 7
