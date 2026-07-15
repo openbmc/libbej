@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ed9c3e4_de49f993",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-07-15T05:54:00Z",
+      "side": 1,
+      "message": "The two resolution modes and the Table 42 invalid forms are already captured in\nthe doxygen for decode() in bej_decoder_json.hpp, on `@param bindings`:\n\n  Empty (the default) disables resolution: deferred binding placeholders and\n  bejResourceLink ids are left raw (e.g. %L\u003cid\u003e). Non-empty enables resolution:\n  a recognized id is substituted, and an unrecognized one becomes its DSP0218\n  Table 42 invalid form (%L -\u003e /invalid.PDR\u003cid\u003e, %I -\u003e invalid,\n  %T -\u003e /invalid.\u003cid\u003e.\u003cn\u003e",
+      "parentUuid": "727676d4_3c7bb69c",
+      "range": {
+        "startLine": 39,
+        "startChar": 9,
+        "endLine": 42,
+        "endChar": 64
+      },
+      "revId": "f3d0dd12ec4d9d74b0a2e3d951b3cb831df3b7a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a5d1ba56_34094790",
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a7c0596_803c2004",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-07-15T05:54:00Z",
+      "side": 1,
+      "message": "In the new revision BejMacroSpec::marker is a std::string_view\ninstead of a char, and findMacroSpec() matches the marker as text with\nlongest-match, so the single-character assumption is gone: a multi-symbol marker\nlike %PD could be recognized and disambiguated from a single-char prefix.\n \nI\u0027m not adding those markers in this change, and to be clear the table only removes the identification limit -- each new marker still needs its own arity and\ninvalid-form handling to parse its operands. Verified by the existing unit tests\nfor %L/%I/%T/%C/%S.",
+      "parentUuid": "da89a211_78e57884",
+      "range": {
+        "startLine": 253,
+        "startChar": 34,
+        "endLine": 253,
+        "endChar": 45
+      },
+      "revId": "f3d0dd12ec4d9d74b0a2e3d951b3cb831df3b7a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c923dcb9_5761ce97",
         "filename": "src/bej_decoder_json.cpp",
         "patchSetId": 7
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c9490a7a_cdaafb78",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-07-15T05:54:00Z",
+      "side": 1,
+      "message": "This change scopes to %L, %I, %T, %C, %S. The remaining markers currently pass\n  through unchanged per DSP0218 Table 42 (an unrecognized %-marker is left as-is).\n\n  I don\u0027t have a concrete plan to add %PD/%PF/%PI right now: I haven\u0027t seen a\n  device that emits them, and I don\u0027t have one on hand to validate against. If that\n  changes, the marker table (string_view marker plus an arity) keeps each addition\n  localized to a new row.",
+      "parentUuid": "c923dcb9_5761ce97",
+      "range": {
+        "startLine": 306,
+        "startChar": 39,
+        "endLine": 306,
+        "endChar": 61
+      },
+      "revId": "f3d0dd12ec4d9d74b0a2e3d951b3cb831df3b7a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb94d93f_98a9d57a",
         "filename": "src/bej_encoder_json.cpp",
         "patchSetId": 7
@@ -100,6 +172,30 @@
       "writtenOn": "2026-07-14T22:30:10Z",
       "side": 1,
       "message": "minor nit: if we think there will be \u003c100 key value pair, vector\u003cpair\u003c\u003e\u003e may be faster and have lower memory overhead",
+      "range": {
+        "startLine": 86,
+        "startChar": 15,
+        "endLine": 87,
+        "endChar": 35
+      },
+      "revId": "f3d0dd12ec4d9d74b0a2e3d951b3cb831df3b7a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29825730_16e50c2b",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-07-15T05:54:00Z",
+      "side": 1,
+      "message": "Done, Thanks",
+      "parentUuid": "fb94d93f_98a9d57a",
       "range": {
         "startLine": 86,
         "startChar": 15,
