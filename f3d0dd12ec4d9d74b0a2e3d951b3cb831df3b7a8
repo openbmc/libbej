@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6796f1a7_86649ae2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-07-20T08:33:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ed9c3e4_de49f993",
+      "range": {
+        "startLine": 39,
+        "startChar": 9,
+        "endLine": 42,
+        "endChar": 64
+      },
+      "revId": "f3d0dd12ec4d9d74b0a2e3d951b3cb831df3b7a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a5d1ba56_34094790",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "In the new revision BejMacroSpec::marker is a std::string_view\ninstead of a char, and findMacroSpec() matches the marker as text with\nlongest-match, so the single-character assumption is gone: a multi-symbol marker\nlike %PD could be recognized and disambiguated from a single-char prefix.\n \nI\u0027m not adding those markers in this change, and to be clear the table only removes the identification limit -- each new marker still needs its own arity and\ninvalid-form handling to parse its operands. Verified by the existing unit tests\nfor %L/%I/%T/%C/%S.",
       "parentUuid": "da89a211_78e57884",
+      "range": {
+        "startLine": 253,
+        "startChar": 34,
+        "endLine": 253,
+        "endChar": 45
+      },
+      "revId": "f3d0dd12ec4d9d74b0a2e3d951b3cb831df3b7a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e0a4910_cc73b415",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-07-20T08:33:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a7c0596_803c2004",
       "range": {
         "startLine": 253,
         "startChar": 34,
@@ -183,6 +231,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4571841_5cbf8bf7",
+        "filename": "src/bej_decoder_json.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-07-20T08:33:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2634075f_93a0747a",
+      "range": {
+        "startLine": 306,
+        "startChar": 39,
+        "endLine": 306,
+        "endChar": 61
+      },
+      "revId": "f3d0dd12ec4d9d74b0a2e3d951b3cb831df3b7a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb94d93f_98a9d57a",
@@ -220,6 +292,30 @@
       "side": 1,
       "message": "Done, Thanks",
       "parentUuid": "fb94d93f_98a9d57a",
+      "range": {
+        "startLine": 86,
+        "startChar": 15,
+        "endLine": 87,
+        "endChar": 35
+      },
+      "revId": "f3d0dd12ec4d9d74b0a2e3d951b3cb831df3b7a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c232747a_754ba9a2",
+        "filename": "src/bej_encoder_json.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002838
+      },
+      "writtenOn": "2026-07-20T08:33:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29825730_16e50c2b",
       "range": {
         "startLine": 86,
         "startChar": 15,
