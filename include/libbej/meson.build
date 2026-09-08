@@ -8,6 +8,7 @@ libbej_headers = files(
     'bej_encoder_core.h',
     'bej_encoder_json.hpp',
     'bej_encoder_metadata.h',
+    'bej_tree.h',
 )
 
 install_headers(libbej_headers, subdir: 'libbej')
