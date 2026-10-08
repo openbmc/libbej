@@ -102,7 +102,7 @@ struct BejTupleF
     uint8_t readOnlyPropertyAndTopLevelAnnotation:1;
     uint8_t nullableProperty:1;
     uint8_t reserved:1;
-    enum BejPrincipalDataType principalDataType:4;
+    enum BejPrincipalDataType principalDataType : 4;
 } __attribute__((__packed__));
 
 /**
